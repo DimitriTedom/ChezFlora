@@ -1,0 +1,150 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+// Définition des enums
+
+enum Category {
+  FRESH_FLOWERS
+  BOUQUETS
+  POTTED_PLANTS
+  DECORATION
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+enum Status {
+  PENDING
+  PROCESSING
+  SHIPPED
+  DELIVERED
+  CANCELLED
+  APPROVED
+  REJECTED
+}
+
+enum ArticleCategory {
+  TIPS
+  DECOR_TRENDS
+  GIFT_IDEAS
+}
+
+enum EventType {
+  WEDDING
+  ANNIVERSARY
+  CORPORATE_EVENT
+}
+
+// Définition des modèles
+
+model Product {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  name        String
+  description String?
+  price       Float
+  stock       Int
+  category    Category
+  images      String[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relation inverse avec Comment
+  comments Comment[]
+}
+
+model User {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  email     String   @unique
+  name      String
+  password  String
+  role      Role     @default(USER)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  addresses     Address[]
+  orders        Order[]
+  comments      Comment[]
+  articles      Article[]
+  quoteRequests QuoteRequest[]
+}
+
+model Order {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  products  Json // Exemple: [{ productId: "123", quantity: 2 }]
+  status    Status   @default(PENDING)
+  total     Float
+  createdAt DateTime @default(now())
+}
+
+model Address {
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId     String
+  user       User     @relation(fields: [userId], references: [id])
+  street     String
+  city       String
+  postalCode String
+  country    String
+  isDefault  Boolean  @default(false)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+}
+
+model Comment {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  content   String
+  productId String?
+  product   Product? @relation(fields: [productId], references: [id])
+  articleId String?
+  article   Article? @relation(fields: [articleId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Article {
+  id          String          @id @default(auto()) @map("_id") @db.ObjectId
+  title       String
+  content     String
+  authorId    String
+  author      User            @relation(fields: [authorId], references: [id])
+  category    ArticleCategory
+  publishedAt DateTime
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt
+
+  // Relation inverse avec Comment
+  comments Comment[]
+}
+
+model QuoteRequest {
+  id          String    @id @default(auto()) @map("_id") @db.ObjectId
+  userId      String
+  user        User      @relation(fields: [userId], references: [id])
+  eventDate   DateTime
+  eventType   EventType
+  description String
+  status      Status    @default(PENDING)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
