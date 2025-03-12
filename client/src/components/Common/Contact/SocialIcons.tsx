@@ -41,7 +41,7 @@ const SocialIcons: FC = () => (
         target="_blank"
         rel="noopener noreferrer"
         aria-label={ariaLabel}
-        className="bg-Maron rounded-full w-8 h-8 lg:w-12 lg:h-12 xl:w-14 xl:h-14 flex items-center justify-center text-pink-600 hover:bg-amber-500"
+        className="bg-orange-400 hover:bg-orange-500 rounded-full w-8 h-8 lg:w-12 lg:h-12 xl:w-14 xl:h-14 flex items-center justify-center text-pink-600"
       >
         <Icon />
       </a>
