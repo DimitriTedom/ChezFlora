@@ -81,7 +81,7 @@ const HeaderSm = () => {
   ];
 
   return (
-    <div className="w-full flex items-center px-10 gap-8 h-16 justify-center bg-white shadow-2xl fixed z-11 bottom-0 border-t-2 border-pink-200">
+    <div className="w-full flex items-center px-10 gap-8 h-16 justify-center bg-white shadow-2xl fixed bg-opacity-90 bottom-0 border-t-2 border-pink-200">
       {navItems.map((item, index) => {
         // Pour l'item "Menu", utiliser le composant Sheet de shadcn
         if (item.title === "Menu") {

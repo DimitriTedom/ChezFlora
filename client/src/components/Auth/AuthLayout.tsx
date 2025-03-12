@@ -13,10 +13,10 @@ const AuthLayout = () => {
         <Outlet />
       </div>
       {/* footer component */}
-      <div className="z-[-10] w-full">
+      <div className="z-[1] w-full">
         <Footer />
       </div>
-      <div className="lg:hidden w-full ">
+      <div className="lg:hidden w-full z-[2]">
         <HeaderSm />
       </div>
     </div>

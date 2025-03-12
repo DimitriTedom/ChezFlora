@@ -1,5 +1,8 @@
+import { Link } from "react-router-dom";
+
 const Logo = () => {
   return (
+    <Link to="/shop/home">
     <div className="flex items-end">
       <h2 className="text-pink-300 text-2xl">CHEZ</h2>
       <h1 className="text-4xl font-extrabold flex items-end">
@@ -12,6 +15,7 @@ const Logo = () => {
         RA
       </h1>
     </div>
+    </Link>
   );
 };
 

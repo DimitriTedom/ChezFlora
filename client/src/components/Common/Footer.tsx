@@ -1,6 +1,9 @@
 import SocialIcons from "./Contact/SocialIcons";
 import Logo from "./Logo";
 import FooterSubComponent from "../Footer/FooterSubComponent";
+import { SnowDevCard } from "../Footer/SnowDevCard";
+import TitleComponent from "../Footer/title.Component";
+import JoinNewsLetter from "../Shopping-view/JoinNewsLetter";
 
 const Footer = () => {
   return (
@@ -44,11 +47,24 @@ const Footer = () => {
             to4="#"
           />
         </div>
+        {/* Join our newsletter */}
+        <section className="self-start relative max-h-[300px]">
+          <TitleComponent title="Join our Newsletter" />
+          <JoinNewsLetter />
+          <div className="absolute hidden lg:block right-0">
+
+          <img
+            src="/motifflower3.png"
+            alt="motif flower 3"
+            className="object-contain max-h-[28rem]"
+          />
+          </div>
+        </section>
       </div>
       <div className="border-t-2 border-t-black flex items-center justify-center py-5">
         <h1 className="text-[1rem] font-semibold lg:text-xl text-center">
-          © All copyrights reserved.
-          Designed, coded and deployed by <a href="#">SnowDev</a>.
+          © All copyrights reserved. Designed, coded and deployed by{" "}
+          <SnowDevCard />
         </h1>
       </div>
     </div>

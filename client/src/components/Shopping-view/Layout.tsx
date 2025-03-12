@@ -1,19 +1,22 @@
 import { Outlet } from "react-router-dom";
-import ShoppingHeader from "./Header";
-import HeaderSm from "./HeaderSm";
+import ShoppingHeader from "../Shopping-view/Header";
+import HeaderSm from "../Shopping-view/HeaderSm";
+import Footer from "../Common/Footer";
 
 const ShoppingLayout = () => {
   return (
-    <div className="flex flex-col bg-white overflow-hidden relative">
-      {/* Common header */}
-      <div className="fixed z-10 top-0 bg-white/75">
-        <ShoppingHeader />
-      </div>
-      <main className="flex flex-col w-full">
+    <div className="flex justify-center items-center flex-col relative w-full">
+      {/* Header Component */}
+      <ShoppingHeader />
+      <div className="lg:px-[30rem] lg:pb-[8rem] pt-5 p-8 xl:px-[20rem]">
         <Outlet />
-      </main>
-      <div className="lg:hidden">
-      <HeaderSm/>
+      </div>
+      {/* footer component */}
+      <div className="z-[1] w-full">
+        <Footer />
+      </div>
+      <div className="lg:hidden w-full z-[2]">
+        <HeaderSm />
       </div>
     </div>
   );

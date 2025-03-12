@@ -4,7 +4,7 @@ const ShoppingHome = () => {
     <div>
       {/* Hero Section */}
       <section className="w-full">
-
+    here is the shop/home page
       </section>
     </div>
   )
