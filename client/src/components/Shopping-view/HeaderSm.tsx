@@ -1,7 +1,7 @@
+import { AiFillHome } from "react-icons/ai"; 
 import { MdAccountCircle } from "react-icons/md";
 import React from "react";
 import { NavLink, Link } from "react-router-dom";
-import { BiSearchAlt2 } from "react-icons/bi";
 import { AiOutlineShoppingCart } from "react-icons/ai";
 import { BiMenuAltRight } from "react-icons/bi";
 import {
@@ -71,11 +71,10 @@ const NavMenuLinkSm = ({ title, icon: Icon, url }: NavProps) => (
     </NavLink>
   </NavigationMenuItem>
 );
-
 const HeaderSm = () => {
   // Définition dynamique des éléments de la barre de navigation
   const navItems: NavProps[] = [
-    { title: "Home", icon: BiSearchAlt2, url: "/android/home" },
+    { title: "Home", icon: AiFillHome, url: "/android/home" },
     { title: "Cart", icon: AiOutlineShoppingCart, url: "/android/cart" },
     { title: "Account", icon: MdAccountCircle, url: "/android/account" },
     { title: "Menu", icon: BiMenuAltRight, url: "/shop/menu" },
@@ -173,7 +172,7 @@ const HeaderSm = () => {
                           </NavigationMenuList>
                         </NavigationMenu>
                       </nav>
-                      <div className="space-y-6">
+                      <div className="space-y-6 flex flex-col">
                       <SignOrContactButton/>
                       <SocialIcons/>
                       </div>

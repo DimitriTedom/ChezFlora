@@ -52,7 +52,10 @@ export default {
   				'3': 'hsl(var(--chart-3))',
   				'4': 'hsl(var(--chart-4))',
   				'5': 'hsl(var(--chart-5))'
-  			}
+  			},
+			Pink: 'var(--secondary-pink)',
+			Green: 'var(--primary-green)',
+			Maron: 'var(--tertiary-maron)'
   		},
   		fontFamily: {
   			Inter: 'var(--Inter)',

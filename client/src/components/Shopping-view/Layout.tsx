@@ -12,7 +12,7 @@ const ShoppingLayout = () => {
       <main className="flex flex-col w-full">
         <Outlet />
       </main>
-      <div className="lg:hidden relative">
+      <div className="lg:hidden">
       <HeaderSm/>
       </div>
     </div>

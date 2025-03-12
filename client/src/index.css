@@ -34,6 +34,9 @@
     --font_open_sans: "Open Sans", sans-serif;
     --Inter: "Inter", sans-serif;
     --Poppins: "Poppins", sans-serif;
+    --tertiary-maron: #EBCB92;
+    --secondary-pink: #F4CFDF;
+    --primary-green: #B0F2B6;
   }
   .dark {
     --background: 240 10% 3.9%;

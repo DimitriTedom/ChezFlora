@@ -1,4 +1,5 @@
-// import { RxAvatar } from "react-icons/rx"; 
+import { CgOptions } from "react-icons/cg";
+// import { RxAvatar } from "react-icons/rx";
 import React from "react";
 import { NavLink, Link } from "react-router-dom";
 import { AiOutlineShoppingCart } from "react-icons/ai";
@@ -15,7 +16,10 @@ import {
 import PopoverCustum from "../Common/PopoverCustum";
 import { AvatarCustum } from "../Common/Avatar.custom";
 import SignOrContactButton from "./SignOrContactButton";
-
+import { Sheet, SheetTrigger, SheetContent } from "@/components/ui/sheet";
+import { MagnifyingGlassIcon } from "@radix-ui/react-icons";
+import { useState } from "react";
+import { Input } from "../ui/input";
 // Composant personnalisé pour les liens simples
 const NavMenuLink = ({ url, text }: { url: string; text: string }) => (
   <NavigationMenuItem>
@@ -52,92 +56,120 @@ const NavMenuDropdown = ({
 );
 
 const ShoppingHeader = () => {
+  const [searchValue, setSearchValue] = useState("");
+
   return (
     <div className="w-full">
-      <div className="w-full justify-center lg:hidden bg-white/90">
-    flora
+      <div className="w-full justify-center bg-opacity-5 lg:hidden bg-white/90 py-3 px-4">
+        <Sheet>
+          <div className="flex items-center bg-opacity-10 bg-white shadow-lg rounded-full p-2 w-full max-w-md">
+            <button className="mr-2 bg-white rounded-full p-2 flex items-center justify-center shadow-md">
+              <MagnifyingGlassIcon className="w-6 h-6 text-black" />
+            </button>
+
+            <div className="flex flex-col">
+              <Input
+                type="text"
+                value={searchValue}
+                onChange={(e) => setSearchValue(e.target.value)}
+                placeholder="Which flower ?"
+                className="bg-white outline-none w-full text-black px-2 border-none shadow-none"
+              />
+              <div className="ml-4 text-gray-400 md:block">
+                where • week • Event
+              </div>
+            </div>
+          <SheetTrigger>
+            <button className="mr-2 bg-white rounded-full p-2 flex items-center justify-center shadow-md">
+              <CgOptions className="w-6 h-6 text-black" />
+            </button>
+          </SheetTrigger>
+          </div>
+          <SheetContent side="top" className="h-screen">
+
+          </SheetContent>
+        </Sheet>
       </div>
-    <div className="lg:flex w-full items-center py-5 justify-between border-b-3 border-b-gray-700 border shadow-md px-[6rem] hidden">
-      {/* Logo renvoie sur la page d'accueil */}
-      <Link to="/shop/home">
-        <Logo />
-      </Link>
+      <div className="lg:flex w-full items-center py-5 justify-between border-b-3 border-b-gray-700 border shadow-md px-[6rem] hidden">
+        {/* Logo renvoie sur la page d'accueil */}
+        <Link to="/shop/home">
+          <Logo />
+        </Link>
 
-      {/* Navigation principale (version desktop) */}
-      <nav className="hidden md:hidden lg:flex space-x-6 text-xl">
-        <NavigationMenu>
-          <NavigationMenuList>
-            {/* Menu Accueil */}
-            <NavMenuLink url="/shop/home" text="Home" />
-          </NavigationMenuList>
-        </NavigationMenu>
+        {/* Navigation principale (version desktop) */}
+        <nav className="hidden md:hidden lg:flex space-x-6 text-xl">
+          <NavigationMenu>
+            <NavigationMenuList>
+              {/* Menu Accueil */}
+              <NavMenuLink url="/shop/home" text="Home" />
+            </NavigationMenuList>
+          </NavigationMenu>
 
-        <NavigationMenu>
-          <NavigationMenuList>
-            {/* Menu Store */}
-            <NavMenuLink url="/shop/store" text="Store" />
-          </NavigationMenuList>
-        </NavigationMenu>
+          <NavigationMenu>
+            <NavigationMenuList>
+              {/* Menu Store */}
+              <NavMenuLink url="/shop/store" text="Store" />
+            </NavigationMenuList>
+          </NavigationMenu>
 
-        <NavigationMenu>
-          <NavigationMenuList>
-            {/* Menu Services avec sous-menu */}
-            <NavMenuDropdown text="Services">
-              {/* Items du sous-menu Services (utilise Link simple, 
-                  mais tu peux aussi mettre NavLink si tu veux un style actif) */}
-              <NavigationMenuLink className="rounded-md hover:bg-pink-100">
-                <Link to="/service1" className="transition-colors px-4 py-2">
-                  Service 1
-                </Link>
-              </NavigationMenuLink>
-              <NavigationMenuLink className="rounded-md hover:bg-pink-100">
-                <Link to="/service2" className="transition-colors px-4 py-2">
-                  Service 2
-                </Link>
-              </NavigationMenuLink>
-              <NavigationMenuLink className="rounded-md hover:bg-pink-100">
-                <Link to="/service3" className="transition-colors px-4 py-2">
-                  Service 3
-                </Link>
-              </NavigationMenuLink>
-            </NavMenuDropdown>
-          </NavigationMenuList>
-        </NavigationMenu>
+          <NavigationMenu>
+            <NavigationMenuList>
+              {/* Menu Services avec sous-menu */}
+              <NavMenuDropdown text="Services">
+ 
+                <NavigationMenuLink className="rounded-md hover:bg-pink-100">
+                  <Link to="/service1" className="transition-colors px-4 py-2">
+                    Service 1
+                  </Link>
+                </NavigationMenuLink>
+                <NavigationMenuLink className="rounded-md hover:bg-pink-100">
+                  <Link to="/service2" className="transition-colors px-4 py-2">
+                    Service 2
+                  </Link>
+                </NavigationMenuLink>
+                <NavigationMenuLink className="rounded-md hover:bg-pink-100">
+                  <Link to="/service3" className="transition-colors px-4 py-2">
+                    Service 3
+                  </Link>
+                </NavigationMenuLink>
+              </NavMenuDropdown>
+            </NavigationMenuList>
+          </NavigationMenu>
 
-        <NavigationMenu>
-          <NavigationMenuList>
-            {/* Menu Blog */}
-            <NavMenuLink url="/shop/blog" text="Blog" />
-          </NavigationMenuList>
-        </NavigationMenu>
+          <NavigationMenu>
+            <NavigationMenuList>
+              {/* Menu Blog */}
+              <NavMenuLink url="/shop/blog" text="Blog" />
+            </NavigationMenuList>
+          </NavigationMenu>
 
-        <NavigationMenu>
-          <NavigationMenuList>
-            {/* Menu About */}
-            <NavMenuLink url="/shop/about" text="About" />
-          </NavigationMenuList>
-        </NavigationMenu>
-      </nav>
+          <NavigationMenu>
+            <NavigationMenuList>
+              {/* Menu About */}
+              <NavMenuLink url="/shop/about" text="About" />
+            </NavigationMenuList>
+          </NavigationMenu>
+        </nav>
 
-      {/* Icônes mobiles (visibles uniquement quand la navbar est cachée) */}
-      <div className="flex items-center lg:hidden space-x-[4%]">
-        <AiOutlineShoppingCart className="headerIcons" />
-        <PopoverCustum/>
-        <BiMenuAltRight className="headerIcons" />
+        {/* Icônes mobiles (visibles uniquement quand la navbar est cachée) */}
+        <div className="flex items-center lg:hidden space-x-[4%]">
+          <AiOutlineShoppingCart className="headerIcons" />
+          <PopoverCustum />
+          <BiMenuAltRight className="headerIcons" />
+        </div>
+
+        {/* Section des boutons (vide dans cet exemple) */}
+        <div className="hidden lg:flex lg:items-center lg:space-x-4">
+          <AiOutlineShoppingCart className="headerIcons" />
+          <span className="w-[2px] h-8 bg-pink-400"></span>
+          <PopoverCustum />
+          <span className="w-[2px] h-8 bg-pink-400"></span>
+
+          {/* <RxAvatar className="headerIcons mr-[1rem]"/> */}
+          <AvatarCustum />
+          <SignOrContactButton />
+        </div>
       </div>
-
-      {/* Section des boutons (vide dans cet exemple) */}
-      <div className="hidden lg:flex lg:items-center lg:space-x-4">
-        <AiOutlineShoppingCart className="headerIcons" />
-        <span className="w-[2px] h-8 bg-pink-400"></span>
-        <PopoverCustum/>
-        <span className="w-[2px] h-8 bg-pink-400"></span>
-
-        {/* <RxAvatar className="headerIcons mr-[1rem]"/> */}
-        <AvatarCustum/>
-                <SignOrContactButton/>
-      </div>
-    </div>
     </div>
   );
 };
