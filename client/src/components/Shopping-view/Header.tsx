@@ -59,15 +59,15 @@ const ShoppingHeader = () => {
   const [searchValue, setSearchValue] = useState("");
 
   return (
-    <div className="w-full">
-      <div className="w-full justify-center bg-opacity-5 lg:hidden bg-white/90 py-3 px-4">
+    <div className="w-screen mb-32 xl:mb-0">
+      <div className="w-full justify-center border-b-[1px] border-b-pink-700 fixed top-0  z-5 bg-opacity-50 backdrop-blur-sm transition-all duration-300 lg:hidden bg-white/80 py-3 px-4">
         <Sheet>
-          <div className="flex items-center bg-opacity-10 bg-white shadow-lg rounded-full p-2 w-full max-w-md">
+          <div className="flex items-center justify-between bg-opacity-50 bg-transparent bg-white shadow-lg rounded-full p-2 w-full">
             <button className="mr-2 bg-white rounded-full p-2 flex items-center justify-center shadow-md">
               <MagnifyingGlassIcon className="w-6 h-6 text-black" />
             </button>
 
-            <div className="flex flex-col">
+            <div className="flex flex-col w-[17rem] md:w-[40rem] justify-center">
               <Input
                 type="text"
                 value={searchValue}
@@ -80,7 +80,7 @@ const ShoppingHeader = () => {
               </div>
             </div>
           <SheetTrigger>
-            <button className="mr-2 bg-white rounded-full p-2 flex items-center justify-center shadow-md">
+            <button className="bg-white rounded-full p-2 flex items-center justify-center shadow-md">
               <CgOptions className="w-6 h-6 text-black" />
             </button>
           </SheetTrigger>
@@ -90,7 +90,7 @@ const ShoppingHeader = () => {
           </SheetContent>
         </Sheet>
       </div>
-      <div className="lg:flex w-full items-center py-5 justify-between border-b-3 border-b-gray-700 border shadow-md px-[6rem] hidden">
+      <div className="lg:flex w-screen items-center py-5 justify-between border-b-3 border-b-gray-700 border shadow-md px-[6rem] hidden fixed bg-white bg-opacity-85 lg:mb-8">
         {/* Logo renvoie sur la page d'accueil */}
         <Link to="/shop/home">
           <Logo />

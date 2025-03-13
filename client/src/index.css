@@ -34,9 +34,9 @@
     --font_open_sans: "Open Sans", sans-serif;
     --Inter: "Inter", sans-serif;
     --Poppins: "Poppins", sans-serif;
-    --tertiary-maron: #EBCB92;
-    --secondary-pink: #F4CFDF;
-    --primary-green: #B0F2B6;
+    --tertiary-maron: #ebcb92;
+    --secondary-pink: #f4cfdf;
+    --primary-green: #b0f2b6;
   }
   .dark {
     --background: 240 10% 3.9%;
@@ -70,17 +70,20 @@
     @apply border-border;
   }
   body {
-    @apply bg-background text-foreground font-Poppins;
+    @apply bg-background text-foreground font-Inter w-full p-0 m-0 overflow-x-hidden;
   }
 }
 
-@layer components{
-  .headerIcons{
-    @apply text-pink-300 hover:text-pink-400 text-4xl
+@layer components {
+  .headerIcons {
+    @apply text-pink-300 hover:text-pink-400 text-4xl;
   }
 }
 
-@layer utilities{
-  .ombre{
-    box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 4px, rgba(0, 0, 0, 0.3) 0px 7px 13px -3px, rgba(0, 0, 0, 0.2) 0px -3px 0px inset;}
+@layer utilities {
+  .ombre {
+    box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 4px,
+      rgba(0, 0, 0, 0.3) 0px 7px 13px -3px,
+      rgba(0, 0, 0, 0.2) 0px -3px 0px inset;
+  }
 }

@@ -7,7 +7,7 @@ import JoinNewsLetter from "../Shopping-view/JoinNewsLetter";
 
 const Footer = () => {
   return (
-    <div className="w-full bg-Maron flex flex-col">
+    <div className="w-[100%] bg-Maron flex flex-col">
       <div className="flex flex-col lg:items-center px-4 py-6 gap-4 lg:justify-between lg:flex-row lg:px-[6rem] lg:py-[5rem]">
         <div className="flex flex-col gap-8">
           <div className="space-y-4">

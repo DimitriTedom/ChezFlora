@@ -7,7 +7,7 @@ const JoinNewsLetter = () => {
       <Input
         type="Email"
         placeholder="example@gmail.com"
-        className="p-6 border-solid border rounded-full lg:w-[40rem] border-pink-300 shadow-lg text-sm lg:text-[1.3rem] outline-pink-400 selection:shadow-pink-400 text-gray-700"
+        className="p-6 border-solid border rounded-full lg:w-[20rem] xl:w-[30rem] border-pink-300 shadow-lg text-sm lg:text-[1.3rem] outline-pink-400 selection:shadow-pink-400 text-gray-700"
       />{" "}
       <button
         className="p-4 bg-pink-300 flex items-center absolute justify-center z-[1] right-[.5%] rounded-full hover:bg-pink-500 duration-300 hover:shadow-lg"
