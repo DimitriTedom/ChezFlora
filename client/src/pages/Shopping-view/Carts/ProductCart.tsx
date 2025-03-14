@@ -2,7 +2,7 @@ import { BsCartPlus } from "react-icons/bs";
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Badge } from "@/components/ui/badge";
-interface Product {
+export interface Product {
   title: string;
   price: number;
   units: number;
@@ -28,7 +28,7 @@ const ProductCard: React.FC<Product> = ({ title, price, units, image, discount }
       )}
       <img src={image} alt={title} className="w-full object-cover" />
       <div className="p-4 flex flex-col gap-6">
-        <div className='flex w-full justify-between items-center'>
+        <div className='flex w-full justify-between items-center space-x-12'>
           <h2 className="text-2xl font-Poppins font-extrabold mb-2 truncate">{title}</h2>
           <p className="text-gray-600 mb-4">{units} unit{units !== 1 ? 's' : ''}</p>
         </div>
