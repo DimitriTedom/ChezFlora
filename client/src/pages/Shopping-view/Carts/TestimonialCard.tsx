@@ -1,6 +1,7 @@
-import { AiFillStar } from "react-icons/ai"; 
+import { AiFillStar } from "react-icons/ai";
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
-{/* <AiFillStar /> */}
+import { motion } from "framer-motion";
+
 export interface Testimonial {
   text: string;
   name: string;
@@ -21,39 +22,63 @@ const TestimonialCard: React.FC<Testimonial> = ({
     const hasHalfStar = rating % 1 >= 0.5;
 
     return (
-      <>
+      <div className="flex items-center gap-0.5">
         {[...Array(fullStars)].map((_, index) => (
-          <AiFillStar key={index} className="w-5 h-5 text-yellow-500" />
+          <AiFillStar
+            key={index}
+            className="w-5 h-5 text-yellow-500 md:w-6 md:h-6"
+          />
         ))}
-        {hasHalfStar && <AiFillStar className="w-5 h-5 text-yellow-500 opacity-50" />}
+        {hasHalfStar && (
+          <AiFillStar
+            className="w-5 h-5 text-yellow-500 opacity-50 md:w-6 md:h-6"
+          />
+        )}
         {[...Array(5 - fullStars - (hasHalfStar ? 1 : 0))].map((_, index) => (
-          <AiFillStar key={index + fullStars + (hasHalfStar ? 1 : 0)} className="w-5 h-5 text-gray-300" />
+          <AiFillStar
+            key={index + fullStars + (hasHalfStar ? 1 : 0)}
+            className="w-5 h-5 text-gray-300 md:w-6 md:h-6"
+          />
         ))}
-      </>
+      </div>
     );
   };
 
   return (
-    <div className="bg-white rounded-lg shadow-xl p-6 relative overflow-hidden">
-      <div className="absolute inset-0 bg-gray-100 opacity-10 blur-md"></div>
-      <div className="relative z-10">
-        <p className="text-gray-700 mb-4">{text}</p>
-        <div className="flex flex-col gap-4 lg:flex-row items-center justify-between">
-          <div className="flex items-center justify-between lg:justify-start w-full">
-            <Avatar className="w-16 h-16 mr-3">
-              <AvatarImage src={imageUrl} alt={`Avatar of ${name}`} />
+    <motion.div
+      className="bg-white rounded-2xl shadow-lg p-4 sm:p-6 relative overflow-hidden transition-transform duration-300 hover:-translate-y-1"
+      whileHover={{ scale: 1.02 }}
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: -20 }}
+    >
+      <div className="absolute inset-0 bg-gradient-to-br from-primary/10 to-transparent opacity-20 blur-md" />
+      <div className="relative z-10 space-y-4">
+        <p className="text-gray-700 text-sm sm:text-base leading-relaxed">
+          {text}
+        </p>
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
+          <div className="flex items-center gap-3 w-full sm:w-auto">
+            <Avatar className="w-12 h-12 sm:w-16 sm:h-16 border-2 border-white shadow-lg">
+              <AvatarImage
+                src={imageUrl}
+                alt={name}
+                className="object-cover"
+              />
             </Avatar>
-            <div>
-              <h5 className="text-gray-900 font-medium">{name}</h5>
-              <p className="text-gray-600">{tagline}</p>
+            <div className="text-center sm:text-left">
+              <h5 className="text-base sm:text-lg font-medium text-gray-900">
+                {name}
+              </h5>
+              <p className="text-xs sm:text-sm text-gray-500">{tagline}</p>
             </div>
           </div>
-          <div className="flex items-center">
+          <div className="flex items-center gap-2 sm:gap-3">
             {renderStars(rating)}
           </div>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 };
 

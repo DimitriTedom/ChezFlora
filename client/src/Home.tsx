@@ -20,9 +20,11 @@ import UnAuthPage from "./pages/UnAuthPAge";
 import AuthForgotPassword from "./pages/Auth/ForgotPassword";
 import AuthEnterOtp from "./pages/Auth/EnterOTP";
 import AuthNewPassword from "./pages/Auth/EnterNewPassword";
+import ShoppingStore from "./pages/Shopping-view/ShoppingStore";
+import ShoppingAbout from "./pages/Shopping-view/ShoppingAbout";
 
 export default function Home() {
-  const isAuthenticated = false;
+  const isAuthenticated = true;
   const user = {
     name: "dimitri",
     role: "user"
@@ -62,6 +64,8 @@ export default function Home() {
           }>
           <Route path="home" element={<ShoppingHome />} />
           <Route path="listing" element={<ShoppingListing />} />
+          <Route path="store" element={<ShoppingStore />} />
+          <Route path="about" element={<ShoppingAbout />} />
           <Route path="checkout" element={<ShoppingCheckout />} />
           <Route path="account" element={<ShoppingAccount />} />
           <Route path="blog" element={<ShoppingBlog />} />

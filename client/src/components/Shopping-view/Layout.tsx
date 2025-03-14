@@ -7,7 +7,7 @@ const ShoppingLayout = () => {
   return (
     <div className="flex flex-col w-screen min-h-screen relative overflow-x-hidden">
       {/* Header Component */}
-      <div className="mb-32 bg-opacity-95 absolute top-0 z-[50] ">
+      <div className="mb-32 bg-opacity-95 absolute top-0 z-[50]">
         <ShoppingHeader />
       </div>
       <div className="lg:px-[20rem] lg:pb-[8rem] pt-5 p-8 xl:px-[6rem] w-full h-full md:px-[4rem]">

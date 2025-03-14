@@ -3,9 +3,13 @@ import { FaSearchengin } from "react-icons/fa";
 import { Button } from "@/components/ui/button";
 import SearchBar from "@/components/Shopping-view/SearchBarLg";
 import FormTitle from "@/components/Common/FormTitle";
-import ProductCard, { Product } from "./Carts/ProductCart";
+import ProductCard from "./Carts/ProductCart";
 import Spinner from "@/components/Shopping-view/ShowMoreSpinner";
 import TestimonialCard, { Testimonial } from "./Carts/TestimonialCard";
+import BlogCard from "./Carts/BlogCard";
+import { blogsArray } from "@/data/blogs";
+import { products } from "@/data/Products";
+import { Link } from "react-router-dom";
 const ShoppingHome = () => {
   const testimonials: Testimonial[] = [
     {
@@ -13,65 +17,31 @@ const ShoppingHome = () => {
       name: "Marie Dubois",
       imageUrl: "/avatar1.png",
       tagline: "Cliente depuis 2020",
-      rating: 4.6
+      rating: 4.6,
     },
     {
       text: "Le service client est exceptionnel ! J'ai dû modifier ma commande à la dernière minute et l'équipe a été extrêmement accommodante. Les orchidées que j'ai reçues étaient incroyablement belles.",
       name: "Lucas Martin",
       imageUrl: "/avatar2.svg",
       tagline: "Client fidèle",
-      rating: 4.2
+      rating: 4.2,
     },
     {
       text: "J'étais sceptique sur la livraison internationale, mais ChezFlora a dépassé mes attentes. Les lys que j'ai envoyés à ma sœur au Canada sont arrivés en parfait état après seulement 48 heures.",
       name: "Sophie Moreau",
       imageUrl: "/avatar3.svg",
       tagline: "Client depuis 2022",
-      rating: 5.0
+      rating: 5.0,
     },
     {
       text: "Les frais de livraison étaient un peu élevés, mais la qualité des fleurs compense largement. Les tulipes que j'ai reçues étaient fraîches et ont duré plus d'une semaine. Je recommande sans hésiter !",
       name: "Élodie Durand",
       imageUrl: "/avatar4.svg",
       tagline: "Client depuis 2023",
-      rating: 3.5
-    }
+      rating: 3.5,
+    },
   ];
-  const products: Product[] = [
-    {
-      title: 'Luxury Premium Red Roses Bouquet with 12 Stems',
-      price: 49.99,
-      units: 5,
-      image: '/flowerGen5.jpg',
-      discount: 20
-    },
-    {
-      title: 'Fresh White Lilies Arrangement in Crystal Vase',
-      price: 35.50,
-      units: 3,
-      image: '/flowerGen4(Services).jpg',
-    },
-    {
-      title: 'Tropical Orchid Plant in Ceramic Pot with Care Guide',
-      price: 29.99,
-      units: 8,
-      image: '/flower12.webp',
-      discount: 15
-    },
-    {
-      title: 'Assorted Wildflower Bouquet for Summer Season',
-      price: 22.99,
-      units: 12,
-      image: '/flowerGen1.jpg',
-    },
-    {
-      title: 'Designer Mixed Flower Arrangement in Glass Vase',
-      price: 39.99,
-      units: 7,
-      image: '/flower2.jpg',
-      discount: 10
-    }
-  ];
+
   return (
     <div className="w-full overflow-x-hidden">
       <div className="w-48 h-48 rounded-full bg-pink-100 blur-3xl absolute z-[-2] left-[10%] lg:w-60 lg:h-60"></div>
@@ -93,10 +63,10 @@ const ShoppingHome = () => {
             </Button>
           </div>
           <div className="hidden lg:block absolute bg-gray-200 shadow-pink-300 drop-shadow-2xl w-[80%] xl:w-[90%] lg:bottom-[60%] xl:top-[65%]">
-          <div>
-            <SearchBar />
+            <div>
+              <SearchBar />
+            </div>
           </div>
-        </div>
         </div>
         <div className="w-48 h-48 lg:w-64 lg:h-64 rounded-full bg-green-100 blur-3xl absolute z-[-2] right-0 top-[20%] lg:left-[15%]"></div>
         <div>
@@ -106,7 +76,6 @@ const ShoppingHome = () => {
             className="rounded-[2rem] lg:h-[80%] lg:w-[100%] xl:h-[85%]"
           />
         </div>
-
       </section>
 
       {/* Featured Products */}
@@ -123,22 +92,17 @@ const ShoppingHome = () => {
           className="absolute scale-50 top-[-9%] right-[-50%] md:scale-75 opacity-70 rotate-180 xl:right-[-10%]"
         />
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mt-8 max-w-full">
-        {products.map((product, index) => (
-        <ProductCard
-          key={index}
-          title={product.title}
-          price={product.price}
-          units={product.units}
-          image={product.image}
-          discount={product.discount}
-        />
-      ))}
+          {products.map((product, index) => (
+            <ProductCard key={index} {...product} />
+          ))}
         </div>
+        <Link to="/shop/store">
+        
         <Button className="flex items-center justify-center rounded-full text-sm lg:text-xl px-[1rem] py-4 bg-orange-300 border border-solid border-orange-500 hover:bg-oramge-500 hover:shadow-md duration-300 cursor-pointer">
           <Spinner />
           <span className="ml-4">Show me more</span>
         </Button>{" "}
-
+        </Link>
         <img
           src="/motifFlower2.png"
           alt="motifFlower2"
@@ -148,28 +112,65 @@ const ShoppingHome = () => {
 
       {/* Testimonials */}
       <section className="flex flex-col items-center gap-8 mt-[4rem] bg-rose-100 p-[3rem] rounded-3xl relative overflow-hidden">
-      <div>
-        <FormTitle title="Testimonials" comment="What our customers say about us"/>
-      </div>
-      <img
+        <div>
+          <FormTitle
+            title="Testimonials"
+            comment="What our customers say about us"
+          />
+        </div>
+        <img
           src="/motifFloral-removebg-preview.png"
           alt="motifFlower"
           className="absolute scale-50 top-[-9%] right-[-50%] md:scale-75 opacity-70 rotate-180  xl:right-[-10%]"
         />
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mt-8 max-w-full">
-        {testimonials.map((testimonial, index) => (
-          <TestimonialCard key={index} {...testimonial} />
-        ))}
-      </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mt-8 max-w-full">
+          {testimonials.map((testimonial, index) => (
+            <TestimonialCard key={index} {...testimonial} />
+          ))}
+        </div>
 
-      <img
+        <img
           src="/ProduitEnVedeteFlower-removebg-preview.png"
           alt="motifFlower2"
           className="absolute scale-50 bottom-[-20%] left-[-50%] md:scale-75 opacity-80  xl:left-[-20%]"
         />
       </section>
 
-
+      {/* Blog */}
+      <section className="flex flex-col items-center gap-8 mt-[4rem] bg-gray-100 p-[3rem] rounded-3xl relative overflow-hidden">
+        <div>
+          <FormTitle
+            title="Find our all blogs from here"
+            comment="our blogs are written from very research research and well known writers writers so that  we can provide you the best blogs and articles articles for you to read them all along"
+          />
+        </div>
+        <img
+          src="/motifFlower.png"
+          alt="motifFlower"
+          className="absolute scale-50 top-[-9%] right-[-50%] md:scale-75 opacity-70 rotate-180 xl:right-[-10%]"
+        />
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mt-8 max-w-full">
+          {blogsArray.map((blog) => (
+            <BlogCard
+              key={blog.id}
+              {...blog}
+              authorImageUrl={blog.authorImageUrl} // Optional prop
+            />
+          ))}
+        </div>
+        {/* <img
+          src="/motifFlower2.png"
+          alt="motifFlower2"
+          className="absolute scale-50 bottom-[-9%] left-[-50%] md:scale-75 opacity-80  xl:left-[-10%]"
+        /> */}
+        <Link to="/shop/blog">
+        
+        <Button className="flex items-center justify-center rounded-full text-sm lg:text-xl px-[1rem] py-4 bg-rose-300 border border-solid border-orange-500 hover:bg-oramge-500 hover:shadow-md duration-300 cursor-pointer">
+          <Spinner />
+          <span className="ml-4">Show me more</span>
+        </Button>{" "}
+        </Link>
+      </section>
     </div>
   );
 };
