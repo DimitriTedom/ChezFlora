@@ -10,6 +10,8 @@ import BlogCard from "./Carts/BlogCard";
 import { blogsArray } from "@/data/blogs";
 import { products } from "@/data/Products";
 import { Link } from "react-router-dom";
+import { Helmet } from "react-helmet-async";
+
 const ShoppingHome = () => {
   const testimonials: Testimonial[] = [
     {
@@ -44,6 +46,27 @@ const ShoppingHome = () => {
 
   return (
     <div className="w-full overflow-x-hidden">
+      <Helmet>
+        <title>ChezFlora - Fresh Flowers, Décoration, and Event Services</title>
+        <meta
+          name="description"
+          content="Discover fresh floral arrangements, plants, and bespoke decoration services for events. Order online with fast delivery. Eco-friendly and artisanal quality since 2016."
+        />
+        {/* Open Graph Tags */}
+        <meta
+          property="og:title"
+          content="ChezFlora - Floral Décoration Experts"
+        />
+        <meta
+          property="og:description"
+          content="Explore premium flowers, event decoration, and personalized floral services. Shop online for weddings, events, and home décor."
+        />
+        <meta property="og:type" content="website" />
+        <meta property="og:image" content="/assets/og-home.jpg" />
+        {/* Replace with your hero image */}
+        <meta property="og:url" content="https://www.chezflora.com/shop/home" />
+      </Helmet>
+
       <div className="w-48 h-48 rounded-full bg-pink-100 blur-3xl absolute z-[-2] left-[10%] lg:w-60 lg:h-60"></div>
       {/* Hero Section */}
       <section className="w-full h-full flex flex-col gap-8 relative lg:flex-row lg:justify-between xl:justify-between mt-32">
@@ -97,11 +120,10 @@ const ShoppingHome = () => {
           ))}
         </div>
         <Link to="/shop/store">
-        
-        <Button className="flex items-center justify-center rounded-full text-sm lg:text-xl px-[1rem] py-4 bg-orange-300 border border-solid border-orange-500 hover:bg-oramge-500 hover:shadow-md duration-300 cursor-pointer">
-          <Spinner />
-          <span className="ml-4">Show me more</span>
-        </Button>{" "}
+          <Button className="flex items-center justify-center rounded-full text-sm lg:text-xl px-[1rem] py-4 bg-orange-300 border border-solid border-orange-500 hover:bg-oramge-500 hover:shadow-md duration-300 cursor-pointer">
+            <Spinner />
+            <span className="ml-4">Show me more</span>
+          </Button>{" "}
         </Link>
         <img
           src="/motifFlower2.png"
@@ -164,11 +186,10 @@ const ShoppingHome = () => {
           className="absolute scale-50 bottom-[-9%] left-[-50%] md:scale-75 opacity-80  xl:left-[-10%]"
         /> */}
         <Link to="/shop/blog">
-        
-        <Button className="flex items-center justify-center rounded-full text-sm lg:text-xl px-[1rem] py-4 bg-rose-300 border border-solid border-orange-500 hover:bg-oramge-500 hover:shadow-md duration-300 cursor-pointer">
-          <Spinner />
-          <span className="ml-4">Show me more</span>
-        </Button>{" "}
+          <Button className="flex items-center justify-center rounded-full text-sm lg:text-xl px-[1rem] py-4 bg-rose-300 border border-solid border-orange-500 hover:bg-oramge-500 hover:shadow-md duration-300 cursor-pointer">
+            <Spinner />
+            <span className="ml-4">Show me more</span>
+          </Button>{" "}
         </Link>
       </section>
     </div>
