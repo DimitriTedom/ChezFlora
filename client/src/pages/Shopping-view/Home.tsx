@@ -43,7 +43,7 @@ const ShoppingHome = () => {
       </section>
 
       {/* Featured Products */}
-      <section className="flex flex-col items-center gap-8 mt-[4rem] bg-green-200 p-[3rem] rounded-3xl relative">
+      <section className="flex flex-col items-center gap-8 mt-[4rem] bg-green-200 p-[3rem] rounded-3xl relative overflow-x-hidden">
         <div>
           <FormTitle
             title="Featured Products"
@@ -55,7 +55,7 @@ const ShoppingHome = () => {
           alt="motifFlower"
           className="absolute scale-50 top-[-9%] right-[-50%] md:scale-75 opacity-70 rotate-180"
         />
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mt-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mt-8 max-w-full">
           <ProductCard
             title="Lavender the flower of summer "
             price={10.99}
