@@ -22,7 +22,7 @@ const ProductCard: React.FC<Product> = ({ title, price, units, image, discount }
   return (
     <div className="bg-[#FFF7E0] rounded-[2rem] shadow-md overflow-hidden relative border-2 border-Maron">
       {discount && (
-        <Badge className="absolute top-0 left-0 bg-red-500 text-white px-2 py-1 text-sm font-bold rounded-full">
+        <Badge className="absolute top-0 left-0 bg-red-500 hover:bg-red-600 cursor-pointer text-white px-2 py-1 text-sm font-bold rounded-full">
           -{discount}% today
         </Badge>
       )}
