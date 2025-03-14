@@ -147,7 +147,7 @@ const ShoppingHome = () => {
       </section>
 
       {/* Testimonials */}
-      <section className="flex flex-col items-center gap-8 mt-[4rem] bg-rose-100 p-[3rem] rounded-3xl relative overflow-x-hidden">
+      <section className="flex flex-col items-center gap-8 mt-[4rem] bg-rose-100 p-[3rem] rounded-3xl relative overflow-hidden">
       <div>
         <FormTitle title="Testimonials" comment="What our customers say about us"/>
       </div>

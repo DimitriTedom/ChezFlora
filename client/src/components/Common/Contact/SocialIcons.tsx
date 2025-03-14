@@ -11,22 +11,22 @@ interface SocialLink {
 
 const socialLinks: SocialLink[] = [
   {
-    href: 'https://t.me/yourusername',
+    href: 'https://t.me/chezflora',
     ariaLabel: 'Telegram',
     Icon: FaTelegramPlane,
   },
   {
-    href: 'https://wa.me/yourphonenumber',
+    href: 'https://wa.me/+6957237832',
     ariaLabel: 'WhatsApp',
     Icon: BsWhatsapp,
   },
   {
-    href: 'https://www.linkedin.com/in/yourusername',
+    href: 'https://www.linkedin.com/in/chezflora/',
     ariaLabel: 'LinkedIn',
     Icon: FaLinkedinIn,
   },
   {
-    href: 'https://twitter.com/yourusername',
+    href: 'https://twitter.com/chezflora',
     ariaLabel: 'Twitter',
     Icon: AiOutlineTwitter,
   },

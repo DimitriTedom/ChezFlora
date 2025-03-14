@@ -55,7 +55,7 @@ const Footer = () => {
             <img
               src="/motifflower3.png"
               alt="motif flower 3"
-              className="object-contain max-h-[28rem]"
+              className="object-contain max-h-[28rem] opacity-80"
             />
           </div>
         </section>

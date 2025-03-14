@@ -4,8 +4,8 @@ const Logo = () => {
   return (
     <Link to="/shop/home">
     <div className="flex items-end">
-      <h2 className="text-pink-300 text-2xl">CHEZ</h2>
-      <h1 className="text-4xl font-extrabold flex items-end">
+      <h2 className="text-pink-400 font-bold text-2xl">CHEZ</h2>
+      <h1 className="text-4xl font-extrabold flex items-end font-Poppins">
         FL
         <img
           src="/ChezFlora__1_-removebg-preview.png"

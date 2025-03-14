@@ -32,9 +32,9 @@ export function SnowDevCard() {
               tags: MERN Stack Developper, Graphic, & UI/UX Designer
             </p>
             <p className="text-sm text-pink-700 flex space-x-2">
-                <a href="https://github.com/DimitriTedom"><AiFillGithub /></a>
-                <a href="https://github.com/DimitriTedom"><BsLinkedin /></a>
-                <a href="mailto:dimitritedom@gmail.com"><SiGmail /></a>
+                <a href="https://github.com/DimitriTedom" target="_blank"><AiFillGithub /></a>
+                <a href="https://www.linkedin.com/in/tedom-tafotsi-dimitri-wilfried-b70502298/" target="_blank"><BsLinkedin /></a>
+                <a href="mailto:dimitritedom@gmail.com" target="_blank"><SiGmail /></a>
             </p>
             <div className="flex items-center pt-2">
               <CalendarIcon className="mr-2 h-4 w-4 opacity-70" />{" "}
