@@ -52,12 +52,11 @@ const Footer = () => {
           <TitleComponent title="Join our Newsletter" />
           <JoinNewsLetter />
           <div className="absolute hidden lg:block right-0">
-
-          <img
-            src="/motifflower3.png"
-            alt="motif flower 3"
-            className="object-contain max-h-[28rem]"
-          />
+            <img
+              src="/motifflower3.png"
+              alt="motif flower 3"
+              className="object-contain max-h-[28rem]"
+            />
           </div>
         </section>
       </div>

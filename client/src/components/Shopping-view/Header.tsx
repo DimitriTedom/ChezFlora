@@ -59,8 +59,8 @@ const ShoppingHeader = () => {
   const [searchValue, setSearchValue] = useState("");
 
   return (
-    <div className="w-screen mb-32 xl:mb-0">
-      <div className="w-full justify-center border-b-[1px] border-b-pink-700 fixed top-0  z-5 bg-opacity-50 backdrop-blur-sm transition-all duration-300 lg:hidden bg-white/80 py-3 px-4">
+    <div className="w-screen lg:mb-32 xl:mb-32">
+      <div className="w-full justify-center border-b-[1px] border-b-pink-700 fixed top-0  z-[50] bg-opacity-50 backdrop-blur-sm transition-all duration-300 lg:hidden bg-white/80 py-3 px-4">
         <Sheet>
           <div className="flex items-center justify-between bg-opacity-50 bg-transparent bg-white shadow-lg rounded-full p-2 w-full">
             <button className="mr-2 bg-white rounded-full p-2 flex items-center justify-center shadow-md">
@@ -90,6 +90,7 @@ const ShoppingHeader = () => {
           </SheetContent>
         </Sheet>
       </div>
+
       <div className="lg:flex w-screen items-center py-5 justify-between border-b-3 border-b-gray-700 border shadow-md px-[6rem] hidden fixed bg-white bg-opacity-85 lg:mb-8">
         {/* Logo renvoie sur la page d'accueil */}
         <Link to="/shop/home">
