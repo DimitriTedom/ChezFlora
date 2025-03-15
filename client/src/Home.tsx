@@ -22,6 +22,7 @@ import AuthEnterOtp from "./pages/Auth/EnterOTP";
 import AuthNewPassword from "./pages/Auth/EnterNewPassword";
 import ShoppingStore from "./pages/Shopping-view/ShoppingStore";
 import ShoppingAbout from "./pages/Shopping-view/ShoppingAbout";
+import ShoppingContact from "./pages/Shopping-view/ShoppingContact";
 
 export default function Home() {
   const isAuthenticated = true;
@@ -69,6 +70,7 @@ export default function Home() {
           <Route path="checkout" element={<ShoppingCheckout />} />
           <Route path="account" element={<ShoppingAccount />} />
           <Route path="blog" element={<ShoppingBlog />} />
+          <Route path="contact" element={<ShoppingContact />} />
         </Route>
         <Route path="/unauth-page" element={<UnAuthPage />} />        
         <Route path="*" element={<NotFound />} />        

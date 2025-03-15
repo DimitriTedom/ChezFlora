@@ -3,6 +3,8 @@ import { Helmet } from "react-helmet-async";
 import FounderCard from "./Carts/FounderCard";
 import { Founders } from "@/data/About.FounderUsers";
 import FastFacts from "@/components/Shopping-view/About/FastFacts";
+import FormTitle from "@/components/Common/FormTitle";
+import GoodNewsCarousel from "@/components/Shopping-view/About/GoodNewsCarousel";
 
 const ShoppingAbout = () => {
   return (
@@ -72,6 +74,15 @@ const ShoppingAbout = () => {
 {/* Fast Facts */}
       <section className="pt-32">
           <FastFacts/>
+      </section>
+      {/* Good news from Far away */}
+
+      <section className="mt-16 px-4 md:px-8 lg:px-16 py-12 bg-rose-200 rounded-xl relative">
+            <FormTitle title="Good news from far away" comment="Let's see what people think of ChezFlora" />
+            <div>
+                {/* <img src="/GroupOfAvatars.png" alt="group of avatars" className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2" /> */}
+            <GoodNewsCarousel/>
+            </div>
       </section>
     </div>
   );
