@@ -41,7 +41,7 @@ const AuthLogin: React.FC = () => {
 
 
   return (
-    <div className=" flex items-center justify-center flex-col text-center">
+    <div className=" flex items-center justify-center flex-col text-center mt-32">
       <div className="bg-white p-8 rounded-[40px] shadow-2xl border w-full lg:px-[20rem] lg:py-[3rem] xl:px-[10rem]">
       <div className="mb-[1rem] lg:mb-[2rem]">
         <FormTitle title="Forgot password" comment="We will sent password intruction to your email"/>

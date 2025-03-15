@@ -54,6 +54,7 @@ const CommonForm: React.FC<CommonFormProps> = ({
             value={value}
             onChange={(e) => setFormData({ ...formData, [controlItem.name]: e.target.value })}
             className="mt-1 w-full"
+            rows={4}
           />
         );
       default:
