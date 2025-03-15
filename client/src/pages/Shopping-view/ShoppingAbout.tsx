@@ -56,7 +56,7 @@ const ShoppingAbout = () => {
       <div className=" flex flex-col items-center px-4 md:px-8 lg:px-16">
         <div className=" space-y-4 mb-12 self-start">
           <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold font-Poppins">
-            🌿 Our Founders
+            👋️ Our Founders
           </h1>
           <p className="text-lg sm:text-xl text-gray-700">
             Meet the team creating sustainable floral experiences with passion
@@ -78,7 +78,7 @@ const ShoppingAbout = () => {
       {/* Good news from Far away */}
 
       <section className="mt-16 px-4 md:px-8 lg:px-16 py-12 bg-rose-200 rounded-xl relative">
-            <FormTitle title="Good news from far away" comment="Let's see what people think of ChezFlora" />
+            <FormTitle title="🗞️ Good news from far away" comment="Let's see what people think of ChezFlora" />
             <div>
                 {/* <img src="/GroupOfAvatars.png" alt="group of avatars" className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2" /> */}
             <GoodNewsCarousel/>

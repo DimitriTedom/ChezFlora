@@ -11,7 +11,7 @@ const AboutHeroSection = () => {
       <div className="flex flex-col md:flex-row items-center justify-between gap-8">
         {/* Left Content */}
         <div className="max-w-md space-y-4 text-center md:text-left">
-          <h1 className="text-3xl font-bold font-Poppins xl:text-4xl">🌿 About ChezFlora</h1>
+          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold font-Poppins">🌸️ About ChezFlora</h1>
           <p className="text-gray-700 ">
             Since 2016, we've been crafting artisanal floral arrangements with a focus on sustainability. 
             From wedding bouquets to corporate event decorations, we bring nature's beauty to life.

@@ -150,6 +150,13 @@ const ShoppingHeader = () => {
               <NavMenuLink url="/shop/about" text="About" />
             </NavigationMenuList>
           </NavigationMenu>
+
+          <NavigationMenu>
+            <NavigationMenuList>
+              {/* Menu About */}
+              <NavMenuLink url="/shop/contact" text="Contact" />
+            </NavigationMenuList>
+          </NavigationMenu>
         </nav>
 
         {/* Icônes mobiles (visibles uniquement quand la navbar est cachée) */}
