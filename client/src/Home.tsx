@@ -25,7 +25,7 @@ import ShoppingAbout from "./pages/Shopping-view/ShoppingAbout";
 import ShoppingContact from "./pages/Shopping-view/ShoppingContact";
 
 export default function Home() {
-  const isAuthenticated = true;
+  const isAuthenticated = false;
   const user = {
     name: "dimitri",
     role: "user"

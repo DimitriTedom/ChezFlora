@@ -3,6 +3,7 @@ import { AiOutlineFacebook, AiOutlineInstagram, AiOutlineTwitter, AiOutlineYoutu
 import CommonForm from "@/components/Common/Form";
 import { Helmet } from "react-helmet-async";
 import { useState } from "react";
+import JoinNewsLetterComponent from "@/components/Shopping-view/contact/JoinNewsLetter";
 
 // Configuration objects
 const contactInfo = [
@@ -119,7 +120,7 @@ const ShoppingContact = () => {
   };
 
   return (
-    <div className="mt-32">
+    <div className="mt-32 overflow-x-hidden">
       <Helmet>
         {/* Primary SEO Tags */}
         <title>ChezFlora - Contact Us | Floral Consultation & Support</title>
@@ -218,6 +219,8 @@ const ShoppingContact = () => {
           />
         </div>
       </div>
+
+      <JoinNewsLetterComponent/>
     </div>
   );
 };

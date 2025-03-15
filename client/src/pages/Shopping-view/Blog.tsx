@@ -2,7 +2,7 @@ import { Helmet } from "react-helmet-async";
 
 const ShoppingBlog = () => {
   return (
-    <div>
+    <div className="mt-32">
       <Helmet>
         <title>ChezFlora Blog - Floral Tips & Trends</title>
         <meta

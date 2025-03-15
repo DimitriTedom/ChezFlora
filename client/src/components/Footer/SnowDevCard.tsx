@@ -22,8 +22,8 @@ export function SnowDevCard() {
       </HoverCardTrigger>
       <HoverCardContent className="w-80">
         <div className="flex justify-between space-x-4">
-          <Avatar>
-            <AvatarImage src="/avatar1.png" />
+          <Avatar className="w-16 h-16">
+            <AvatarImage src="/SnowDev (1).png" alt="@SnowDev" />
             <AvatarFallback>SN</AvatarFallback>
           </Avatar>
           <div className="space-y-1 flex-col flex items-center">
