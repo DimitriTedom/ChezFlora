@@ -74,7 +74,7 @@ const NavMenuLinkSm = ({ title, icon: Icon, url }: NavProps) => (
 const HeaderSm = () => {
   // Définition dynamique des éléments de la barre de navigation
   const navItems: NavProps[] = [
-    { title: "Home", icon: AiFillHome, url: "/android/home" },
+    { title: "Home", icon: AiFillHome, url: "/shop/home" },
     { title: "Cart", icon: AiOutlineShoppingCart, url: "/android/cart" },
     { title: "Account", icon: MdAccountCircle, url: "/android/account" },
     { title: "Menu", icon: BiMenuAltRight, url: "/shop/menu" },

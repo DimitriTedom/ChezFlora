@@ -9,8 +9,7 @@ import { registerFormControls } from "@/config";
 import { useDispatch } from "react-redux";
 import { registerUser } from "@/store/authSlice"; // action asynchrone définie dans ton slice
 import type { AppDispatch } from "@/store/store";
-import { useCustomToast } from "../../hooks/useCustomToast";
-
+import { useCustomToast } from "@/hooks/useCustomToast";
 
 interface SocialButton {
   content: string;
@@ -27,7 +26,7 @@ const AuthRegister: React.FC = () => {
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const { showCustomToast } = useCustomToast();
+  const { showToast } = useCustomToast();
 
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
@@ -43,18 +42,34 @@ const AuthRegister: React.FC = () => {
       setLoading(false);
       return;
     }
-    // console.log('at tr',formData);
-    // Dispatch de l'action registerUser (qui doit être définie dans ton slice)
+
     dispatch(registerUser(formData))
       .unwrap()
       .then((response) => {
-        // Par exemple, si la réponse contient un token, on peut le stocker
-        if (response?.token) {
-          localStorage.setItem("token", response.token);
+        // this response contains a json of succes boolean and succes message
+        console.log("API Response:", response);
+        if (response?.success) {
+          console.log("sucess before toast")
+          showToast({
+            message: response?.message,
+            type: "success",
+            subtitle: "Redirecting to login page...",
+            duration: 3000,
+          });
+          console.log("Client Response from Server: ", response);
+          setTimeout(() => {
+            navigate("/auth/login");
+          }, 3000);
+        }else{
+          console.log("Registration failed: ", response.message);
         }
-        navigate("/auth/login");
       })
       .catch((err: any) => {
+        showToast({
+          message: err,
+          type:"error",
+          duration: 5000,
+        })
         setError(err || "Registration failed");
       })
       .finally(() => setLoading(false));
@@ -80,6 +95,18 @@ const AuthRegister: React.FC = () => {
 
   return (
     <div className="flex items-center justify-center mt-32">
+      {/* <button
+        onClick={() =>
+          showToast({
+            message: "Test toast",
+            type: "success",
+            subtitle: "Ceci est un test",
+            // duration:3000,
+          })
+        }
+      >
+        Teste du toast
+      </button> */}
       <div className="bg-white p-8 rounded-[40px] shadow-2xl border w-full lg:px-[20rem] lg:py-[3rem] xl:px-[10rem]">
         <div className="mb-[1rem] lg:mb-[2rem]">
           <FormTitle
@@ -120,14 +147,11 @@ const AuthRegister: React.FC = () => {
           formData={formData}
           setFormData={setFormData}
           onSubmit={handleSubmit}
-          onClick={() => showCustomToast({ message: "Registration succesfull", type: "success" ,subtitle:"You can login now"})}
           buttonText="Continue"
         />
         {/* <Toaster/> */}
         {/* Gestion des erreurs et du chargement */}
-        {error && (
-          <p className="text-red-500 text-center mt-2">{error}</p>
-        )}
+        {error && <p className="text-red-500 text-center mt-2">{error}</p>}
         {loading && (
           <div className="flex justify-center mt-4">
             <svg

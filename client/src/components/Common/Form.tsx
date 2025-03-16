@@ -3,7 +3,6 @@ import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
 import { Textarea } from "../ui/textarea";
-import { ToastProvider } from "../../hooks/useCustomToast";
 
 interface FormControlItem {
   name: string;
@@ -20,6 +19,7 @@ export interface CommonFormProps {
   onSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
   onClick?: (e:React.MouseEvent) => void;
   buttonText?: string; // Facultatif avec une valeur par défaut
+  isBnDisabled?:boolean;
 }
 
 const CommonForm: React.FC<CommonFormProps> = ({
@@ -27,8 +27,8 @@ const CommonForm: React.FC<CommonFormProps> = ({
   formData,
   setFormData,
   onSubmit,
-  onClick,
-  buttonText = "Submit",
+  isBnDisabled,
+  buttonText,
 }) => {
   const renderInputByComponentType = (controlItem: FormControlItem) => {
     const value = formData[controlItem.name] || "";
@@ -84,10 +84,10 @@ const CommonForm: React.FC<CommonFormProps> = ({
           </div>
         ))}
       </div>
-      <Button type="submit" onClick={onClick} className="mt-4 w-full p-6 font-semibold text-white bg-pink-300 hover:bg-pink-400 rounded-full text-[1.3rem]">
-        {buttonText}
+      <Button type="submit" disabled={isBnDisabled} className="mt-4 w-full p-6 font-semibold text-white bg-pink-300 hover:bg-pink-400 rounded-full text-[1.3rem]">
+        {buttonText || "Submit"}
       </Button>
-      <div className="w-full"><ToastProvider/></div>
+      
     </form>
   );
 };

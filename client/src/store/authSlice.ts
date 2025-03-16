@@ -4,12 +4,20 @@ import axios from "axios";
 
 // Définition des types pour l'utilisateur et l'état d'authentification
 interface User {
+  success:boolean;
+  message:string;
+user:{
   id: string;
+  role:string;
   name: string;
   email: string;
-  token?: string;
 }
 
+}
+interface RegisterResponse { // Renommé pour clarté
+  success: boolean;
+  message: string;
+}
 interface AuthState {
   user: User | null;
   isLoading: boolean;
@@ -19,14 +27,14 @@ interface AuthState {
 
 const initialState: AuthState = {
   user: null,
-  isLoading: false,
+  isLoading: true,
   error: null,
   isAuthenticated:false,
 };
 
 // Action asynchrone pour l'enregistrement d'un utilisateur
 export const registerUser = createAsyncThunk<
-  User, // Type de retour en cas de succès
+RegisterResponse, // Type de retour en cas de succès
   { name: string; email: string; password: string }, // Type des paramètres attendus
   { rejectValue: string }
 >(
@@ -38,7 +46,7 @@ export const registerUser = createAsyncThunk<
         userData,
         { withCredentials: true }
       );
-      return response.data;
+      return response.data; //this data is just a json containing succes boolean and message from backend part which is to be displated in the user side by toast
     } catch (error: any) {
       return rejectWithValue(
         error.response?.data?.message || "Registration failed"

@@ -13,6 +13,7 @@ import { LoginFormControls } from "@/config";
 import { useDispatch } from "react-redux";
 import { loginUser } from "@/store/authSlice";
 import {Toaster,toast} from 'sonner'
+import { useCustomToast } from "@/hooks/useCustomToast";
 // Interface pour les boutons de réseaux sociaux
 interface SocialButton {
   content: string;
@@ -29,7 +30,7 @@ const AuthLogin: React.FC = () => {
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-
+  const {showToast} = useCustomToast()
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
   const notify = ()=>{
@@ -46,14 +47,34 @@ const AuthLogin: React.FC = () => {
         throw new Error("All fields are required");
       }
       console.log(formData);
-      dispatch(loginUser(formData)).unwrap().then((data)=>{console.log(data)});
+      dispatch(loginUser(formData)).unwrap().then((response)=>{
+          console.log("API RESPONSE:",response);
+          if(response?.success){
+            console.log("sucess before toast");
+            showToast({
+              message: response?.message,
+              type: "success",
+              subtitle: "Redirecting to shop home page...",
+              duration: 3000,
+            });
+            console.log("Client Response from Server: ", response);
+            setTimeout(() => {
+              navigate("/shop/home");
+            }, 3000);
+          }else{
+            console.log("Login Failed:", response?.message);
+          }
+      });
+    } catch (error:any) {
 
-    const {user,token} = response.data;
-    localStorage.setItem('token',token);
-      // Redirection vers une page après connexion
-      navigate("/dashboard");
-    } catch (error) {
-      setError("Invalid email or password",);
+      showToast({
+        message: error?.message,
+        type: "error",
+        subtitle: "Redirecting to login page...",
+        duration: 5000,
+      });
+
+      setError( error || "Invalid email or password",);
       console.log(error);
     } finally {
       setLoading(false);

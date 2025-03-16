@@ -1,85 +1,67 @@
-import { toast, Toaster } from "sonner";
-import { useEffect, useState } from "react";
+// src/hooks/useCustomToast.tsx
+import { toast, ToastOptions,ToastPosition } from 'react-toastify';
+import CustomToast from '../components/CustomToast';
 
-type ToastType = "success" | "error";
+type ToastType = 'success' | 'error' | 'warning' | 'info';
 
-interface CustomToastProps {
+interface ToastParams {
   message: string;
   subtitle?: string;
   type?: ToastType;
-  duration?: number; // durée de visibilité "idéale" (sans transition)
+  duration?: number;
 }
 
 export const useCustomToast = () => {
-  const showCustomToast = ({
+  const showToast = ({
     message,
     subtitle,
-    type = "success",
-    duration = 5000,
-  }: CustomToastProps) => {
-    const transitionDuration = 1000; // durée de la transition de la barre (en ms)
-    const totalDuration = duration + transitionDuration;
-
-    const id = toast(
-      <div
-        className={`rounded-lg shadow-md p-4 w-full space-y-2 text-white ${
-          type === "success" ? "bg-green-500" : "bg-red-500"
-        }`}
-        aria-live="polite"
-      >
-        <div className="flex justify-between items-center">
-          <strong>{message}</strong>
-          <button
-            className="opacity-70 hover:opacity-100"
-            onClick={() => id && toast.dismiss(id)}
-          >
-            ×
-          </button>
-        </div>
-        {subtitle && <p className="text-sm opacity-90">{subtitle}</p>}
-        <ProgressBar duration={totalDuration} type={type} />
-      </div>,
-      { duration: totalDuration }
+    type = 'success',
+    duration=5000,
+  }: ToastParams) => {
+    return toast[type](
+      <CustomToast 
+        type={type} 
+        message={message} 
+        subtitle={subtitle} 
+      />,
+      {
+        autoClose: duration,
+        closeButton: false,
+        position: "top-right" as ToastPosition,
+        hideProgressBar: false,
+        progressClassName: 'bg-white',
+        progressStyle: { transition: 'width 0.3s ease' },
+        pauseOnHover: true,
+      } as ToastOptions
     );
-
-    return id;
   };
 
-  return { showCustomToast };
+  const promiseToast = (
+    promise: Promise<any>,
+    {
+      pending = 'Processing...',
+      success = 'Success!',
+      error = 'Something went wrong',
+    }: {
+      pending?: string;
+      success?: string;
+      error?: string;
+    }
+  ) => {
+    return toast.promise(
+      promise,
+      {
+        pending: <CustomToast type="info" message={pending} />,
+        success: <CustomToast type="success" message={success} />,
+        error: <CustomToast type="error" message={error} />,
+      },
+      {
+        position:  "top-right" as ToastPosition,
+        autoClose: 5000,
+        closeButton: false,
+      } as ToastOptions
+    );
+  };
+
+  return { showToast, promiseToast };
 };
-
-interface ProgressBarProps {
-  duration: number;
-  type: ToastType;
-}
-
-const ProgressBar = ({ duration, type }: ProgressBarProps) => {
-  const [progress, setProgress] = useState(100);
-
-  useEffect(() => {
-    // On met à jour la barre toutes les 50ms pour une transition plus fluide
-    const interval = setInterval(() => {
-      setProgress((prev) => {
-        const decrement = 100 / (duration / 50);
-        return Math.max(0, prev - decrement);
-      });
-    }, 50);
-
-    return () => clearInterval(interval);
-  }, [duration]);
-
-  return (
-    <div className="h-1 bg-white rounded-full overflow-hidden mt-2">
-      <div
-        className="h-full bg-opacity-30 transition-all duration-1000"
-        style={{
-          width: `${progress}%`,
-          backgroundColor: type === "success" ? "green" : "red",
-        }}
-      />
-    </div>
-  );
-};
-
-// Fournisseur de toast
-export const ToastProvider = () => <Toaster position="top-right" />;

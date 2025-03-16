@@ -31,9 +31,9 @@ export const register = async (req: Request, res: Response) => {
 		});
 // Noramalement, je veut que l'utilisateur apres avoir ete enregistrer, doit login pour s'authentifier avant de recevoir un token via api/auth/login
 // Donc la logique suivante est a reflechir
-		const token = generateToken(user.id, user.email, user.role, user.name);
-
-		res.status(HttpCode.CREATED).json({ user, token, successs: true, message: 'Registration successful' });
+		// const token = generateToken(user.id, user.email, user.role, user.name);
+			console.log(user)
+		res.status(HttpCode.OK).json({ success: true, message: 'Registration successful' });
 	} catch (error) {
 		if (error instanceof z.ZodError) {
 			return res.status(HttpCode.BAD_REQUEST).json({
@@ -76,6 +76,14 @@ export const login = async (req: Request, res: Response) => {
 				userName: user.name
 			} 
 		});
+		res.status(HttpCode.OK).json({ success: true, message: 'Login successful',
+			user: {
+				email: user.email,
+				role: user.role,
+				id: user.id,
+				userName: user.name
+			}
+		 });
 	} catch (error) {
 		if (error instanceof z.ZodError) {
 			return res.status(HttpCode.BAD_REQUEST).json({

@@ -24,15 +24,29 @@ import ShoppingStore from "./pages/Shopping-view/ShoppingStore";
 import ShoppingAbout from "./pages/Shopping-view/ShoppingAbout";
 import ShoppingContact from "./pages/Shopping-view/ShoppingContact";
 import BlogPostPage from "./pages/Shopping-view/Blog/BlogPostPage";
-
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 export default function Home() {
   const isAuthenticated = false;
   const user = {
     name: "dimitri",
-    role: "user"
+    role: "user",
   };
   return (
-    <div>
+    <>
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="colored"
+        style={{ zIndex: 9999 }}
+      />
       <Routes>
         <Route
           path="/auth"
@@ -45,25 +59,31 @@ export default function Home() {
           <Route path="login" element={<AuthLogin />} />
           <Route path="register" element={<AuthRegister />} />
           <Route path="forgot-password" element={<AuthForgotPassword />} />
-          <Route path="verify-otp" element={<AuthEnterOtp/>}/>
-          <Route path="enter-new-password" element={<AuthNewPassword/>}/>
+          <Route path="verify-otp" element={<AuthEnterOtp />} />
+          <Route path="enter-new-password" element={<AuthNewPassword />} />
         </Route>
-        <Route path="/admin" element={
+        <Route
+          path="/admin"
+          element={
             <CheckAuth isAuthenticated={isAuthenticated} user={user}>
               <AdminLayout />
             </CheckAuth>
-          }>
+          }
+        >
           <Route path="dashboard" element={<AdminDashboard />} />
           <Route path="products" element={<AdminProducts />} />
           <Route path="orders" element={<AdminOrders />} />
           <Route path="features" element={<AdminFeatures />} />
           <Route path="blogs" element={<AdminBlogs />} />
         </Route>
-        <Route path="/shop" element={
+        <Route
+          path="/shop"
+          element={
             <CheckAuth isAuthenticated={isAuthenticated} user={user}>
               <ShoppingLayout />
             </CheckAuth>
-          }>
+          }
+        >
           <Route path="home" element={<ShoppingHome />} />
           <Route path="listing" element={<ShoppingListing />} />
           <Route path="store" element={<ShoppingStore />} />
@@ -74,9 +94,9 @@ export default function Home() {
           <Route path="blog/:id" element={<BlogPostPage />} />
           <Route path="contact" element={<ShoppingContact />} />
         </Route>
-        <Route path="/unauth-page" element={<UnAuthPage />} />        
-        <Route path="*" element={<NotFound />} />        
+        <Route path="/unauth-page" element={<UnAuthPage />} />
+        <Route path="*" element={<NotFound />} />
       </Routes>
-    </div>
+    </>
   );
 }
