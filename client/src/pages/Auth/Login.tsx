@@ -2,18 +2,15 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import CommonForm from "@/components/Common/Form";
-// import { Button } from "../ui/button";
-import { 
-  AiOutlineFacebook,
-  AiOutlineTwitter 
-} from "react-icons/ai";
+import { AiOutlineFacebook, AiOutlineTwitter } from "react-icons/ai";
 import { FcGoogle } from "react-icons/fc";
 import FormTitle from "@/components/Common/FormTitle";
 import { LoginFormControls } from "@/config";
 import { useDispatch } from "react-redux";
 import { loginUser } from "@/store/authSlice";
-import {Toaster,toast} from 'sonner'
 import { useCustomToast } from "@/hooks/useCustomToast";
+import { Helmet } from "react-helmet-async";
+import { AppDispatch } from "@/store/store";
 // Interface pour les boutons de réseaux sociaux
 interface SocialButton {
   content: string;
@@ -30,51 +27,57 @@ const AuthLogin: React.FC = () => {
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const {showToast} = useCustomToast()
+  const { showToast } = useCustomToast();
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
-  const notify = ()=>{
-    toast.success('Login Successfull');
-  }
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
     setError(null);
-    console.log(formData);
     try {
-      // Exemple de validation basique
       if (!formData.email || !formData.password) {
         throw new Error("All fields are required");
       }
       console.log(formData);
-      dispatch(loginUser(formData)).unwrap().then((response)=>{
-          console.log("API RESPONSE:",response);
-          if(response?.success){
-            console.log("sucess before toast");
-            showToast({
-              message: response?.message,
-              type: "success",
-              subtitle: "Redirecting to shop home page...",
-              duration: 3000,
-            });
-            console.log("Client Response from Server: ", response);
-            setTimeout(() => {
-              navigate("/shop/home");
-            }, 3000);
-          }else{
-            console.log("Login Failed:", response?.message);
-          }
+      dispatch(loginUser(formData))
+      .unwrap()
+      .then((response) => {
+        if (response?.success) {
+          showToast({
+            message: response.message,
+            type: "success",
+            subtitle: "Redirecting to shop home page...",
+            duration: 3000,
+          });
+          setTimeout(() => navigate("/shop/home"), 3000);
+        } else {
+          showToast({
+            message: response?.message || "Login failed",
+            type: "error",
+            subtitle: "Failed to login...",
+            duration: 5000,
+          });
+        }
+      })
+      .catch((error) => {
+        showToast({
+          message: error?.message || "An unexpected error occurred",
+          type: "error",
+          subtitle: "Server error...",
+          duration: 5000,
+        });
+        setError(error?.message || "Invalid email or password");
       });
-    } catch (error:any) {
-
+    } catch (error: any) {
       showToast({
         message: error?.message,
         type: "error",
-        subtitle: "Redirecting to login page...",
+        subtitle: "Failed Server Error...",
         duration: 5000,
       });
 
-      setError( error || "Invalid email or password",);
+      setError(error || "Invalid email or password");
       console.log(error);
     } finally {
       setLoading(false);
@@ -102,10 +105,53 @@ const AuthLogin: React.FC = () => {
 
   return (
     <div className=" flex items-center justify-center mt-32">
+      <Helmet>
+        {/* Primary SEO Tags */}
+        <title>Login - Access Your ChezFlora Account</title>
+        <meta
+          name="description"
+          content="Log in to your ChezFlora account to manage orders, track deliveries, and access exclusive floral services."
+        />
+        <meta
+          name="keywords"
+          content="login, sign in, chezflora account, floral services, online shopping"
+        />
+        {/* Open Graph Tags (Social Media) */}
+        <meta property="og:title" content="Login - ChezFlora Account Access" />
+        <meta
+          property="og:description"
+          content="Access your ChezFlora account to shop for fresh flowers, explore event decoration services, and manage subscriptions."
+        />
+        <meta property="og:type" content="website" />
+        <meta
+          property="og:url"
+          content="https://www.chezflora.com/auth/login"
+        />
+        <meta property="og:image" content="/assets/og-login.jpg" />{" "}
+        {/* Replace with login-themed image */}
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="630" />
+        {/* Twitter Card Tags */}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="Login - ChezFlora Account Access" />
+        <meta
+          name="twitter:description"
+          content="Log in to your account for seamless shopping, order tracking, and personalized floral services."
+        />
+        <meta name="twitter:image" content="/assets/og-login.jpg" />
+        {/* Branding & Technical Tags */}
+        <link rel="canonical" href="https://www.chezflora.com/auth/login" />
+        <link rel="icon" href="/favicon.ico" type="image/x-icon" />
+        <meta name="theme-color" content="#E9F5DB" />{" "}
+        {/* Soft green from palette */}
+      </Helmet>
       <div className="bg-white p-8 rounded-[40px] shadow-2xl border w-full lg:px-[20rem] lg:py-[3rem] xl:px-[10rem]">
-      <div className="mb-[1rem] lg:mb-[2rem]">
-        <FormTitle title="Sign In" comment="Welcome to our blog magazine Community"/>
-        </div> 
+        <div className="mb-[1rem] lg:mb-[2rem]">
+          <FormTitle
+            title="Sign In"
+            comment="Welcome to our blog magazine Community"
+          />
+        </div>
 
         {/* BOUTONS DE CONNEXION AVEC RESEAUX SOCIAUX */}
         <div className="space-y-3 mb-6">
@@ -116,7 +162,9 @@ const AuthLogin: React.FC = () => {
               className="relative flex items-center justify-center space-x-3 w-full py-2 px-6 bg-pink-200 border-[2px] border-gray-300 rounded-full hover:bg-pink-300 transition duration-300"
             >
               <div className="absolute left-4">{button.icon}</div>
-              <span className="text-md font-medium text-gray-800">{button.content}</span>
+              <span className="text-md font-medium text-gray-800">
+                {button.content}
+              </span>
             </Link>
           ))}
         </div>
@@ -137,14 +185,11 @@ const AuthLogin: React.FC = () => {
           formData={formData}
           setFormData={setFormData}
           onSubmit={handleSubmit}
-          onClick={notify}
-          buttonText="Continue"
+          buttonText="continue"
+          isBnDisabled={loading}
         />
-        <Toaster/>
         {/* GESTION DES ERREURS ET CHARGEMENT */}
-        {error && (
-          <p className="text-red-500 text-center mt-2">{error}</p>
-        )}
+        {error && <p className="text-red-500 text-center mt-2">{error}</p>}
         {loading && (
           <div className="flex justify-center mt-4">
             <svg
@@ -181,7 +226,12 @@ const AuthLogin: React.FC = () => {
               Create an account
             </Link>
           </p>
-            <Link to="/auth/forgot-password" className="text-[#F98190] hover:text-pink-700 transition-colors underline">Forgot password</Link>
+          <Link
+            to="/auth/forgot-password"
+            className="text-[#F98190] hover:text-pink-700 transition-colors underline"
+          >
+            Forgot password
+          </Link>
         </div>
       </div>
     </div>

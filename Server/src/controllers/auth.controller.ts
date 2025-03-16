@@ -4,7 +4,7 @@ import { hashPassword, comparePassword } from '../utils/bcrypt';
 import { generateToken } from '../utils/jwt';
 import { HttpCode } from '../core/constants';
 import { registerSchema, loginSchema } from '../schemas/auth.schema';
-import { z } from 'zod';
+import { errorHandler } from '../middlewares/auth.middleware';
 
 const prisma = new PrismaClient();
 
@@ -16,7 +16,7 @@ export const register = async (req: Request, res: Response) => {
 		const existingUser = await prisma.user.findUnique({ where: { email } });
 
 		if (existingUser) {
-			return res.status(HttpCode.BAD_REQUEST).json({ error: 'Email already used' });
+			return res.status(HttpCode.BAD_REQUEST).json({ success: false, message: 'Email already used' });
 		}
 
 		const hashedPassword = await hashPassword(password);
@@ -29,23 +29,12 @@ export const register = async (req: Request, res: Response) => {
 				role: 'USER'
 			}
 		});
-// Noramalement, je veut que l'utilisateur apres avoir ete enregistrer, doit login pour s'authentifier avant de recevoir un token via api/auth/login
-// Donc la logique suivante est a reflechir
-		// const token = generateToken(user.id, user.email, user.role, user.name);
-			console.log(user)
+		// Noramalement, je veut que l'utilisateur apres avoir ete enregistrer, doit login pour s'authentifier avant de recevoir un token via api/auth/login dans un cookie
+		// Donc la logique suivante est a reflechir
+		console.log(user);
 		res.status(HttpCode.OK).json({ success: true, message: 'Registration successful' });
 	} catch (error) {
-		if (error instanceof z.ZodError) {
-			return res.status(HttpCode.BAD_REQUEST).json({
-				success: false,
-				errors: error.errors // Here we return the validation erros of Zod
-			});
-		}
-		console.error(error);
-		res.status(HttpCode.INTERNAL_SERVER_ERROR).json({
-			success: false,
-			message: 'Internal server error occurred'
-		});
+		errorHandler(error,res);
 	}
 };
 
@@ -56,12 +45,14 @@ export const login = async (req: Request, res: Response) => {
 
 		const user = await prisma.user.findUnique({ where: { email } });
 		if (!user) {
-			return res.status(HttpCode.UNAUTHORIZED).json({ error: "User doesn't exist ! pleaseregister first" });
+			return res
+				.status(HttpCode.UNAUTHORIZED)
+				.json({ success: false, message: "User doesn't exist ! pleaseregister first" });
 		}
 
 		const isValid = await comparePassword(password, user.password);
 		if (!isValid) {
-			return res.status(HttpCode.UNAUTHORIZED).json({ error: 'Incorrect email or password' });
+			return res.status(HttpCode.UNAUTHORIZED).json({ success: false, message: 'Incorrect email or password' });
 		}
 
 		const token = generateToken(user.id, user.email, user.role, user.name);
@@ -70,31 +61,35 @@ export const login = async (req: Request, res: Response) => {
 			success: true,
 			message: 'Logged in succesfully',
 			user: {
+				id: user.id,
 				email: user.email,
 				role: user.role,
-				id: user.id,
-				userName: user.name
-			} 
+				name: user.name,
+			  },
 		});
-		res.status(HttpCode.OK).json({ success: true, message: 'Login successful',
-			user: {
-				email: user.email,
-				role: user.role,
-				id: user.id,
-				userName: user.name
-			}
-		 });
+		//Note : en allant en production, on va securiser le token avec  le code suivant:
+		// 		const isProduction = process.env.NODE_ENV === 'production';
+		// res.cookie('token', token, {
+		//   httpOnly: true,
+		//   secure: isProduction,
+		//   sameSite: 'strict'
+		// });
+
+
+		// res.status(HttpCode.OK).json({
+		// 	success: true,
+		// 	message: 'Login successful',
+		// 	data: {
+		// 	  user: {
+		// 		id: user.id,
+		// 		email: user.email,
+		// 		role: user.role,
+		// 		name: user.name,
+		// 	  },
+		// 	},
+		//   });
 	} catch (error) {
-		if (error instanceof z.ZodError) {
-			return res.status(HttpCode.BAD_REQUEST).json({
-				success: false,
-				errors: error.errors
-			});
-		}
-		console.error(error);
-		res.status(HttpCode.INTERNAL_SERVER_ERROR).json({
-			success: false,
-			message: 'Internal server error occurred'
-		});
+		errorHandler(error,res);
+
 	}
 };

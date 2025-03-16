@@ -4,7 +4,7 @@ import CommonForm from "@/components/Common/Form";
 
 import FormTitle from "@/components/Common/FormTitle";
 import { ForgotPasswordFormControls } from "@/config";
-
+import { Helmet } from "react-helmet-async";
 
 const AuthLogin: React.FC = () => {
   const [formData, setFormData] = useState({
@@ -32,21 +32,71 @@ const AuthLogin: React.FC = () => {
 
       navigate("/dashboard");
     } catch (error) {
-      setError("Invalid email or password",);
+      setError("Invalid email or password");
       console.log(error);
     } finally {
       setLoading(false);
     }
   };
 
-
   return (
     <div className=" flex items-center justify-center flex-col text-center mt-32">
+      <Helmet>
+        {/* Primary SEO Tags */}
+        <title>Forgot Password - Reset Your ChezFlora Account</title>
+        <meta
+          name="description"
+          content="Reset your ChezFlora account password securely. Follow simple steps to regain access to your account and continue shopping."
+        />
+        <meta
+          name="keywords"
+          content="forgot password, reset password, chezflora account recovery, floral services"
+        />
+        {/* Open Graph Tags (Social Media) */}
+        <meta
+          property="og:title"
+          content="Forgot Password - ChezFlora Account Recovery"
+        />
+        <meta
+          property="og:description"
+          content="Securely reset your ChezFlora password and regain access to your account for seamless shopping and order management."
+        />
+        <meta property="og:type" content="website" />
+        <meta
+          property="og:url"
+          content="https://www.chezflora.com/auth/forgot-password"
+        />
+        <meta property="og:image" content="/assets/og-forgot-password.jpg" />{" "}
+        {/* Replace with recovery-themed image */}
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="630" />
+        {/* Twitter Card Tags */}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta
+          name="twitter:title"
+          content="Forgot Password - ChezFlora Account Recovery"
+        />
+        <meta
+          name="twitter:description"
+          content="Reset your password securely and regain access to your ChezFlora account for uninterrupted floral shopping and services."
+        />
+        <meta name="twitter:image" content="/assets/og-forgot-password.jpg" />
+        {/* Branding & Technical Tags */}
+        <link
+          rel="canonical"
+          href="https://www.chezflora.com/auth/forgot-password"
+        />
+        <link rel="icon" href="/favicon.ico" type="image/x-icon" />
+        <meta name="theme-color" content="#E9F5DB" />{" "}
+        {/* Soft green from palette */}
+      </Helmet>
       <div className="bg-white p-8 rounded-[40px] shadow-2xl border w-full lg:px-[20rem] lg:py-[3rem] xl:px-[10rem]">
-      <div className="mb-[1rem] lg:mb-[2rem]">
-        <FormTitle title="Forgot password" comment="We will sent password intruction to your email"/>
-        </div> 
-
+        <div className="mb-[1rem] lg:mb-[2rem]">
+          <FormTitle
+            title="Forgot password"
+            comment="We will sent password intruction to your email"
+          />
+        </div>
 
         {/* FORMULAIRE DE CONNEXION */}
         <CommonForm
@@ -58,9 +108,7 @@ const AuthLogin: React.FC = () => {
         />
 
         {/* GESTION DES ERREURS ET CHARGEMENT */}
-        {error && (
-          <p className="text-red-500 text-center mt-2">{error}</p>
-        )}
+        {error && <p className="text-red-500 text-center mt-2">{error}</p>}
         {loading && (
           <div className="flex justify-center mt-4">
             <svg
@@ -96,7 +144,12 @@ const AuthLogin: React.FC = () => {
               Sign in
             </Link>
             /
-            <Link to="/auth/register" className="text-[#F98190] hover:text-pink-700 transition-colors underline">Sign up</Link>
+            <Link
+              to="/auth/register"
+              className="text-[#F98190] hover:text-pink-700 transition-colors underline"
+            >
+              Sign up
+            </Link>
           </p>
         </div>
       </div>

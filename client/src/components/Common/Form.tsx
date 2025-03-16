@@ -85,7 +85,7 @@ const CommonForm: React.FC<CommonFormProps> = ({
         ))}
       </div>
       <Button type="submit" disabled={isBnDisabled} className="mt-4 w-full p-6 font-semibold text-white bg-pink-300 hover:bg-pink-400 rounded-full text-[1.3rem]">
-        {buttonText || "Submit"}
+      {isBnDisabled ? "Loading..." : buttonText}
       </Button>
       
     </form>

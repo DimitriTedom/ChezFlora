@@ -7,9 +7,10 @@ import { FcGoogle } from "react-icons/fc";
 import FormTitle from "@/components/Common/FormTitle";
 import { registerFormControls } from "@/config";
 import { useDispatch } from "react-redux";
-import { registerUser } from "@/store/authSlice"; // action asynchrone définie dans ton slice
+import { registerUser } from "@/store/authSlice"; 
 import type { AppDispatch } from "@/store/store";
 import { useCustomToast } from "@/hooks/useCustomToast";
+import { Helmet } from "react-helmet-async";
 
 interface SocialButton {
   content: string;
@@ -35,7 +36,6 @@ const AuthRegister: React.FC = () => {
     e.preventDefault();
     setLoading(true);
     setError(null);
-    console.log(formData);
     // Vérification basique des champs
     if (!formData.name || !formData.email || !formData.password) {
       setError("All fields are required");
@@ -49,7 +49,7 @@ const AuthRegister: React.FC = () => {
         // this response contains a json of succes boolean and succes message
         console.log("API Response:", response);
         if (response?.success) {
-          console.log("sucess before toast")
+          console.log("sucess before toast");
           showToast({
             message: response?.message,
             type: "success",
@@ -60,16 +60,16 @@ const AuthRegister: React.FC = () => {
           setTimeout(() => {
             navigate("/auth/login");
           }, 3000);
-        }else{
+        } else {
           console.log("Registration failed: ", response.message);
         }
       })
       .catch((err: any) => {
         showToast({
           message: err,
-          type:"error",
+          type: "error",
           duration: 5000,
-        })
+        });
         setError(err || "Registration failed");
       })
       .finally(() => setLoading(false));
@@ -107,6 +107,50 @@ const AuthRegister: React.FC = () => {
       >
         Teste du toast
       </button> */}
+      <Helmet>
+        {/* Primary SEO Tags */}
+        <title>Inscription - Créez votre compte ChezFlora</title>
+        <meta
+          name="description"
+          content="Créez votre compte ChezFlora pour accéder à des services exclusifs : suivi de commandes, offres personnalisées, et conseils décoration floraux."
+        />
+        <meta
+          name="keywords"
+          content="inscription, compte client, création compte, fleurs en ligne, décoration événementielle"
+        />
+        {/* Open Graph Tags (Social Media) */}
+        <meta
+          property="og:title"
+          content="Inscription ChezFlora - Votre compte floral"
+        />
+        <meta
+          property="og:description"
+          content="Rejoignez ChezFlora pour une expérience shopping premium : commandes simplifiées, abonnements floraux, et inspirations déco."
+        />
+        <meta property="og:type" content="website" />
+        <meta
+          property="og:url"
+          content="https://www.chezflora.com/auth/register"
+        />
+        <meta property="og:image" content="/assets/og-register.jpg" />{" "}
+        {/* Replace with signup-themed image */}
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="630" />
+        {/* Twitter Card Tags */}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="Inscription - ChezFlora" />
+        <meta
+          name="twitter:description"
+          content="Créez votre compte en 1 minute pour profiter de livraison express, promotions exclusives et services de décoration sur mesure."
+        />
+        <meta name="twitter:image" content="/assets/og-register.jpg" />
+        {/* Branding & Technical Tags */}
+        <link rel="canonical" href="https://www.chezflora.com/auth/register" />
+        <link rel="icon" href="/favicon.ico" type="image/x-icon" />
+        <meta name="theme-color" content="#E9F5DB" />{" "}
+        {/* Soft green from palette */}
+      </Helmet>
+
       <div className="bg-white p-8 rounded-[40px] shadow-2xl border w-full lg:px-[20rem] lg:py-[3rem] xl:px-[10rem]">
         <div className="mb-[1rem] lg:mb-[2rem]">
           <FormTitle
@@ -147,9 +191,9 @@ const AuthRegister: React.FC = () => {
           formData={formData}
           setFormData={setFormData}
           onSubmit={handleSubmit}
-          buttonText="Continue"
+          isBnDisabled={loading}
+          buttonText= "continue"
         />
-        {/* <Toaster/> */}
         {/* Gestion des erreurs et du chargement */}
         {error && <p className="text-red-500 text-center mt-2">{error}</p>}
         {loading && (

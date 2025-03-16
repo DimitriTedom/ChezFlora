@@ -3,20 +3,21 @@ import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import axios from "axios";
 
 // Définition des types pour l'utilisateur et l'état d'authentification
+interface ApiResponse {
+  success: boolean;
+  message: string;
+}
+
 interface User {
-  success:boolean;
-  message:string;
-user:{
   id: string;
-  role:string;
+  role: string;
   name: string;
   email: string;
 }
 
-}
-interface RegisterResponse { // Renommé pour clarté
-  success: boolean;
-  message: string;
+interface RegisterResponse extends ApiResponse {}
+interface LoginResponse extends ApiResponse {
+  user: User;
 }
 interface AuthState {
   user: User | null;
@@ -55,7 +56,7 @@ RegisterResponse, // Type de retour en cas de succès
   }
 );
 export const loginUser = createAsyncThunk<
-  User, // Type de retour en cas de succès
+LoginResponse, // Type de retour en cas de succès
   { email: string; password: string }, // Type des paramètres attendus
   { rejectValue: string }
 >(
@@ -113,6 +114,7 @@ const authSlice = createSlice({
         state.isLoading = false;
         state.user = null; //action.payload as string normally but i want the user to login after signup to be authenticated
         state.isAuthenticated=false;
+        state.error = null;
       })
       .addCase(registerUser.rejected, (state) => {
         state.isLoading = false;
@@ -123,14 +125,14 @@ const authSlice = createSlice({
         state.isLoading = true;
         state.error = null;
       })
-      .addCase(loginUser.fulfilled, (state, action: PayloadAction<User>) => {
+      .addCase(loginUser.fulfilled, (state, action:PayloadAction<User>) => {
         state.isLoading = false;
         state.user = action.payload;
         state.isAuthenticated=true;
       })
-      .addCase(loginUser.rejected, (state) => {
+      .addCase(loginUser.rejected, (state,action) => {
         state.isLoading = false;
-        state.error = null;
+        state.error = action.payload || "An unexpected error occured";
         state.isAuthenticated = false;
       })
   },

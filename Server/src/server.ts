@@ -5,7 +5,7 @@ import compression from 'compression';
 import rateLimit from 'express-rate-limit';
 import { setupSwagger } from './swagger';
 import morgan from 'morgan';
-import { ONE_HUNDRED, SIXTY } from './core/constants';
+import { HttpCode, ONE_HUNDRED, SIXTY } from './core/constants';
 import dotenv from 'dotenv';
 import cors from 'cors';
 import AuthRoutes from './routes/auth.routes';
@@ -34,9 +34,18 @@ app.use(
 	rateLimit({
 		max: ONE_HUNDRED,
 		windowMs: SIXTY,
-		message: 'Trop de Requete à partir de cette adresse IP '
+		message: 'Excess requests from this IP Adresse '
 	})
 );
+app.use((req,res,next)=>{
+	req.setTimeout(5000,()=>{
+		res.status(HttpCode.REQUEST_TIMEOUT).json({
+			success:false,
+			message:'Request timed out',
+		});
+	});
+	next();
+});
 app.use(morgan('combined'));
 
 setupSwagger(app);
