@@ -128,7 +128,7 @@ const SearchBar = () => {
               mode="single"
               selected={selectedDate}
               onSelect={(date) => setSelectedDate(date as Date)}
-              initialFocus
+              // initialFocus
               className="rounded-lg border-pink-500 focus:border-pink-500"
             />
           </PopoverContent>

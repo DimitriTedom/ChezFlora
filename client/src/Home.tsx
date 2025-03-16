@@ -23,6 +23,7 @@ import AuthNewPassword from "./pages/Auth/EnterNewPassword";
 import ShoppingStore from "./pages/Shopping-view/ShoppingStore";
 import ShoppingAbout from "./pages/Shopping-view/ShoppingAbout";
 import ShoppingContact from "./pages/Shopping-view/ShoppingContact";
+import BlogPostPage from "./pages/Shopping-view/Blog/BlogPostPage";
 
 export default function Home() {
   const isAuthenticated = false;
@@ -70,6 +71,7 @@ export default function Home() {
           <Route path="checkout" element={<ShoppingCheckout />} />
           <Route path="account" element={<ShoppingAccount />} />
           <Route path="blog" element={<ShoppingBlog />} />
+          <Route path="blog/:id" element={<BlogPostPage />} />
           <Route path="contact" element={<ShoppingContact />} />
         </Route>
         <Route path="/unauth-page" element={<UnAuthPage />} />        

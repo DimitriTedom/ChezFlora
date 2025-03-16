@@ -162,10 +162,10 @@ const ShoppingContact = () => {
         <meta name="author" content="ChezFlora Team" />
       </Helmet>
 
-      <div className="flex flex-col md:flex-row items-center gap-4 justify-between p-8">
+      <div className="flex flex-col md:flex-row items-center gap-4 xl:gap-12 justify-between p-8">
         {/* Left Side: Contact Information and Form */}
         <div className="w-full md:w-1/2 mb-8 md:mb-0">
-          <h1 className="text-4xl font-bold mb-4">Contact us</h1>
+          <h1 className="text-4xl font-bold mb-4">Contact us📬️</h1>
 
           {/* Contact Information */}
           <div className="space-y-4 mb-8">

@@ -77,7 +77,7 @@ const BlogCard: React.FC<BlogCardProps> = ({
 
         {/* Responsive Read More Link */}
         <Link
-          to={`/blog/${id}`}
+          to={`/shop/blog/${id}`}
           className="flex items-center gap-1 text-purple-500 hover:underline focus:outline-none focus:ring-2 focus:ring-purple-300 rounded"
         >
           <span className="text-xs sm:text-sm">Read More...</span>
