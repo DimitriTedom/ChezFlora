@@ -31,20 +31,30 @@ import { useEffect } from "react";
 import { checkAuth } from "./store/authSlice";
 import { AppDispatch, RootState } from "./store/store";
 import ChezFloraLoader from "./components/Common/ChezFloraLoader";
+import { Skeleton } from "./components/ui/skeleton";
 export default function Home() {
   // const isAuthenticated = false;
   // const user = {
   //   name: "dimitri",
   //   role: "admin",
   // };
-  const {user,isAuthenticated,isLoading} = useSelector((state:RootState)=>state.auth)
+  const { user, isAuthenticated, isLoading } = useSelector(
+    (state: RootState) => state.auth
+  );
   const dispatch = useDispatch<AppDispatch>();
-  useEffect(()=>{
-    dispatch(checkAuth()).unwrap().catch(()=>console.log('Auth check failed'))
-  },[dispatch])
-
+  useEffect(() => {
+    dispatch(checkAuth())
+      .unwrap()
+      .catch(() => console.log("Auth check failed"));
+  }, [dispatch]);
   if (isLoading) {
-    return <div><ChezFloraLoader/></div>;
+    console.log(isLoading, user);
+    return (
+      <div>
+        <ChezFloraLoader/> 
+        {/* <Skeleton className="w-[800px] h-[600px] bg-black" /> */}
+      </div>
+    );
   }
   return (
     <>

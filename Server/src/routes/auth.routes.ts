@@ -13,7 +13,12 @@ router.get('/checkauth', authenticateUser, (req, res)=>{
     res.status(HttpCode.OK).json({
         success:true,
         message:'User is authenticated',
-        user
+        user:{
+            id:user.id,
+            email:user.email,
+            role:user.role,
+            name:user.name
+        }
     })
 });
 

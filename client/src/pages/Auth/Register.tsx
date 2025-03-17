@@ -52,7 +52,7 @@ const AuthRegister: React.FC = () => {
         if (response?.success) {
           console.log("sucess before toast");
           showToast({
-            message: response?.message,
+            message: response.message,
             type: "success",
             subtitle: "Redirecting to login page...",
             duration: 3000,

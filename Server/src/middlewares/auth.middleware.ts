@@ -5,7 +5,7 @@ import { Request, Response, NextFunction } from "express";
 
 export const authenticateUser = async (req: Request, res: Response, next: NextFunction) => {
     // Vérifier d'abord le header Authorization
-    let token = req.header('Authorization')?.replace('Bearer ', '') || req.cookies?.token;
+    let token =  req.cookies?.token;
   
     // Si non trouvé, vérifier les cookies
     if (!token) {
@@ -23,7 +23,12 @@ export const authenticateUser = async (req: Request, res: Response, next: NextFu
       const decoded = verifyToken(token);
       if (!decoded) throw new Error('Invalid token');
       
-      (req as any).user = decoded;
+      (req as any).user = {
+        id: decoded.id,
+        email: decoded.email,
+        role: decoded.role,
+        name: decoded.name
+      };
       next();
     } catch (error) {
       res.status(HttpCode.UNAUTHORIZED).json({
