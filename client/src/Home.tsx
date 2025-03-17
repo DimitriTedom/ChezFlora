@@ -31,7 +31,7 @@ import { useEffect } from "react";
 import { checkAuth } from "./store/authSlice";
 import { AppDispatch, RootState } from "./store/store";
 import ChezFloraLoader from "./components/Common/ChezFloraLoader";
-import { Skeleton } from "./components/ui/skeleton";
+// import { Skeleton } from "./components/ui/skeleton";
 export default function Home() {
   // const isAuthenticated = false;
   // const user = {
@@ -94,7 +94,7 @@ export default function Home() {
             </CheckAuth>
           }
         >
-          <Route path="dashboard" element={<AdminDashboard />} />
+          <Route index path="dashboard" element={<AdminDashboard />} />
           <Route path="products" element={<AdminProducts />} />
           <Route path="orders" element={<AdminOrders />} />
           <Route path="features" element={<AdminFeatures />} />
