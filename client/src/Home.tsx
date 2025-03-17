@@ -5,7 +5,6 @@ import AuthRegister from "./pages/Auth/Register";
 import AdminLayout from "./components/Admin-view/Layout";
 import AdminDashboard from "./pages/admin-view/Dashboard";
 import AdminBlogs from "./pages/admin-view/Blogs";
-import AdminFeatures from "./pages/admin-view/Features";
 import AdminOrders from "./pages/admin-view/Orders";
 import AdminProducts from "./pages/admin-view/Products";
 import ShoppingLayout from "./components/Shopping-view/Layout";
@@ -31,6 +30,8 @@ import { useEffect } from "react";
 import { checkAuth } from "./store/authSlice";
 import { AppDispatch, RootState } from "./store/store";
 import ChezFloraLoader from "./components/Common/ChezFloraLoader";
+import AdminQuotes from "./pages/admin-view/Quotes";
+import AdminCustomers from "./pages/admin-view/Customers";
 // import { Skeleton } from "./components/ui/skeleton";
 export default function Home() {
   // const isAuthenticated = false;
@@ -97,8 +98,9 @@ export default function Home() {
           <Route index path="dashboard" element={<AdminDashboard />} />
           <Route path="products" element={<AdminProducts />} />
           <Route path="orders" element={<AdminOrders />} />
-          <Route path="features" element={<AdminFeatures />} />
+          <Route path="quotes" element={<AdminQuotes />} />
           <Route path="blogs" element={<AdminBlogs />} />
+          <Route path="users" element={<AdminCustomers />} />
         </Route>
         <Route
           path="/shop"

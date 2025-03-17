@@ -220,6 +220,9 @@
   .textShadow {
     text-shadow: 2px 2px 1px rgba(0, 0, 0, 0.5);
   }
+  [data-sidebar] {
+    transition: transform 0.3s ease-in-out;
+  }
 }
 
 @layer base {
