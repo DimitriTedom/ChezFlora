@@ -1,7 +1,7 @@
-import { Request, Response } from 'express';
+import { NextFunction, Request, Response } from 'express';
 import { PrismaClient } from '@prisma/client';
 import { hashPassword, comparePassword } from '../utils/bcrypt';
-import { generateToken } from '../utils/jwt';
+import { generateToken, verifyToken } from '../utils/jwt';
 import { HttpCode } from '../core/constants';
 import { registerSchema, loginSchema } from '../schemas/auth.schema';
 import { errorHandler } from '../middlewares/auth.middleware';
@@ -34,7 +34,7 @@ export const register = async (req: Request, res: Response) => {
 		console.log(user);
 		res.status(HttpCode.OK).json({ success: true, message: 'Registration successful' });
 	} catch (error) {
-		errorHandler(error,res);
+		errorHandler(error, res);
 	}
 };
 
@@ -47,7 +47,7 @@ export const login = async (req: Request, res: Response) => {
 		if (!user) {
 			return res
 				.status(HttpCode.UNAUTHORIZED)
-				.json({ success: false, message: "User doesn't exist ! pleaseregister first" });
+				.json({ success: false, message: "User doesn't exist ! please register first" });
 		}
 
 		const isValid = await comparePassword(password, user.password);
@@ -64,8 +64,8 @@ export const login = async (req: Request, res: Response) => {
 				id: user.id,
 				email: user.email,
 				role: user.role,
-				name: user.name,
-			  },
+				name: user.name
+			}
 		});
 		//Note : en allant en production, on va securiser le token avec  le code suivant:
 		// 		const isProduction = process.env.NODE_ENV === 'production';
@@ -74,7 +74,6 @@ export const login = async (req: Request, res: Response) => {
 		//   secure: isProduction,
 		//   sameSite: 'strict'
 		// });
-
 
 		// res.status(HttpCode.OK).json({
 		// 	success: true,
@@ -89,7 +88,34 @@ export const login = async (req: Request, res: Response) => {
 		// 	},
 		//   });
 	} catch (error) {
-		errorHandler(error,res);
-
+		errorHandler(error, res);
 	}
+};
+
+//auth middleware to verify controller when users will refresh page
+
+// export const authMiddleware = async (req:Request,res:Response, next:NextFunction) =>{
+// 	const token = req.cookies.token;
+// 	if(!token) return res.status(HttpCode.UNAUTHORIZED).json({
+// 		success:false,
+// 		message:'Unauthorised user!'
+// 	})
+
+// 	try {
+// 			const decoded = verifyToken(token);
+// 			(req as any).user = decoded;
+// 			next();
+// 	} catch (error) {
+// 		res.status(HttpCode.UNAUTHORIZED).json({
+// 			success:false,
+// 			message:'Unauthorised user!'
+// 		})
+// 	}
+
+// }
+
+// logouit controller :
+
+export const logout = async (req: Request, res: Response) => {
+	res.clearCookie('token').json({ success: true, message: 'Logged out successfully' });
 };

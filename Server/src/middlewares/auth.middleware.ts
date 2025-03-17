@@ -3,17 +3,35 @@ import { HttpCode } from "../core/constants";
 import { verifyToken } from "../utils/jwt";
 import { Request, Response, NextFunction } from "express";
 
-export const authenticateUser = (req: Request, res:Response, next:NextFunction)=>{
-    const token = req.header('Authorization')?.replace('Bearer ', '');
-    if(!token) return res.status(HttpCode.UNAUTHORIZED).json({error: 'No token available'});
-
-    const decoded = verifyToken(token);
-    if(!decoded) return res.status(HttpCode.UNAUTHORIZED).json({error: 'invalid Token'});
-
-    (req as any).user = decoded;
-    next();
-}
-
+export const authenticateUser = async (req: Request, res: Response, next: NextFunction) => {
+    // Vérifier d'abord le header Authorization
+    let token = req.header('Authorization')?.replace('Bearer ', '') || req.cookies?.token;
+  
+    // Si non trouvé, vérifier les cookies
+    if (!token) {
+      token = req.cookies.token;
+    }
+  
+    if (!token) {
+      return res.status(HttpCode.UNAUTHORIZED).json({
+        success: false,
+        message: 'Token missing!',
+      });
+    }
+  
+    try {
+      const decoded = verifyToken(token);
+      if (!decoded) throw new Error('Invalid token');
+      
+      (req as any).user = decoded;
+      next();
+    } catch (error) {
+      res.status(HttpCode.UNAUTHORIZED).json({
+        success: false,
+        message: 'Invalid or expired token!',
+      });
+    }
+  };
 export const errorHandler = (error: any, res: Response) => {
         if (error instanceof z.ZodError) {
             return res.status(HttpCode.BAD_REQUEST).json({

@@ -8,16 +8,16 @@ interface CheckAuthProps {
 }
 const CheckAuth = ({ isAuthenticated, user, children }: CheckAuthProps) => {
   const location = useLocation();
-
+  console.log(location.pathname , isAuthenticated)
   if (
     !isAuthenticated &&
     !(
       location.pathname.includes("/login") ||
-      location.pathname.includes("/register") ||
-      location.pathname.includes("/forgot-password") ||
-      location.pathname.includes("/home") ||
-      location.pathname.includes("/verify-otp") ||
-      location.pathname.includes("/enter-new-password")
+      location.pathname.includes("/register")
+      // location.pathname.includes("/forgot-password") ||
+      // location.pathname.includes("/home") ||
+      // location.pathname.includes("/verify-otp") ||
+      // location.pathname.includes("/enter-new-password")
     )
   ) {
     return <Navigate to="/auth/login" />;
@@ -28,7 +28,7 @@ const CheckAuth = ({ isAuthenticated, user, children }: CheckAuthProps) => {
     (location.pathname.includes("/login") ||
       location.pathname.includes("/register"))
   ) {
-    if (user?.role === "admin") {
+    if (user?.role === "ADMIN") {
       return <Navigate to="/admin/dashboard" />;
     } else {
       return <Navigate to="/shop/home" />;
@@ -36,14 +36,14 @@ const CheckAuth = ({ isAuthenticated, user, children }: CheckAuthProps) => {
   }
   if (
     isAuthenticated &&
-    user?.role !== "admin" &&
+    user?.role !== "ADMIN" &&
     location.pathname.includes("admin")
   ) {
     return <Navigate to="/unauth-page" />;
   }
   if (
     isAuthenticated &&
-    user?.role == "admin" &&
+    user?.role == "ADMIN" &&
     location.pathname.includes("shop")
   ) {
     return <Navigate to="/admin/dashboard" />;

@@ -26,12 +26,26 @@ import ShoppingContact from "./pages/Shopping-view/ShoppingContact";
 import BlogPostPage from "./pages/Shopping-view/Blog/BlogPostPage";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect } from "react";
+import { checkAuth } from "./store/authSlice";
+import { AppDispatch, RootState } from "./store/store";
+import ChezFloraLoader from "./components/Common/ChezFloraLoader";
 export default function Home() {
-  const isAuthenticated = false;
-  const user = {
-    name: "dimitri",
-    role: "user",
-  };
+  // const isAuthenticated = false;
+  // const user = {
+  //   name: "dimitri",
+  //   role: "admin",
+  // };
+  const {user,isAuthenticated,isLoading} = useSelector((state:RootState)=>state.auth)
+  const dispatch = useDispatch<AppDispatch>();
+  useEffect(()=>{
+    dispatch(checkAuth()).unwrap().catch(()=>console.log('Auth check failed'))
+  },[dispatch])
+
+  if (isLoading) {
+    return <div><ChezFloraLoader/></div>;
+  }
   return (
     <>
       <ToastContainer

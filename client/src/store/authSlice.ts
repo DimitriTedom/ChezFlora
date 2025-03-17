@@ -16,6 +16,7 @@ interface User {
 }
 
 interface RegisterResponse extends ApiResponse {}
+
 interface LoginResponse extends ApiResponse {
   user: User;
 }
@@ -96,6 +97,24 @@ export const newPassword = createAsyncThunk<
     }
   }
 )
+export const logoutUser = createAsyncThunk("/auth/logout", 
+  async () => {
+    const response = await axios.post("http://localhost:5000/api/auth/logout",{},{withCredentials:true});
+    return response.data
+  }
+);
+
+export const checkAuth = createAsyncThunk("/auth/checkauth",
+  async () => {
+  const response = await axios.get("http://localhost:5000/api/auth/checkauth",{withCredentials:true,
+    headers:{
+      "Cache-Control":
+          "no-store,no cache, must-revalidate, proxy-revalidate",
+    },
+  }
+);
+  return response.data;
+})
 const authSlice = createSlice({
   name: "auth",
   initialState,
@@ -125,16 +144,32 @@ const authSlice = createSlice({
         state.isLoading = true;
         state.error = null;
       })
-      .addCase(loginUser.fulfilled, (state, action:PayloadAction<User>) => {
+      .addCase(loginUser.fulfilled, (state, action:PayloadAction<LoginResponse>) => {
+        console.log(action);
         state.isLoading = false;
-        state.user = action.payload;
-        state.isAuthenticated=true;
+        state.user = action.payload.success ? action.payload.user : null;
+        state.isAuthenticated= action.payload.success;
       })
-      .addCase(loginUser.rejected, (state,action) => {
+      .addCase(loginUser.rejected, (state) => {
         state.isLoading = false;
-        state.error = action.payload || "An unexpected error occured";
+        state.user = null;
         state.isAuthenticated = false;
       })
+      .addCase(checkAuth.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(checkAuth.fulfilled, (state, action: PayloadAction<LoginResponse>) => {
+        if (action.payload.success) {
+          state.user = action.payload.user;
+          state.isAuthenticated = true;
+        }
+        state.isLoading = false;
+      })
+      .addCase(checkAuth.rejected, (state) => {
+        state.isLoading = false;
+        state.isAuthenticated = false;
+      });
   },
 });
 

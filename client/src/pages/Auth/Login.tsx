@@ -1,6 +1,6 @@
 // pages/LoginPage.tsx
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import CommonForm from "@/components/Common/Form";
 import { AiOutlineFacebook, AiOutlineTwitter } from "react-icons/ai";
 import { FcGoogle } from "react-icons/fc";
@@ -11,6 +11,7 @@ import { loginUser } from "@/store/authSlice";
 import { useCustomToast } from "@/hooks/useCustomToast";
 import { Helmet } from "react-helmet-async";
 import { AppDispatch } from "@/store/store";
+import ChezFloraLoader from "@/components/Common/ChezFloraLoader";
 // Interface pour les boutons de réseaux sociaux
 interface SocialButton {
   content: string;
@@ -28,7 +29,6 @@ const AuthLogin: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const { showToast } = useCustomToast();
-  const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -39,46 +39,30 @@ const AuthLogin: React.FC = () => {
       if (!formData.email || !formData.password) {
         throw new Error("All fields are required");
       }
-      console.log(formData);
-      dispatch(loginUser(formData))
-      .unwrap()
-      .then((response) => {
-        if (response?.success) {
-          showToast({
-            message: response.message,
-            type: "success",
-            subtitle: "Redirecting to shop home page...",
-            duration: 3000,
-          });
-          setTimeout(() => navigate("/shop/home"), 3000);
-        } else {
-          showToast({
-            message: response?.message || "Login failed",
-            type: "error",
-            subtitle: "Failed to login...",
-            duration: 5000,
-          });
-        }
-      })
-      .catch((error) => {
+      const response = await dispatch(loginUser(formData)).unwrap();
+      if (response.success) {
         showToast({
-          message: error?.message || "An unexpected error occurred",
+          message: response.message,
+          type: "success",
+          subtitle: "Redirecting to home page...",
+          duration: 3000,
+        });
+        // setTimeout(() => navigate("/shop/home"), 3000);
+      } else {
+        showToast({
+          message: response.message,
           type: "error",
-          subtitle: "Server error...",
+          subtitle: "Failed to login...",
           duration: 5000,
         });
-        setError(error?.message || "Invalid email or password");
-      });
+      }
     } catch (error: any) {
       showToast({
-        message: error?.message,
+        message: error.message, //normally suposed to Captures messages from rejected thunk
         type: "error",
-        subtitle: "Failed Server Error...",
+        subtitle: "Failed to login...",
         duration: 5000,
       });
-
-      setError(error || "Invalid email or password");
-      console.log(error);
     } finally {
       setLoading(false);
     }
@@ -190,30 +174,32 @@ const AuthLogin: React.FC = () => {
         />
         {/* GESTION DES ERREURS ET CHARGEMENT */}
         {error && <p className="text-red-500 text-center mt-2">{error}</p>}
-        {loading && (
-          <div className="flex justify-center mt-4">
-            <svg
-              className="animate-spin h-5 w-5 mr-3 text-pink-500"
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-            >
-              <circle
-                className="opacity-25"
-                cx="12"
-                cy="12"
-                r="10"
-                stroke="currentColor"
-                strokeWidth="4"
-              ></circle>
-              <path
-                className="opacity-75"
-                fill="currentColor"
-                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.963 7.963 0 014 12H0c0 6.627 5.373 12 12 12a7.963 7.963 0 01-7.717-2.709z"
-              ></path>
-            </svg>
-          </div>
-        )}
+        {loading && <ChezFloraLoader/>
+        // (
+        //   <div className="flex justify-center mt-4">
+        //     <svg
+        //       className="animate-spin h-5 w-5 mr-3 text-pink-500"
+        //       xmlns="http://www.w3.org/2000/svg"
+        //       fill="none"
+        //       viewBox="0 0 24 24"
+        //     >
+        //       <circle
+        //         className="opacity-25"
+        //         cx="12"
+        //         cy="12"
+        //         r="10"
+        //         stroke="currentColor"
+        //         strokeWidth="4"
+        //       ></circle>
+        //       <path
+        //         className="opacity-75"
+        //         fill="currentColor"
+        //         d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.963 7.963 0 014 12H0c0 6.627 5.373 12 12 12a7.963 7.963 0 01-7.717-2.709z"
+        //       ></path>
+        //     </svg>
+        //   </div>
+        // )
+        }
 
         {/* LIGNE DE LIEN D'INSCRIPTION */}
         <div className="mt-4 text-center">
