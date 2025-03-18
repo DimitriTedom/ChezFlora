@@ -2,10 +2,12 @@
 import { configureStore } from "@reduxjs/toolkit";
 import authReducer from "./authSlice"; // Importation du reducer d'authentification depuis le bon dossier
 import cartSlice from './cartSlice';
+import  imageUploadReducer  from "./imageUploadSlice";
 export const store = configureStore({
   reducer: {
     auth: authReducer,
     cart:cartSlice,
+    imageUpload:imageUploadReducer,
   },
 });
 

@@ -9,7 +9,9 @@ import { HttpCode, ONE_HUNDRED, SIXTY } from './core/constants';
 import dotenv from 'dotenv';
 import cors from 'cors';
 import AuthRoutes from './routes/auth.routes';
+import adminProductsRouter from './routes/admin/products.routes';
 import cookieParser from 'cookie-parser';
+import helmet from 'helmet';
 dotenv.config();
 const app = express();
 app.use(
@@ -26,11 +28,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(compression());
 // My Routes
 app.use('/api/auth', AuthRoutes);
-// Authentification Middleware for secured routes
-// app.get('/api/user', authenticateUser, (req, res) => {
-// 	res.json(req.user);
-// });
-
+app.use(helmet());
 
 app.use(
 	rateLimit({
@@ -39,15 +37,23 @@ app.use(
 		message: 'Excess requests from this IP Adresse '
 	})
 );
-app.use((req,res,next)=>{
-	req.setTimeout(5000,()=>{
+app.use((req, res, next) => {
+	req.setTimeout(5000, () => {
 		res.status(HttpCode.REQUEST_TIMEOUT).json({
-			success:false,
-			message:'Request timed out',
+			success: false,
+			message: 'Request timed out'
 		});
 	});
 	next();
 });
+
+app.use('/api/admin/products', adminProductsRouter);
+app.use((req, res, next) => {
+	if (req.path === '/api/admin/products/upload-image') {
+	  req.setTimeout(10000); // 10s timeout pour les uploads
+	}
+	next();
+  });
 app.use(morgan('combined'));
 
 setupSwagger(app);

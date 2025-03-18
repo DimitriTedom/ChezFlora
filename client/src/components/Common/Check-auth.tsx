@@ -8,7 +8,6 @@ interface CheckAuthProps {
 }
 const CheckAuth = ({ isAuthenticated, user, children }: CheckAuthProps) => {
   const location = useLocation();
-  console.log(location.pathname , isAuthenticated)
   if (
     !isAuthenticated &&
     !(

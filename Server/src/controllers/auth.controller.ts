@@ -1,7 +1,7 @@
-import { NextFunction, Request, Response } from 'express';
+import { Request, Response } from 'express';
 import { PrismaClient } from '@prisma/client';
 import { hashPassword, comparePassword } from '../utils/bcrypt';
-import { generateToken, verifyToken } from '../utils/jwt';
+import { generateToken } from '../utils/jwt';
 import { HttpCode } from '../core/constants';
 import { registerSchema, loginSchema } from '../schemas/auth.schema';
 import { errorHandler } from '../middlewares/auth.middleware';

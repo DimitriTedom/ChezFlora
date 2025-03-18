@@ -2,13 +2,14 @@ import { AiOutlinePlus } from "react-icons/ai";
 import { Button } from "@/components/ui/button";
 import { Fragment } from "react/jsx-runtime";
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import CommonForm from "@/components/Common/Form";
 import { addProductFormElements } from "@/config";
 import ProductImageUpload from "@/components/Admin-view/ImageUpload";
 
+
 interface ProductFormData {
-  image: File | null;
+  image: File | null ;
   title: string;
   description: string;
   price: number;
@@ -32,11 +33,19 @@ const AdminProducts = () => {
   const [formData, setFormData] = useState<ProductFormData>(initialFormData);
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [imageUploadedUrl, setImageUploadedUrl] = useState<string>('');
-
+  // const {imageUrl} = useSelector((state:RootState)=>state.imageUpload);
+  const [imageLoadingState,setImageLoadingState] = useState<boolean>(false)
+  useEffect(() => {
+    if (imageFile) {
+      setFormData(prev => ({ ...prev, image: imageFile }));
+    }
+  }, [imageFile]);
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     console.log(formData);
   };
+  console.log(formData);
+
   return (
     <Fragment>
       <div className="w-full mb-5 flex justify-end">
@@ -44,7 +53,7 @@ const AdminProducts = () => {
       </div>
       <div className="grid gap-4 md:grid-cols-3 lg:grid-cols-4"> </div>
       <Sheet open={openCreateProductDialog} onOpenChange={()=>{setOpenCreateProductDialog(false)}}>
-        <SheetContent>
+        <SheetContent className="overflow-y-auto">
           <SheetHeader>
           <SheetTitle>Add New Product</SheetTitle>
           </SheetHeader>
@@ -52,9 +61,10 @@ const AdminProducts = () => {
           imageFile={imageFile}
           setImageFile={setImageFile}
           imageUploadedUrl={imageUploadedUrl}
-          setimageUploadedUrl={setImageUploadedUrl}
+          setImageUploadedUrl={setImageUploadedUrl}
+          setImageLoadingState={setImageLoadingState}
           />
-          <div className="py-6">
+          <div className="py-2">
             <CommonForm
             formData={formData}
             setFormData={setFormData}
