@@ -59,6 +59,7 @@ model Product {
   name        String
   description String?
   price       Float
+  saleprice   Float
   stock       Int
   category    Category
   images      String[]

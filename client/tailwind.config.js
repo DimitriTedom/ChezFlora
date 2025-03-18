@@ -54,7 +54,7 @@ export default {
   				'5': 'hsl(var(--chart-5))'
   			},
   			Pink: 'var(--secondary-pink)',
-  			Green: 'var(--primary-green)',
+  			primary: 'var(--primary-green)',
   			Maron: 'var(--tertiary-maron)',
   			sidebar: {
   				DEFAULT: 'hsl(var(--sidebar-background))',
@@ -66,7 +66,6 @@ export default {
   				border: 'hsl(var(--sidebar-border))',
   				ring: 'hsl(var(--sidebar-ring))'
   			},
-			  primary: "#8B9A46", // Vert doux
 			  secondary: "#D4B08C", // Beige
 			  accent: "#F5E6D3", // Blanc cassé
 			  muted: "#E0D5C5" // Marron clair

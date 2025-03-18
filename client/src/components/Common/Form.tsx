@@ -3,6 +3,7 @@ import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
 import { Textarea } from "../ui/textarea";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
 
 interface FormControlItem {
   name: string;
@@ -10,6 +11,7 @@ interface FormControlItem {
   placeholder: string;
   component: "input" | "textarea" | "select";
   type?: "email" | "text" | "password" ; // Facultatif pour le composant input
+  options?: { id: string; label: string }[];
 }
 
 export interface CommonFormProps {
@@ -45,6 +47,7 @@ const CommonForm: React.FC<CommonFormProps> = ({
             className="p-6 border-solid border rounded-full w-full border-[#e5e7eb] shadow-sm lg:text-xl"
           />
         );
+        
       case "textarea":
         return (
           <Textarea
@@ -57,6 +60,34 @@ const CommonForm: React.FC<CommonFormProps> = ({
             rows={4}
           />
         );
+        break;
+        case "select":
+          return (
+            <Select
+              onValueChange={(value) =>
+                setFormData({
+                  ...formData,
+                  [controlItem.name]: value,
+                })
+              }
+              value={value}
+            >
+              <SelectTrigger className="w-full">
+                <SelectValue placeholder={controlItem.label} />
+              </SelectTrigger>
+              <SelectContent>
+                {controlItem.options && controlItem.options.length > 0
+                  ? controlItem.options.map((optionItem) => (
+                      <SelectItem key={optionItem.id} value={optionItem.id}>
+                        {optionItem.label}
+                      </SelectItem>
+                    ))
+                  : null}
+              </SelectContent>
+            </Select>
+          );
+  
+          break;
       default:
         return (
           <Input
