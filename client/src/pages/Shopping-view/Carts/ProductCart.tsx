@@ -1,69 +1,64 @@
 import { BsCartPlus } from "react-icons/bs";
-import { useState, useEffect } from 'react';
-import { Button } from '@/components/ui/button';
-import { Badge } from "@/components/ui/badge";
 import { motion, AnimatePresence } from "framer-motion";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { useState } from "react";
 
 export interface Product {
-  title: string;
+  id: string;
+  name: string;
   price: number;
-  units: number;
+  stock: number;
   image: string;
-  discount?: number;
+  saleprice?: number;
 }
 
-const ProductCard: React.FC<Product> = ({
-  title,
+const UserProductCard: React.FC<Product> = ({
+  id,
+  name,
   price,
-  units,
+  stock,
   image,
-  discount
+  saleprice
 }) => {
-  const [quantity, setQuantity] = useState(units);
   const [isLoaded, setIsLoaded] = useState(false);
-
-  const discountedPrice = discount 
-    ? price * (1 - discount / 100) 
-    : price;
-
-  const handleAddToCart = () => {
-    // Add to cart logic here
-    console.log(`${title} added to cart`);
-  };
+  const discountPercentage = saleprice 
+    ? Math.round(((price - saleprice) / price) * 100)
+    : null;
+  const displayPrice = saleprice || price;
 
   return (
     <motion.div
-      className="bg-[#FFF7E0] rounded-xl sm:rounded-2xl shadow-lg overflow-hidden 
-                 relative border-2 border-maroon max-w-full transition-shadow 
+      className="bg-[#F5E6D3] rounded-xl sm:rounded-2xl shadow-lg overflow-hidden 
+                 relative border border-[#D4B08C] max-w-full transition-shadow 
                  duration-300 hover:shadow-2xl"
       whileHover={{ scale: 1.02 }}
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -20 }}
     >
-      {/* Discount Badge */}
+      {/* Badge de promotion */}
       <AnimatePresence>
-        {discount && (
+        {discountPercentage && (
           <motion.div
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.8 }}
             transition={{ type: "spring", stiffness: 200 }}
+            className="absolute top-3 left-3 z-10"
           >
-            <Badge className="absolute top-3 left-3 bg-red-500 text-white 
-                            px-2.5 py-1 text-xs sm:text-sm font-semibold 
-                            rounded-full z-10 shadow-md">
-              -{discount}% TODAY
+            <Badge className="bg-[#8B9A46] text-white px-2.5 py-1 rounded-full">
+              -{discountPercentage}% PROMO
             </Badge>
           </motion.div>
         )}
       </AnimatePresence>
 
-      {/* Image Container */}
+      {/* Image */}
       <div className="aspect-square w-full relative">
         <img
           src={image}
-          alt={title}
+          alt={name}
           className={`w-full h-full object-cover transition-opacity 
                      duration-300 ${isLoaded ? 'opacity-100' : 'opacity-0'}`}
           onLoad={() => setIsLoaded(true)}
@@ -73,65 +68,51 @@ const ProductCard: React.FC<Product> = ({
         )}
       </div>
 
-      {/* Content Section */}
+      {/* Contenu */}
       <div className="p-4 sm:p-6 space-y-4">
-        {/* Title and Units */}
-        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
-          <h2 className="text-lg sm:text-xl md:text-2xl font-poppins font-bold 
-                        text-gray-900 truncate flex-1">
-            {title}
-          </h2>
+        {/* Titre */}
+        <h2 className="text-lg sm:text-xl md:text-2xl font-poppins font-bold 
+                      text-[#8B9A46] truncate">
+          {name}
+        </h2>
+
+        {/* Prix */}
+        <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
+          {discountPercentage ? (
+            <div className="flex items-center gap-3">
+              <p className="text-gray-400 line-through text-sm sm:text-base">
+                ${price.toFixed(2)}
+              </p>
+              <p className="text-[#D4B08C] text-xl sm:text-2xl font-bold">
+                ${displayPrice.toFixed(2)}
+              </p>
+            </div>
+          ) : (
+            <p className="text-[#8B9A46] text-lg sm:text-xl font-bold">
+              ${price.toFixed(2)}
+            </p>
+          )}
+
+          {/* Stock */}
           <div className="flex items-center gap-1 text-gray-600">
-            <span className="text-sm sm:text-base">{units}</span>
-            <span className="hidden sm:inline">unit{units !== 1 && 's'}</span>
+            <span className="text-sm sm:text-base">Stock: {stock}</span>
           </div>
         </div>
 
-        {/* Pricing Section */}
-        <div className="flex flex-col sm:flex-row justify-between items-center gap-2">
-          {discount ? (
-            <>
-              <div className="flex items-center gap-3">
-                <p className="text-gray-400 line-through text-sm sm:text-base">
-                  ${price.toFixed(2)}
-                </p>
-                <p className="text-green-600 text-xl sm:text-2xl font-bold">
-                  ${discountedPrice.toFixed(2)}
-                </p>
-              </div>
-              <Button
-                onClick={handleAddToCart}
-                className="w-full sm:w-auto bg-pink-200 
-                          hover:bg-pink-300 text-black font-medium 
-                          shadow-md transition-all duration-200 
-                          active:scale-95"
-                size="sm"
-              >
-                <BsCartPlus className="mr-2" />
-                Add to Cart
-              </Button>
-            </>
-          ) : (
-            <div className="flex justify-between w-full items-center gap-4">
-              <p className="text-gray-700 text-lg sm:text-xl font-bold">
-                ${price.toFixed(2)}
-              </p>
-              <Button
-                onClick={handleAddToCart}
-                className="w-full sm:w-auto bg-pink-200 
-                          hover:bg-pink-300 text-black font-medium 
-                          shadow-md transition-all duration-200 
-                          active:scale-95"
-              >
-                <BsCartPlus className="mr-2" />
-                Add to Cart
-              </Button>
-            </div>
-          )}
-        </div>
+        {/* Bouton d'ajout au panier */}
+        <Button 
+          className="w-full bg-pink-200 hover:bg-pink-300 
+                     text-black font-medium shadow-md transition-all 
+                     duration-200 active:scale-95"
+          size="sm"
+          onClick={() => console.log(`Ajout de ${name} au panier`)}
+        >
+          <BsCartPlus className="mr-2" />
+          Add to Cart
+        </Button>
       </div>
     </motion.div>
   );
 };
 
-export default ProductCard;
+export default UserProductCard;

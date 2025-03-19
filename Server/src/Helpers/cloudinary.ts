@@ -25,7 +25,7 @@ export const upload = multer({
 // Utils Cloudinary
 export const uploadToCloudinary = async (file: Express.Multer.File) => {
   try {
-    // Créer un data URI correct avec le MIME type
+    // creons un data URI correct avec le MIME type
     const dataUri = `data:${file.mimetype};base64,${file.buffer.toString('base64')}`;
     
     const result = await cloudinary.uploader.upload(dataUri, {

@@ -115,9 +115,17 @@ const ShoppingHome = () => {
           className="absolute scale-50 top-[-9%] right-[-50%] md:scale-75 opacity-70 rotate-180 xl:right-[-10%]"
         />
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mt-8 max-w-full">
-          {products.map((product, index) => (
-            <ProductCard key={index} {...product} />
-          ))}
+        {products.map((product) => (
+          <ProductCard
+            key={product.id}
+            id={product.id}
+            title={product.title}
+            price={product.price}
+            stock={product.stock}
+            image={product.image}
+            saleprice={product.saleprice}
+          />
+        ))}
         </div>
         <Link to="/shop/store">
           <Button className="flex items-center justify-center rounded-full text-sm lg:text-xl px-[1rem] py-4 bg-orange-300 border border-solid border-orange-500 hover:bg-oramge-500 hover:shadow-md duration-300 cursor-pointer">

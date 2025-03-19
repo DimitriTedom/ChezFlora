@@ -15,7 +15,7 @@ const initialState: ImageUploadState = {
 };
 
 export const uploadImage = createAsyncThunk(
-  'admin/products/upload-image',
+  '/admin/products/upload-image',
   async (file: File) => {
     const formData = new FormData();
     formData.append('my_file', file);

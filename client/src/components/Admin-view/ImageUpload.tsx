@@ -7,25 +7,32 @@ import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/store/store";
 import { uploadImage } from "@/store/imageUploadSlice";
 import { useCustomToast } from "@/hooks/useCustomToast";
+import { Skeleton } from "../ui/skeleton";
 
 interface ImageUploadProps {
   imageFile: File | null;
   setImageFile: React.Dispatch<React.SetStateAction<File | null>>;
   imageUploadedUrl: string;
   setImageUploadedUrl: React.Dispatch<React.SetStateAction<string>>;
+  imageLoadingState: boolean;
   setImageLoadingState: React.Dispatch<React.SetStateAction<boolean>>;
+  isEditMode:boolean;
 }
-
 const ProductImageUpload = ({
   imageFile,
   setImageFile,
   imageUploadedUrl,
   setImageUploadedUrl,
+  isEditMode,
+  imageLoadingState,
   setImageLoadingState,
 }: ImageUploadProps) => {
   const inputRef = useRef<HTMLInputElement>(null);
 
+  console.log(isEditMode, "isEditMode");
+
   const handleImageFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (isEditMode) return;
     const file = e.target.files?.[0];
     if (file) {
       setImageFile(file);
@@ -53,23 +60,21 @@ const ProductImageUpload = ({
     }
     setImageUploadedUrl("");
   };
-  console.log(imageFile);
   const dispatch = useDispatch<AppDispatch>();
-  const { imageUrl, status, error } = useSelector(
-    (state: RootState) => state.imageUpload
-  );
+
   const { showToast } = useCustomToast();
   const handleImageSelect = async (file: File) => {
     try {
+      setImageLoadingState(true);
       const result = await dispatch(uploadImage(file)).unwrap();
       setImageUploadedUrl(result.data.url); // Accéder à data.url
-      setImageLoadingState(false)
+      setImageLoadingState(false);
       showToast({
         message: result.message,
         type: "success",
         duration: 3000,
       });
-    } catch (error:any) {
+    } catch (error: any) {
       showToast({
         message: error.message,
         type: "error",
@@ -77,21 +82,21 @@ const ProductImageUpload = ({
       });
     }
   };
-//   useEffect(() => {
-//     console.log('Image URL:', imageUploadedUrl);
-//   }, [imageUploadedUrl]);
+
   useEffect(() => {
     if (imageFile) {
       handleImageSelect(imageFile);
     }
   }, [imageFile]);
+  console.log(isEditMode, "isEditMode");
+
   return (
     <div className="w-full max-w-md mx-auto">
       <Label htmlFor="image" className="text-lg font-semibold mb-2 block">
         Upload image
       </Label>
       <div
-        className="border border-dashed border-gray-400 rounded-lg"
+        className={` ${isEditMode ? "opacity-60" : ""} border border-dashed border-gray-400 rounded-lg`}
         onDragOver={handleDragOver}
         onDrop={handleDrop}
       >
@@ -102,15 +107,20 @@ const ProductImageUpload = ({
           className=""
           ref={inputRef}
           onChange={handleImageFileChange}
+          disabled={isEditMode}
         />
         {!imageFile ? (
           <Label
             htmlFor="image-upload"
-            className="flex flex-col items-center justify-center h-32 cursor-pointer "
+            className={`${
+              isEditMode ? "cursor-not-allowed" : "cursor-pointer"
+            } flex flex-col items-center justify-center h-32  `}
           >
             <UploadCloudIcon className="w-10 h-10 text-muted-foreground mb-2" />
             <span>Drag & Drop or Click to upload image</span>
           </Label>
+        ) : imageLoadingState ? (
+          <Skeleton className="h-10 bg-rose-100" />
         ) : (
           <div className="flex items-center justify-between">
             <div className="flex items-center">

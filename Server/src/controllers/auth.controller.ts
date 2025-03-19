@@ -29,8 +29,7 @@ export const register = async (req: Request, res: Response) => {
 				role: 'USER'
 			}
 		});
-		// Noramalement, je veut que l'utilisateur apres avoir ete enregistrer, doit login pour s'authentifier avant de recevoir un token via api/auth/login dans un cookie
-		// Donc la logique suivante est a reflechir
+
 		console.log(user);
 		res.status(HttpCode.OK).json({ success: true, message: 'Registration successful' });
 	} catch (error) {

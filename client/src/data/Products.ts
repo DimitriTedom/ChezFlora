@@ -1,37 +1,34 @@
 import { Product } from "@/pages/Shopping-view/Carts/ProductCart";
 
 export const products: Product[] = [
-    {
-      title: 'Luxury Premium Red Roses Bouquet with 12 Stems',
-      price: 49.99,
-      units: 5,
-      image: '/flowerGen5.jpg',
-      discount: 20
-    },
-    {
-      title: 'Fresh White Lilies Arrangement in Crystal Vase',
-      price: 35.50,
-      units: 3,
-      image: '/flowerGen4(Services).jpg',
-    },
-    {
-      title: 'Tropical Orchid Plant in Ceramic Pot with Care Guide',
-      price: 29.99,
-      units: 8,
-      image: '/flower12.webp',
-      discount: 15
-    },
-    {
-      title: 'Assorted Wildflower Bouquet for Summer Season',
-      price: 22.99,
-      units: 12,
-      image: '/flowerGen1.jpg',
-    },
-    {
-      title: 'Designer Mixed Flower Arrangement in Glass Vase',
-      price: 39.99,
-      units: 7,
-      image: '/flower2.jpg',
-      discount: 10
-    }
-  ];
+  {
+    id: "prod1",
+    title: "Bouquet de Roses Rouges",
+    price: 49.99,
+    stock: 15,
+    image: "https://res.cloudinary.com/demo/image/upload/v1742332575/sample_flower.webp",
+    saleprice: 39.99
+  },
+  {
+    id: "prod2",
+    title: "Plantes d'Intérieur",
+    price: 29.99,
+    stock: 25,
+    image: "https://res.cloudinary.com/demo/image/upload/v1742332575/indoor_plant.webp"
+  },
+  {
+    id: "prod3",
+    title: "Couronne Florale",
+    price: 79.99,
+    stock: 5,
+    image: "https://res.cloudinary.com/demo/image/upload/v1742332575/floral_wreath.webp",
+    saleprice: 69.99
+  },
+  {
+    id: "prod4",
+    title: "Cactus en Pot",
+    price: 19.99,
+    stock: 30,
+    image: "https://res.cloudinary.com/demo/image/upload/v1742332575/cactus.webp"
+  }
+]

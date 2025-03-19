@@ -59,10 +59,10 @@ model Product {
   name        String
   description String?
   price       Float
-  saleprice   Float
+  saleprice   Float?
   stock       Int
   category    Category
-  images      String[]
+  image      String
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 

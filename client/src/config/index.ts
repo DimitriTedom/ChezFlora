@@ -16,7 +16,7 @@ export const registerFormControls = [
     {
       name: "password",
       label: "Password",
-      placeholder: "*******",
+      placeholder: "*********",
       component: "input",
       type: "password",
     },
@@ -34,7 +34,7 @@ export const LoginFormControls =
         {
           name: "password",
           label: "Password",
-          placeholder: "******",
+          placeholder: "********",
           component: "input",
           type: "password",
         },
@@ -54,14 +54,14 @@ export const EnterNewPasswordFormControls =[
   {
     name: "password",
     label: "Password",
-    placeholder: "******",
+    placeholder: "*******",
     component: "input",
     type: "password",
   },
     {
     name: "password1",
     label: "Verify Password",
-    placeholder: "******",
+    placeholder: "*******",
     component: "input",
     type: "password",
   },
@@ -69,8 +69,8 @@ export const EnterNewPasswordFormControls =[
 
 export const addProductFormElements = [
   {
-    label: "Title",
-    name: "title",
+    label: "Name",
+    name: "name",
     component: "input",
     type: "text",
     placeholder: "Enter product title",
@@ -86,10 +86,10 @@ export const addProductFormElements = [
     name: "category",
     component: "select",
     options: [
-      { id: "freshflowers", label: "Fresh Flowers" },
-      { id: "bouquets", label: "Bouquets" },
-      { id: "pottedplants", label: "Potted Plants" },
-      { id: "decoration", label: "Decoration" },
+      { id: "FRESH_FLOWERS", label: "Fresh Flowers" },
+      { id: "BOUQUETS", label: "Bouquets" },
+      { id: "POTTED_PLANTS", label: "Potted Plants" },
+      { id: "DECORATION", label: "Decoration" },
     ],
   },
   {
@@ -101,14 +101,14 @@ export const addProductFormElements = [
   },
   {
     label: "Sale Price",
-    name: "salePrice",
+    name: "saleprice",
     component: "input",
     type: "number",
     placeholder: "Enter sale price (optional)",
   },
   {
-    label: "Total Stock",
-    name: "totalStock",
+    label: "Stock",
+    name: "stock",
     component: "input",
     type: "number",
     placeholder: "Enter total stock",
