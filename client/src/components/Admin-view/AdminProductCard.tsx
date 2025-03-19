@@ -54,7 +54,7 @@ const AdminProductCard: React.FC<AdminProductCardProps> = ({
       </AnimatePresence>
 
       {/* Contrôles Admin */}
-      <div className="absolute top-3 right-3 space-x-2 z-10">
+      <div className="absolute top-3 right-3 space-x-2 z-10 bg-[#FFF7E0] rounded-full">
         <Button 
           variant="ghost" 
           size="icon" 
@@ -63,7 +63,7 @@ const AdminProductCard: React.FC<AdminProductCardProps> = ({
             setCurrentEditedId(product?.id)
         }
           }
-          className="text-primary hover:bg-primary/10"
+          className="text-primary hover:bg-primary/90"
         >
           <BsPencil className="h-4 w-4" />
         </Button>
@@ -128,14 +128,14 @@ const AdminProductCard: React.FC<AdminProductCardProps> = ({
             }}
             className="flex-1"
           >
-            Modifier
+            Edit
           </Button>
           <Button 
             variant="destructive" 
-            onClick={() => onDelete(product.id)}
+            onClick={() => onDelete(product?.id)}
             className="flex-1"
           >
-            Supprimer
+            Delete
           </Button>
         </div>
       </div>

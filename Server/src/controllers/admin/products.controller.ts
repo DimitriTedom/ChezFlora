@@ -130,7 +130,7 @@ export const editProducts = async (req: Request, res: Response) => {
 		console.log(updatedProduct ,"updated product"),
 		res.status(200).json({
 			success: true,
-			message: 'Product updated successfully',
+			message: `${findProduct.name} updated successfully`,
 			data: updatedProduct
 		});
 	} catch (error) {
@@ -161,7 +161,7 @@ export const deleteProducts = async (req: Request, res: Response) => {
 
 		res.status(200).json({
 			success: true,
-			message: 'Product deleted successfully'
+			message: `${product.name} deleted successfully`
 		});
 	} catch (error) {
 		console.log(error);

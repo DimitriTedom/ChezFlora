@@ -13,7 +13,12 @@ import { addProductFormElements } from "@/config";
 import ProductImageUpload from "@/components/Admin-view/ImageUpload";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/store/store";
-import { addNewProduct, editProduct, fetchAllProducts } from "@/store/ProductSlice";
+import {
+  addNewProduct,
+  deleteProduct,
+  editProduct,
+  fetchAllProducts,
+} from "@/store/ProductSlice";
 import { useCustomToast } from "@/hooks/useCustomToast";
 import { Product } from "../Shopping-view/Carts/ProductCart";
 import FormTitle from "@/components/Common/FormTitle";
@@ -69,18 +74,18 @@ const AdminProducts = () => {
         .unwrap()
         .then((data) => {
           console.log(data, "edit");
-            showToast({
-              message: `${data.message}`,
-              subtitle: `${data.data.name}`,
-              type: "success",
-              duration: 5000,
-            });
-            setOpenCreateProductDialog(false);
-            setFormData(initialFormData);
-            setCurrentEditedId(null);
-            dispatch(fetchAllProducts()).unwrap();
+          showToast({
+            message: `${data.message}`,
+            subtitle: `${data.data.name}`,
+            type: "info",
+            duration: 5000,
+          });
+          setOpenCreateProductDialog(false);
+          setFormData(initialFormData);
+          setCurrentEditedId(null);
+          dispatch(fetchAllProducts()).unwrap();
         });
-    
+
       return; // Empêche l'ajout d'un nouveau produit après l'édition
     }
     // Vérifier si une image a été téléchargée
@@ -93,7 +98,7 @@ const AdminProducts = () => {
     dispatch(addNewProduct(formData))
       .unwrap()
       .then((data) => {
-        console.log("Product added successfully:", data);
+        // console.log("Product added successfully:", data);
         showToast({
           message: `${data.data.name} added successively`,
           type: "success",
@@ -109,13 +114,31 @@ const AdminProducts = () => {
         console.error("Failed to add product:", error);
       });
   };
-  console.log(
-    "product list:",
-    productList,
-    "uploaded image url:",
-    imageUploadedUrl
-  );
 
+  const handleDelete = (getCurrentProductId:string) =>{
+    console.log(getCurrentProductId);
+    dispatch(deleteProduct(getCurrentProductId)).unwrap().then((data)=>{
+      if(data?.success){
+        dispatch(fetchAllProducts());
+        showToast({
+          message: `${data.message}`,
+          type: "success",
+          duration: 5000,
+        });
+      }
+    })
+  }
+  // console.log(
+  //   "product list:",
+  //   productList,
+  //   "uploaded image url:",
+  //   imageUploadedUrl
+  // );
+  const isFormValid = () => {
+    return Object.keys(formData)
+      .map((key: any) => formData[key] !== "")
+      .every((item) => item);
+  };
   return (
     <Fragment>
       <div className="w-full mb-5 flex-col gap-3 flex justify-between items-center lg:flex-row">
@@ -127,10 +150,10 @@ const AdminProducts = () => {
         </div>
         <Button
           className="bg-pink-200 hover:bg-pink-300"
-          onClick={() =>{ setOpenCreateProductDialog(true)
-            setCurrentEditedId(null)
-          }
-          }
+          onClick={() => {
+            setOpenCreateProductDialog(true);
+            setCurrentEditedId(null);
+          }}
         >
           <AiOutlinePlus /> Add New Product
         </Button>
@@ -143,7 +166,7 @@ const AdminProducts = () => {
             onEdit={(product) => {
               setFormData(product);
             }}
-            onDelete={(id) => dispatch(deleteProduct(id))}
+            onDelete={(id) => handleDelete(id)}
             setOpenCreateProductDialog={setOpenCreateProductDialog}
             setCurrentEditedId={setCurrentEditedId}
           />
@@ -153,14 +176,16 @@ const AdminProducts = () => {
         open={openCreateProductDialog}
         onOpenChange={() => {
           setOpenCreateProductDialog(false);
-          setFormData(initialFormData)
-          setImageFile(null)
-          setImageUploadedUrl("")
+          setFormData(initialFormData);
+          setImageFile(null);
+          setImageUploadedUrl("");
         }}
       >
         <SheetContent className="overflow-y-auto">
           <SheetHeader>
-            <SheetTitle>{currentEditedId !== null ? 'Edit Product' : 'Add New Product'}</SheetTitle>
+            <SheetTitle>
+              {currentEditedId !== null ? "Edit Product" : "Add New Product"}
+            </SheetTitle>
           </SheetHeader>
           <ProductImageUpload
             imageFile={imageFile}
@@ -178,6 +203,7 @@ const AdminProducts = () => {
               onSubmit={onSubmit}
               formControls={addProductFormElements}
               buttonText={currentEditedId !== null ? "Edit" : "Add"}
+              isBnDisabled={!isFormValid()}
             />
           </div>
         </SheetContent>

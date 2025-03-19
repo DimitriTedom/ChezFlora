@@ -114,98 +114,98 @@
     @apply text-pink-300 hover:text-pink-400 text-4xl;
   }
 
-  /* Loader for CheFlora MERN App */
-  .loader {
-    width: 64px;
-    height: 64px;
-    border: 8px solid #faf9f6; /* Blanc cassé */
-    border-top: 8px solid #8fbc8f; /* Vert doux */
-    border-right: 8px solid #ffb6c1; /* Rose poudré */
-    border-bottom: 8px solid #f5f5dc; /* Beige */
-    border-left: 8px solid #d2b48c; /* Marron clair */
-    border-radius: 50%;
-    animation: spin 1.5s linear infinite;
-  }
+/* --------------------------------- */
+/*         ChezFlora Second Loader Styles    */
+/* --------------------------------- */
+/* ChezFloraFlowerLoader.css */
+.flora-flower-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.95);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  backdrop-filter: blur(2px);
+}
 
-  @keyframes spin {
-    0% {
-      transform: rotate(0deg);
-    }
-    100% {
-      transform: rotate(360deg);
-    }
-  }
+.flora-flower-container {
+  text-align: center;
+}
 
-  /* Loader Container */
-  .loader-container {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(255, 255, 255, 0.9);
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    z-index: 9999;
-  }
+.flower-spinner {
+  position: relative;
+  width: 120px;
+  height: 120px;
+  animation: bloom 2s ease-in-out infinite;
+}
 
-  /* Flower Spinner */
-  .flower-spinner {
-    position: relative;
-    width: 80px;
-    height: 80px;
-  }
+.petal-group {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  animation: rotate 4s linear infinite;
+}
 
-  .petal-group {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    animation: rotate 2s linear infinite;
-  }
+.petal {
+  position: absolute;
+  width: 40px;
+  height: 80px;
+  background: #8bc34a;
+  border-radius: 40px 40px 0 0;
+  transform-origin: bottom center;
+}
 
-  .petal {
-    position: absolute;
-    width: 20px;
-    height: 30px;
-    background: #8B9467; /* Soft green from palette */
-    border-radius: 50% 0 50% 50%;
-    transform-origin: bottom center;
-  }
+.petal:nth-child(1) { transform: rotate(0deg) translateY(-40px); }
+.petal:nth-child(2) { transform: rotate(90deg) translateY(-40px); }
+.petal:nth-child(3) { transform: rotate(180deg) translateY(-40px); }
+.petal:nth-child(4) { transform: rotate(270deg) translateY(-40px); }
 
-  .petal:nth-child(1) { transform: rotate(0deg) translateY(-40px); }
-  .petal:nth-child(2) { transform: rotate(90deg) translateY(-40px); }
-  .petal:nth-child(3) { transform: rotate(180deg) translateY(-40px); }
-  .petal:nth-child(4) { transform: rotate(270deg) translateY(-40px); }
+.flower-center {
+  position: absolute;
+  width: 40px;
+  height: 40px;
+  background: #e91e63;
+  border-radius: 50%;
+  top: 40px;
+  left: 40px;
+  animation: pulse 1.5s ease-in-out infinite;
+}
 
-  .center-circle {
-    position: absolute;
-    width: 30px;
-    height: 30px;
-    background: #F5E6D3; /* Beige from palette */
-    border-radius: 50%;
-    border: 3px solid #D4B08C; /* Light brown from palette */
-  }
+@keyframes rotate {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
 
-  @keyframes rotate {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-  }
+@keyframes bloom {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.15); }
+}
 
-  .loading-text {
-    margin-top: 20px;
-    font-family: 'Dancing Script', cursive; /* Handwritten font for titles */
-    color: #6B4E3D; /* Dark brown from palette */
-    font-size: 1.2rem;
-    animation: pulse 1.5s ease-in-out infinite;
-  }
+@keyframes pulse {
+  0% { box-shadow: 0 0 0 0 rgba(233, 30, 99, 0.4); }
+  70% { box-shadow: 0 0 0 20px rgba(233, 30, 99, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(233, 30, 99, 0); }
+}
 
-  @keyframes pulse {
-    0% { opacity: 1; }
-    50% { opacity: 0.6; }
-    100% { opacity: 1; }
-  }
+.loading-text {
+  color: #8bc34a;
+  font-family: 'Dancing Script', cursive;
+  font-size: 28px;
+  margin: 20px 0 5px;
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+}
+
+.sub-text {
+  color: #e91e63;
+  font-family: 'Arial', sans-serif;
+  font-size: 14px;
+  letter-spacing: 1px;
+}
+
 }
 
 /* --------------------------------- */

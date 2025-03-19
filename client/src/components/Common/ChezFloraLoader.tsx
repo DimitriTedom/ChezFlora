@@ -1,16 +1,21 @@
-const ChezFloraLoader = () => {
+import React from 'react';
+
+const ChezFloraLoader: React.FC = () => {
   return (
-    <div className="loader-container">
-      <div className="flower-spinner">
-        <div className="petal-group">
-          <div className="petal"></div>
-          <div className="petal"></div>
-          <div className="petal"></div>
-          <div className="petal"></div>
+    <div className="flora-flower-overlay">
+      <div className="flora-flower-container">
+        <div className="flower-spinner">
+          <div className="petal-group">
+            <div className="petal"></div>
+            <div className="petal"></div>
+            <div className="petal"></div>
+            <div className="petal"></div>
+          </div>
+          <div className="flower-center"></div>
         </div>
-        <div className="center-circle"></div>
+        <p className="loading-text">ChezFlora</p>
+        <p className="sub-text">Loading...</p>
       </div>
-      <p className="loading-text">Chargement en cours...</p>
     </div>
   );
 };
