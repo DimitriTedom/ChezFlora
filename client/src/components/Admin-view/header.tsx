@@ -3,7 +3,11 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
 // import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
+import { useCustomToast } from "@/hooks/useCustomToast"
+import { logoutUser } from "@/store/authSlice"
+import { AppDispatch } from "@/store/store"
 import { LogOut } from "lucide-react"
+import { useDispatch } from "react-redux"
 import { Link } from "react-router-dom"
 // import Link from "next/link"
 interface Avatar {
@@ -17,7 +21,20 @@ const Avatars:Avatar = {
     image:"/avatar4.svg"
 }
 const AdminHeader = () => {
-  return (
+  const dispatch = useDispatch<AppDispatch>();
+  const {showToast} = useCustomToast()
+  const handleLogOut = () =>{
+    dispatch(logoutUser()).unwrap().then((data)=>{
+      showToast({
+        message: `${data.message}`,
+        subtitle: "See you soon !",
+        type: "warning",
+        duration: 5000,
+      });
+    })
+
+  }
+  return ( 
     <header className="flex items-center justify-between p-4 bg-background">
       {/* Logo ou titre */}
       {/* <div className="text-xl font-semibold text-primary">ChezFlora</div> */}
@@ -54,7 +71,7 @@ const AdminHeader = () => {
             </Link>
           </DropdownMenuItem>
           <DropdownMenuSeparator />
-          <DropdownMenuItem onSelect={() => console.log("Logout")}>
+          <DropdownMenuItem onSelect={handleLogOut}>
             <LogOut className="mr-2 h-4 w-4" />
             <span>Log Out</span>
           </DropdownMenuItem>
