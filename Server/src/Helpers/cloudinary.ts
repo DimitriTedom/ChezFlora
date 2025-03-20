@@ -12,7 +12,7 @@ cloudinary.config({
 const storage = multer.memoryStorage();
 export const upload = multer({
   storage,
-  limits: { fileSize: 5 * 1024 * 1024 }, // 5MB max
+  limits: { fileSize: 5 * 1024 * 1024 }, 
   fileFilter: (req, file, cb) => {
     if (file.mimetype.startsWith('image/')) {
       cb(null, true);
@@ -22,23 +22,25 @@ export const upload = multer({
   },
 });
 
-// Utils Cloudinary
 export const uploadToCloudinary = async (file: Express.Multer.File) => {
   try {
-    // creons un data URI correct avec le MIME type
+    console.log("Début de l'upload sur Cloudinary...");
     const dataUri = `data:${file.mimetype};base64,${file.buffer.toString('base64')}`;
-    
+
+    const startTime = Date.now();
     const result = await cloudinary.uploader.upload(dataUri, {
-      resource_type: 'image', // Spécifier explicitement le type
+      resource_type: 'image',
       transformation: [
         { width: 1080, crop: 'scale' },
         { quality: 'auto:best' },
       ],
     });
-    
+    const elapsedTime = Date.now() - startTime;
+    console.log(`Upload réussi en ${elapsedTime} ms. Résultat:`, result);
+
     return result;
-  } catch (error) {
-    console.error('Cloudinary Error Details:', error); // Afficher l'erreur détaillée
+  } catch (error: any) {
+    console.error("Cloudinary upload failed:", error);
     throw new Error(`Cloudinary upload failed: ${error.message}`);
   }
 };

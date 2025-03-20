@@ -14,18 +14,13 @@ export interface Product {
 }
 
 const UserProductCard: React.FC<Product> = ({
-  id,
-  name,
-  price,
-  stock,
-  image,
-  saleprice
-}) => {
+product
+}:Product) => {
   const [isLoaded, setIsLoaded] = useState(false);
-  const discountPercentage = saleprice 
-    ? Math.round(((price - saleprice) / price) * 100)
+  const discountPercentage = product.saleprice 
+    ? Math.round(((product.price - product.saleprice) / product.price) * 100)
     : null;
-  const displayPrice = saleprice || price;
+  const displayPrice = product.saleprice || product.price;
 
   return (
     <motion.div
@@ -47,7 +42,7 @@ const UserProductCard: React.FC<Product> = ({
             transition={{ type: "spring", stiffness: 200 }}
             className="absolute top-3 left-3 z-10"
           >
-            <Badge className="bg-[#8B9A46] text-white px-2.5 py-1 rounded-full">
+            <Badge className="bg-red-500 text-white px-2.5 py-1 rounded-full">
               -{discountPercentage}% PROMO
             </Badge>
           </motion.div>
@@ -57,9 +52,9 @@ const UserProductCard: React.FC<Product> = ({
       {/* Image */}
       <div className="aspect-square w-full relative">
         <img
-          src={image}
-          alt={name}
-          className={`w-full h-full object-cover transition-opacity 
+          src={product.image}
+          alt={product.name}
+          className={`w-full h-full object-fit transition-opacity 
                      duration-300 ${isLoaded ? 'opacity-100' : 'opacity-0'}`}
           onLoad={() => setIsLoaded(true)}
         />
@@ -72,8 +67,8 @@ const UserProductCard: React.FC<Product> = ({
       <div className="p-4 sm:p-6 space-y-4">
         {/* Titre */}
         <h2 className="text-lg sm:text-xl md:text-2xl font-poppins font-bold 
-                      text-[#8B9A46] truncate">
-          {name}
+                       truncate">
+          {product.name}
         </h2>
 
         {/* Prix */}
@@ -81,21 +76,21 @@ const UserProductCard: React.FC<Product> = ({
           {discountPercentage ? (
             <div className="flex items-center gap-3">
               <p className="text-gray-400 line-through text-sm sm:text-base">
-                ${price.toFixed(2)}
+                ${product.price.toFixed(2)}
               </p>
-              <p className="text-[#D4B08C] text-xl sm:text-2xl font-bold">
+              <p className="text-green-600 text-xl sm:text-2xl font-bold">
                 ${displayPrice.toFixed(2)}
               </p>
             </div>
           ) : (
-            <p className="text-[#8B9A46] text-lg sm:text-xl font-bold">
-              ${price.toFixed(2)}
+            <p className="text-gray-700 text-lg sm:text-xl font-bold">
+              ${product.price.toFixed(2)}
             </p>
           )}
 
           {/* Stock */}
           <div className="flex items-center gap-1 text-gray-600">
-            <span className="text-sm sm:text-base">Stock: {stock}</span>
+            <span className="text-sm sm:text-base">Stock: {product.stock}</span>
           </div>
         </div>
 
@@ -104,8 +99,8 @@ const UserProductCard: React.FC<Product> = ({
           className="w-full bg-pink-200 hover:bg-pink-300 
                      text-black font-medium shadow-md transition-all 
                      duration-200 active:scale-95"
-          size="sm"
-          onClick={() => console.log(`Ajout de ${name} au panier`)}
+          size="lg"
+          onClick={() => console.log(`Ajout de ${product.name} au panier`)}
         >
           <BsCartPlus className="mr-2" />
           Add to Cart

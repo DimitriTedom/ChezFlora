@@ -76,6 +76,7 @@ const ProductImageUpload = ({
       });
     } catch (error: any) {
       setImageLoadingState(false);
+      handleRemoveImage();
       showToast({
         message: error.message,
         type: "error",

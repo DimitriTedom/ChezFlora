@@ -9,7 +9,7 @@ interface ApiResponse {
 }
 
 // Définition du type User et des réponses spécifiques
-interface User {
+export interface User {
   id: string;
   role: string;
   name: string;

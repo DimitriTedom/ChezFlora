@@ -117,19 +117,19 @@ export const addProductFormElements = [
 
 
 export const categoryOptionsMap = {
-  freshflowers: "Fresh Flowers",
-  bouquets: "Bouquets",
-  pottedplants: "Potted Plants",
-  decoration: "Decoration",
+  FRESH_FLOWERS: "Fresh Flowers",
+  BOUQUETS: "Bouquets",
+  POTTED_PLANTS: "Potted Plants",
+  DECORATION: "Decoration",
 };
 
 
 export const filterOptions = {
-  category: [
-    { id: "freshflowers", label: "Fresh Flowers" },
-    { id: "bouquets", label: "Bouquets" },
-    { id: "pottedplants", label: "Potted Plants" },
-    { id: "decoration", label: "Decoration" },
+  Category: [
+    { id: "FRESH_FLOWERS", label: "Fresh Flowers" },
+    { id: "BOUQUETS", label: "Bouquets" },
+    { id: "POTTED_PLANTS", label: "Potted Plants" },
+    { id: "DECORATION", label: "Decoration" },
   ]
 };
 

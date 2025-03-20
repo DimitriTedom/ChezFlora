@@ -23,6 +23,7 @@ import { useCustomToast } from "@/hooks/useCustomToast";
 import { Product } from "../Shopping-view/Carts/ProductCart";
 import FormTitle from "@/components/Common/FormTitle";
 import AdminProductCard from "@/components/Admin-view/AdminProductCard";
+import ChezFloraLoader from "@/components/Common/ChezFloraLoader";
 
 export interface ProductFormData {
   image: null | string;
@@ -52,7 +53,7 @@ const AdminProducts = () => {
   const [imageLoadingState, setImageLoadingState] = useState<boolean>(false);
   const dispatch = useDispatch<AppDispatch>();
   const { showToast } = useCustomToast();
-  const { productList } = useSelector(
+  const { productList,isLoading } = useSelector(
     (state: RootState) => state.adminProducts
   );
   const [currentEditedId, setCurrentEditedId] = useState(null);
@@ -128,12 +129,7 @@ const AdminProducts = () => {
       }
     })
   }
-  // console.log(
-  //   "product list:",
-  //   productList,
-  //   "uploaded image url:",
-  //   imageUploadedUrl
-  // );
+
   const isFormValid = () => {
     return Object.keys(formData)
       .map((key: any) => formData[key] !== "")
@@ -158,20 +154,28 @@ const AdminProducts = () => {
           <AiOutlinePlus /> Add New Product
         </Button>
       </div>
-      <div className="grid gap-4 md:grid-cols-3 lg:grid-cols-4">
-        {productList.map((product: Product) => (
-          <AdminProductCard
-            key={product.id}
-            product={product}
-            onEdit={(product) => {
-              setFormData(product);
-            }}
-            onDelete={(id) => handleDelete(id)}
-            setOpenCreateProductDialog={setOpenCreateProductDialog}
-            setCurrentEditedId={setCurrentEditedId}
-          />
-        ))}
-      </div>
+      {isLoading ? (
+        <ChezFloraLoader />
+      ) : productList.length === 0 ? (
+        <div className="flex justify-center items-center h-[300px]">
+          <span className="text-3xl font-bold">No Product, Add products first</span>
+        </div>
+      ) : (
+        <div className="grid gap-4 md:grid-cols-3 lg:grid-cols-4">
+          {productList.map((product: Product) => (
+            <AdminProductCard
+              key={product.id}
+              product={product}
+              onEdit={(product) => {
+                setFormData(product);
+              }}
+              onDelete={(id) => handleDelete(id)}
+              setOpenCreateProductDialog={setOpenCreateProductDialog}
+              setCurrentEditedId={setCurrentEditedId}
+            />
+          ))}
+        </div>
+      )}
       <Sheet
         open={openCreateProductDialog}
         onOpenChange={() => {

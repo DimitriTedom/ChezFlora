@@ -67,7 +67,7 @@ export default {
   				ring: 'hsl(var(--sidebar-ring))'
   			},
 			  secondary: "#D4B08C", // Beige
-			  accent: "#F5E6D3", // Blanc cassé
+			  accent: "#F8CFE8", // Blanc cassé
 			  muted: "#E0D5C5" // Marron clair
   		},
   		fontFamily: {

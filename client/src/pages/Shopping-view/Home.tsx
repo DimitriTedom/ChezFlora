@@ -11,6 +11,7 @@ import { blogsArray } from "@/data/blogs";
 import { products } from "@/data/Products";
 import { Link } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
+import UserProductCard from "./Carts/ProductCart";
 
 const ShoppingHome = () => {
   const testimonials: Testimonial[] = [
@@ -116,14 +117,8 @@ const ShoppingHome = () => {
         />
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mt-8 max-w-full">
         {products.map((product) => (
-          <ProductCard
-            key={product.id}
-            id={product.id}
-            title={product.title}
-            price={product.price}
-            stock={product.stock}
-            image={product.image}
-            saleprice={product.saleprice}
+          <UserProductCard
+          product={product}
           />
         ))}
         </div>

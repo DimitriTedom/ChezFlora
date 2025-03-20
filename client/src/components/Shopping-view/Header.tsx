@@ -1,9 +1,7 @@
 import { CgOptions } from "react-icons/cg";
-// import { RxAvatar } from "react-icons/rx";
 import React from "react";
 import { NavLink, Link } from "react-router-dom";
 import { AiOutlineShoppingCart } from "react-icons/ai";
-import { BiMenuAltRight } from "react-icons/bi";
 import Logo from "../Common/Logo";
 import {
   NavigationMenu,
@@ -14,19 +12,21 @@ import {
   NavigationMenuTrigger,
 } from "@/components/ui/navigation-menu";
 import PopoverCustum from "../Common/PopoverCustum";
-import { AvatarCustum } from "../Common/Avatar.custom";
-import SignOrContactButton from "./SignOrContactButton";
+import  AvatarCustum  from "../Common/Avatar.custom";
+import SignInButton from "./SignOrContactButton";
 import { Sheet, SheetTrigger, SheetContent } from "@/components/ui/sheet";
 import { MagnifyingGlassIcon } from "@radix-ui/react-icons";
 import { useState } from "react";
 import { Input } from "../ui/input";
-// Composant personnalisé pour les liens simples
+import { useSelector } from "react-redux";
+import { RootState } from "@/store/store";
+
+
 const NavMenuLink = ({ url, text }: { url: string; text: string }) => (
   <NavigationMenuItem>
     <NavLink
       to={url}
       className={({ isActive }) =>
-        // On ajoute une classe supplémentaire si le lien est actif
         `text-gray-700 hover:bg-pink-100 transition-colors py-2 px-4 rounded-md ${
           isActive ? "bg-pink-100" : ""
         }`
@@ -37,7 +37,6 @@ const NavMenuLink = ({ url, text }: { url: string; text: string }) => (
   </NavigationMenuItem>
 );
 
-// Composant personnalisé pour les menus déroulants
 const NavMenuDropdown = ({
   text,
   children,
@@ -57,7 +56,7 @@ const NavMenuDropdown = ({
 
 const ShoppingHeader = () => {
   const [searchValue, setSearchValue] = useState("");
-
+  const { user, isAuthenticated } = useSelector((state: RootState) => state.auth);
   return (
     <div className="w-screen lg:mb-32 xl:mb-32">
       <div className="w-full justify-center border-b-[1px] border-b-pink-700 fixed top-0  z-[50] bg-opacity-50 backdrop-blur-sm transition-all duration-300 lg:hidden bg-white/80 py-3 px-4">
@@ -90,32 +89,27 @@ const ShoppingHeader = () => {
           </SheetContent>
         </Sheet>
       </div>
-
+    {/* HEADER FOR LG> */}
       <div className="lg:flex w-screen items-center py-5 justify-between border-b-3 border-b-gray-700 border shadow-md px-[6rem] hidden fixed bg-white bg-opacity-85 lg:mb-8">
-        {/* Logo renvoie sur la page d'accueil */}
         <Link to="/shop/home">
           <Logo />
         </Link>
 
-        {/* Navigation principale (version desktop) */}
         <nav className="hidden md:hidden lg:flex space-x-6 text-xl">
           <NavigationMenu>
             <NavigationMenuList>
-              {/* Menu Accueil */}
               <NavMenuLink url="/shop/home" text="Home" />
             </NavigationMenuList>
           </NavigationMenu>
 
           <NavigationMenu>
             <NavigationMenuList>
-              {/* Menu Store */}
               <NavMenuLink url="/shop/store" text="Store" />
             </NavigationMenuList>
           </NavigationMenu>
 
           <NavigationMenu>
             <NavigationMenuList>
-              {/* Menu Services avec sous-menu */}
               <NavMenuDropdown text="Services">
  
                 <NavigationMenuLink className="rounded-md hover:bg-pink-100">
@@ -139,43 +133,34 @@ const ShoppingHeader = () => {
 
           <NavigationMenu>
             <NavigationMenuList>
-              {/* Menu Blog */}
               <NavMenuLink url="/shop/blog" text="Blog" />
             </NavigationMenuList>
           </NavigationMenu>
 
           <NavigationMenu>
             <NavigationMenuList>
-              {/* Menu About */}
               <NavMenuLink url="/shop/about" text="About" />
             </NavigationMenuList>
           </NavigationMenu>
 
           <NavigationMenu>
             <NavigationMenuList>
-              {/* Menu About */}
               <NavMenuLink url="/shop/contact" text="Contact" />
             </NavigationMenuList>
           </NavigationMenu>
         </nav>
 
-        {/* Icônes mobiles (visibles uniquement quand la navbar est cachée) */}
-        <div className="flex items-center lg:hidden space-x-[4%]">
-          <AiOutlineShoppingCart className="headerIcons" />
-          <PopoverCustum />
-          <BiMenuAltRight className="headerIcons" />
-        </div>
-
-        {/* Section des boutons (vide dans cet exemple) */}
         <div className="hidden lg:flex lg:items-center lg:space-x-4">
           <AiOutlineShoppingCart className="headerIcons" />
           <span className="w-[2px] h-8 bg-pink-400"></span>
           <PopoverCustum />
           <span className="w-[2px] h-8 bg-pink-400"></span>
 
-          {/* <RxAvatar className="headerIcons mr-[1rem]"/> */}
-          <AvatarCustum />
-          <SignOrContactButton />
+          {isAuthenticated ? (
+            <AvatarCustum user={user} />
+          ) : (
+            <SignInButton />
+          )}
         </div>
       </div>
     </div>

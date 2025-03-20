@@ -1,8 +1,7 @@
-import { AiFillHome } from "react-icons/ai"; 
-import { MdAccountCircle } from "react-icons/md";
 import React from "react";
 import { NavLink, Link } from "react-router-dom";
-import { AiOutlineShoppingCart } from "react-icons/ai";
+import { AiFillHome, AiOutlineShoppingCart } from "react-icons/ai";
+import { MdAccountCircle } from "react-icons/md";
 import { BiMenuAltRight } from "react-icons/bi";
 import {
   NavigationMenu,
@@ -14,8 +13,11 @@ import {
 } from "@/components/ui/navigation-menu";
 import { Sheet, SheetTrigger, SheetContent } from "@/components/ui/sheet";
 import Logo from "../Common/Logo";
-import SignOrContactButton from "./SignOrContactButton";
 import SocialIcons from "../Common/Contact/SocialIcons";
+import SignInButton from "./SignOrContactButton";
+import AvatarCustum from "../Common/Avatar.custom";
+import { useSelector } from "react-redux";
+import { RootState } from "@/store/store";
 
 export interface NavProps {
   title: string;
@@ -28,7 +30,6 @@ const NavMenuLink = ({ url, text }: { url: string; text: string }) => (
     <NavLink
       to={url}
       className={({ isActive }) =>
-        // On ajoute une classe supplémentaire si le lien est actif
         `text-gray-700 hover:bg-pink-100 transition-colors py-4 px-4 rounded-md text-xl w-full ${
           isActive ? "bg-pink-100" : ""
         }`
@@ -55,7 +56,7 @@ const NavMenuDropdown = ({
     </NavigationMenuContent>
   </NavigationMenuItem>
 );
-// Composant de lien standard pour la barre de navigation mobile/tablette
+
 const NavMenuLinkSm = ({ title, icon: Icon, url }: NavProps) => (
   <NavigationMenuItem className="w-full">
     <NavLink
@@ -71,8 +72,12 @@ const NavMenuLinkSm = ({ title, icon: Icon, url }: NavProps) => (
     </NavLink>
   </NavigationMenuItem>
 );
-const HeaderSm = () => {
-  // Définition dynamique des éléments de la barre de navigation
+
+const HeaderSm: React.FC = () => {
+  // Using Redux auth state to conditionally render components
+  const { isAuthenticated, user } = useSelector((state: RootState) => state.auth);
+
+  // Define the navigation items
   const navItems: NavProps[] = [
     { title: "Home", icon: AiFillHome, url: "/shop/home" },
     { title: "Cart", icon: AiOutlineShoppingCart, url: "/android/cart" },
@@ -83,17 +88,15 @@ const HeaderSm = () => {
   return (
     <div className="w-full flex items-center px-10 md:px-14 gap-8 h-16 justify-between bg-white shadow-2xl fixed bg-opacity-90 bottom-0 border-t-2 border-pink-200">
       {navItems.map((item, index) => {
-        // Pour l'item "Menu", utilisons le composant Sheet de shadcn
         if (item.title === "Menu") {
           return (
-            <NavigationMenu>
+            <NavigationMenu key={index}>
               <NavigationMenuList className="flex justify-around w-full">
-                <NavigationMenuItem key={index}>
+                <NavigationMenuItem>
                   <Sheet>
                     <SheetTrigger asChild>
                       <button
                         className="flex flex-col items-center text-gray-600 space-y-1 transition-colors p-2 rounded-md"
-                        // Ici, tu peux ajouter d'autres styles si besoin
                       >
                         <item.icon className="text-2xl" />
                         <span className="text-xs font-semibold">
@@ -102,34 +105,30 @@ const HeaderSm = () => {
                       </button>
                     </SheetTrigger>
                     <SheetContent className="py-8 px-0 flex flex-col items-center gap-5">
-                      {/* Contenu du Sheet pour le menu */}
+                      {/* Menu header content */}
                       <div className="space-y-5 px-4">
-                      <Link to="/shop/home">
-                        <Logo />
-                      </Link>
-                      <p>Discover the most outstanding articles on all events types. Write Blogs and share them</p>
+                        <Link to="/shop/home">
+                          <Logo />
+                        </Link>
+                        <p>
+                          Discover outstanding articles on all event types.
+                          Write Blogs and share them.
+                        </p>
                       </div>
                       <nav className="border-t-2 border-pink-200 w-full py-5 flex flex-col gap-4">
-                        <NavigationMenu >
+                        <NavigationMenu>
                           <NavigationMenuList>
-                            {/* Menu Accueil */}
                             <NavMenuLink url="/shop/home" text="Home" />
                           </NavigationMenuList>
                         </NavigationMenu>
-
                         <NavigationMenu>
                           <NavigationMenuList>
-                            {/* Menu Store */}
                             <NavMenuLink url="/shop/store" text="Store" />
                           </NavigationMenuList>
                         </NavigationMenu>
-
                         <NavigationMenu>
                           <NavigationMenuList>
-                            {/* Menu Services avec sous-menu */}
                             <NavMenuDropdown text="Services">
-                              {/* Items du sous-menu Services (utilise Link simple, 
-                  mais tu peux aussi mettre NavLink si tu veux un style actif) */}
                               <NavigationMenuLink className="rounded-md hover:bg-pink-100">
                                 <Link
                                   to="/service1"
@@ -157,24 +156,21 @@ const HeaderSm = () => {
                             </NavMenuDropdown>
                           </NavigationMenuList>
                         </NavigationMenu>
-
                         <NavigationMenu>
                           <NavigationMenuList>
-                            {/* Menu Blog */}
                             <NavMenuLink url="/shop/blog" text="Blog" />
                           </NavigationMenuList>
                         </NavigationMenu>
-
                         <NavigationMenu>
                           <NavigationMenuList>
-                            {/* Menu About */}
                             <NavMenuLink url="/shop/about" text="About" />
                           </NavigationMenuList>
                         </NavigationMenu>
                       </nav>
                       <div className="space-y-6 flex flex-col">
-                      <SignOrContactButton/>
-                      <SocialIcons/>
+                        {/* Conditionally render SignInButton only if not authenticated */}
+                        {!isAuthenticated && <SignInButton />}
+                        <SocialIcons />
                       </div>
                     </SheetContent>
                   </Sheet>
@@ -182,12 +178,53 @@ const HeaderSm = () => {
               </NavigationMenuList>
             </NavigationMenu>
           );
-        } else {
+        } else if (item.title === "Account") {
           return (
-            <NavigationMenu>
+            <NavigationMenu key={index}>
+              <NavigationMenuList className="flex justify-around w-full">
+                <NavigationMenuItem>
+                  <Sheet>
+                    <SheetTrigger asChild>
+                      <button
+                        className="flex flex-col items-center text-gray-600 space-y-1 transition-colors p-2 rounded-md"
+                      >
+                        <item.icon className="text-2xl" />
+                        <span className="text-xs font-semibold">
+                          {item.title}
+                        </span>
+                      </button>
+                    </SheetTrigger>
+                    <SheetContent className="py-8 px-4 flex flex-col items-center gap-5">
+                      {isAuthenticated && user ? (
+                        // If authenticated, display the AvatarCustom with additional account links
+                        <div className="flex flex-col items-center space-y-4">
+                          <AvatarCustum user={user} />
+                          <Link to="/profile" className="text-lg text-gray-700">
+                            Profile
+                          </Link>
+                          <Link to="/settings" className="text-lg text-gray-700">
+                            Settings
+                          </Link>
+                          <Link to="/orders" className="text-lg text-gray-700">
+                            Orders
+                          </Link>
+                        </div>
+                      ) : (
+                        // Otherwise, show the SignIn button
+                        <SignInButton />
+                      )}
+                    </SheetContent>
+                  </Sheet>
+                </NavigationMenuItem>
+              </NavigationMenuList>
+            </NavigationMenu>
+          );
+        } else {
+          // For Home and Cart items (or any other items), render as simple links.
+          return (
+            <NavigationMenu key={index}>
               <NavigationMenuList className="flex justify-around">
                 <NavMenuLinkSm
-                  key={index}
                   title={item.title}
                   icon={item.icon}
                   url={item.url}

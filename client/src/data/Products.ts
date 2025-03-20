@@ -3,32 +3,32 @@ import { Product } from "@/pages/Shopping-view/Carts/ProductCart";
 export const products: Product[] = [
   {
     id: "prod1",
-    title: "Bouquet de Roses Rouges",
+    name: "Bouquet de Roses Rouges",
     price: 49.99,
     stock: 15,
-    image: "https://res.cloudinary.com/demo/image/upload/v1742332575/sample_flower.webp",
+    image: "/flowerGen5.jpg",
     saleprice: 39.99
   },
   {
     id: "prod2",
-    title: "Plantes d'Intérieur",
+    name: "Plantes d'Intérieur",
     price: 29.99,
     stock: 25,
-    image: "https://res.cloudinary.com/demo/image/upload/v1742332575/indoor_plant.webp"
+    image: "/flower1.jpg"
   },
   {
     id: "prod3",
-    title: "Couronne Florale",
+    name: "Couronne Florale",
     price: 79.99,
     stock: 5,
-    image: "https://res.cloudinary.com/demo/image/upload/v1742332575/floral_wreath.webp",
+    image: "/flower3.jpg",
     saleprice: 69.99
   },
   {
     id: "prod4",
-    title: "Cactus en Pot",
+    name: "Cactus en Pot",
     price: 19.99,
     stock: 30,
-    image: "https://res.cloudinary.com/demo/image/upload/v1742332575/cactus.webp"
+    image: "/flowerGen4(Services).jpg"
   }
 ]
