@@ -23,10 +23,7 @@ import {
 import { useNavigate } from "react-router-dom"
 import Logo from "../Common/Logo"
 
-// interface AdminSidebarProps {
-//   open: boolean;
-//   setOpen: (open: boolean) => void;
-// }
+
 const AdminSidebar = () => {
   const navigate = useNavigate()
 

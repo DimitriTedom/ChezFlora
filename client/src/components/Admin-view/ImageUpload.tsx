@@ -3,8 +3,8 @@ import { Input } from "../ui/input";
 import { Label } from "../ui/label";
 import { FileIcon, UploadCloudIcon, XIcon } from "lucide-react";
 import { Button } from "../ui/button";
-import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch, RootState } from "@/store/store";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "@/store/store";
 import { uploadImage } from "@/store/imageUploadSlice";
 import { useCustomToast } from "@/hooks/useCustomToast";
 import { Skeleton } from "../ui/skeleton";
@@ -75,6 +75,7 @@ const ProductImageUpload = ({
         duration: 3000,
       });
     } catch (error: any) {
+      setImageLoadingState(false);
       showToast({
         message: error.message,
         type: "error",

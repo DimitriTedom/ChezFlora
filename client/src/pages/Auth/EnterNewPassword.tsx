@@ -1,14 +1,16 @@
 // AuthRegister.tsx
 import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import CommonForm from "@/components/Common/Form";
 import FormTitle from "@/components/Common/FormTitle";
 import { EnterNewPasswordFormControls } from "@/config";
 import { useDispatch } from "react-redux";
-import { newPassword } from "@/store/authSlice"; // action asynchrone définie dans ton slice
 import type { AppDispatch } from "@/store/store";
+import { updatePassword } from "@/store/authSlice";
+import { useCustomToast } from "@/hooks/useCustomToast";
 
-const AuthNewPassword: React.FC = () => {
+const EnterNewPassword: React.FC = () => {
+  const { email } = useParams<{ email: string }>();
   const [formData, setFormData] = useState({
     password: "",
     password1: "",
@@ -18,37 +20,46 @@ const AuthNewPassword: React.FC = () => {
 
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
+  const { showToast } = useCustomToast();
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
     setError(null);
-    console.log(formData);
-    // Vérification basique des champs
     if (!formData.password || !formData.password1) {
       setError("All fields are required");
       setLoading(false);
       return;
-    }else if(formData.password !== formData.password1){
+    } else if (formData.password !== formData.password1) {
       setError("Passwords do not match");
       setLoading(false);
       return;
     }
-    // console.log('at tr',formData);
-
-    // Dispatch de l'action registerUser (qui doit être définie dans ton slice)
-//     dispatch(newPassword({email:'here should be the users email',formData.password}))
-//       .unwrap()
-//       .then((response) => {
-//         if (response?.token) {
-//           localStorage.setItem("token", response.token);
-//         }
-//         navigate("/auth/login");
-//       })
-//       .catch((err: any) => {
-//         setError(err || "Password modification failed");
-//       })
-//       .finally(() => setLoading(false));
+    if (!email) {
+      setError("Email parameter is missing");
+      setLoading(false);
+      return;
+    }
+    dispatch(updatePassword({ email, password: formData.password }))
+      .unwrap()
+      .then((data) => {
+        console.log(data);
+        if (data?.success) {
+          showToast({
+            message: data.message,
+            subtitle:"Redirecting to Login...",
+            type: "success",
+            duration: 5000,
+          });
+        }
+        navigate("/auth/login");
+      })
+      .catch((err) => {
+        setError(err);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   };
 
   return (
@@ -117,4 +128,4 @@ const AuthNewPassword: React.FC = () => {
   );
 };
 
-export default AuthNewPassword
+export default EnterNewPassword

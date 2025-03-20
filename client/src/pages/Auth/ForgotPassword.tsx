@@ -1,36 +1,45 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import CommonForm from "@/components/Common/Form";
-
 import FormTitle from "@/components/Common/FormTitle";
 import { ForgotPasswordFormControls } from "@/config";
 import { Helmet } from "react-helmet-async";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "@/store/store";
+import { useCustomToast } from "@/hooks/useCustomToast";
+import { checkUser } from "@/store/authSlice";
 
-const AuthLogin: React.FC = () => {
-  const [formData, setFormData] = useState({
-    email: "",
-  });
-
+const ForgotPassword: React.FC = () => {
+  const [formData, setFormData] = useState({ email: "" });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   const navigate = useNavigate();
+  const dispatch = useDispatch<AppDispatch>();
+  const { showToast } = useCustomToast();
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
     setError(null);
-    console.log(formData);
     try {
       if (!formData.email) {
         throw new Error("Email is required");
       }
-
-      // Logique de soumission (ex : appel API)
-      // Simule une requête asynchrone
-      await new Promise((resolve) => setTimeout(resolve, 1500));
-
-      navigate("/dashboard");
+      dispatch(checkUser(formData.email))
+        .unwrap()
+        .then((data) => {
+          console.log(data);
+          if (data?.success) {
+            showToast({
+              message: data.message,
+              subtitle:"Redirecting to Enter OPTP...",
+              type: "info",
+              duration: 5000,
+            });
+            navigate(`/auth/verify-otp/${formData.email}`);
+          }
+        });
     } catch (error) {
       setError("Invalid email or password");
       console.log(error);
@@ -38,11 +47,9 @@ const AuthLogin: React.FC = () => {
       setLoading(false);
     }
   };
-
   return (
     <div className=" flex items-center justify-center flex-col text-center mt-32">
       <Helmet>
-        {/* Primary SEO Tags */}
         <title>Forgot Password - Reset Your ChezFlora Account</title>
         <meta
           name="description"
@@ -52,7 +59,6 @@ const AuthLogin: React.FC = () => {
           name="keywords"
           content="forgot password, reset password, chezflora account recovery, floral services"
         />
-        {/* Open Graph Tags (Social Media) */}
         <meta
           property="og:title"
           content="Forgot Password - ChezFlora Account Recovery"
@@ -67,10 +73,8 @@ const AuthLogin: React.FC = () => {
           content="https://www.chezflora.com/auth/forgot-password"
         />
         <meta property="og:image" content="/assets/og-forgot-password.jpg" />{" "}
-        {/* Replace with recovery-themed image */}
         <meta property="og:image:width" content="1200" />
         <meta property="og:image:height" content="630" />
-        {/* Twitter Card Tags */}
         <meta name="twitter:card" content="summary_large_image" />
         <meta
           name="twitter:title"
@@ -81,14 +85,13 @@ const AuthLogin: React.FC = () => {
           content="Reset your password securely and regain access to your ChezFlora account for uninterrupted floral shopping and services."
         />
         <meta name="twitter:image" content="/assets/og-forgot-password.jpg" />
-        {/* Branding & Technical Tags */}
         <link
           rel="canonical"
           href="https://www.chezflora.com/auth/forgot-password"
         />
         <link rel="icon" href="/favicon.ico" type="image/x-icon" />
         <meta name="theme-color" content="#E9F5DB" />{" "}
-        {/* Soft green from palette */}
+
       </Helmet>
       <div className="bg-white p-8 rounded-[40px] shadow-2xl border w-full lg:px-[20rem] lg:py-[3rem] xl:px-[10rem]">
         <div className="mb-[1rem] lg:mb-[2rem]">
@@ -157,4 +160,4 @@ const AuthLogin: React.FC = () => {
   );
 };
 
-export default AuthLogin;
+export default ForgotPassword;

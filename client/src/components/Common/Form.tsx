@@ -1,4 +1,6 @@
-import React from "react";
+import { AiOutlineEye } from "react-icons/ai"; 
+import { AiOutlineEyeInvisible } from "react-icons/ai"; 
+import React, { useState } from "react";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
@@ -10,7 +12,7 @@ interface FormControlItem {
   label: string;
   placeholder: string;
   component: "input" | "textarea" | "select";
-  type?: "email" | "text" | "password" ; // Facultatif pour le composant input
+  type?: "email" | "text" | "password" ; 
   options?: { id: string; label: string }[];
 }
 
@@ -20,7 +22,7 @@ export interface CommonFormProps {
   setFormData: (formData: Record<string, string>) => void;
   onSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
   onClick?: (e:React.MouseEvent) => void;
-  buttonText?: string; // Facultatif avec une valeur par défaut
+  buttonText?: string;
   isBnDisabled?:boolean;
 }
 
@@ -32,8 +34,44 @@ const CommonForm: React.FC<CommonFormProps> = ({
   isBnDisabled,
   buttonText,
 }) => {
+  const [showPassword, setShowPassword] = useState<{[key: string]: boolean}>({});
+
+  const togglePasswordVisibility = (fieldName: string) => {
+    setShowPassword(prevState => ({
+      ...prevState,
+      [fieldName]: !prevState[fieldName]
+    }));
+  };
+
   const renderInputByComponentType = (controlItem: FormControlItem) => {
     const value = formData[controlItem.name] || "";
+    
+    if (controlItem.component === "input" && controlItem.type === "password") {
+      return (
+        <div className="relative">
+          <Input
+            type={showPassword[controlItem.name] ? "text" : "password"}
+            name={controlItem.name}
+            placeholder={controlItem.placeholder}
+            id={controlItem.name}
+            value={value}
+            onChange={(e) => setFormData({ ...formData, [controlItem.name]: e.target.value })}
+            className="p-6 border-solid border rounded-full w-full border-[#e5e7eb] shadow-sm lg:text-xl pr-10"
+          />
+          <button
+            type="button"
+            className="absolute inset-y-0 right-0 flex items-center px-3"
+            onClick={() => togglePasswordVisibility(controlItem.name)}
+          >
+            {showPassword[controlItem.name] ? 
+              <AiOutlineEyeInvisible className="h-5 w-5 text-gray-500" /> :
+              <AiOutlineEye className="h-5 w-5 text-gray-500" />
+            }
+          </button>
+        </div>
+      );
+    }
+
     switch (controlItem.component) {
       case "input":
         return (
@@ -56,38 +94,37 @@ const CommonForm: React.FC<CommonFormProps> = ({
             id={controlItem.name}
             value={value}
             onChange={(e) => setFormData({ ...formData, [controlItem.name]: e.target.value })}
-            className="mt-1 w-full"
+            className="border-solid border rounded-md border-[#e5e7eb] shadow-sm lg:text-xl w-full"
             rows={4}
           />
         );
-        break;
-        case "select":
-          return (
-            <Select
-              onValueChange={(value) =>
-                setFormData({
-                  ...formData,
-                  [controlItem.name]: value,
-                })
-              }
-              value={value}
-            >
-              <SelectTrigger className="w-full">
-                <SelectValue placeholder={controlItem.label} />
-              </SelectTrigger>
-              <SelectContent>
-                {controlItem.options && controlItem.options.length > 0
-                  ? controlItem.options.map((optionItem) => (
-                      <SelectItem key={optionItem.id} value={optionItem.id}>
-                        {optionItem.label}
-                      </SelectItem>
-                    ))
-                  : null}
-              </SelectContent>
-            </Select>
-          );
-  
-          break;
+        
+      case "select":
+        return (
+          <Select
+            onValueChange={(value) =>
+              setFormData({
+                ...formData,
+                [controlItem.name]: value,
+              })
+            }
+            value={value}
+          >
+            <SelectTrigger className="w-full">
+              <SelectValue placeholder={controlItem.label} />
+            </SelectTrigger>
+            <SelectContent>
+              {controlItem.options && controlItem.options.length > 0
+                ? controlItem.options.map((optionItem) => (
+                    <SelectItem key={optionItem.id} value={optionItem.id}>
+                      {optionItem.label}
+                    </SelectItem>
+                  ))
+                : null}
+            </SelectContent>
+          </Select>
+        );
+
       default:
         return (
           <Input
@@ -115,10 +152,13 @@ const CommonForm: React.FC<CommonFormProps> = ({
           </div>
         ))}
       </div>
-      <Button type="submit" disabled={isBnDisabled} className="mt-4 w-full p-6 font-semibold text-white bg-pink-300 hover:bg-pink-400 rounded-full text-[1.3rem]">
-      {isBnDisabled ? "waiting..." : buttonText}
+      <Button 
+        type="submit" 
+        disabled={isBnDisabled}
+        className="mt-4 w-full p-6 font-semibold text-white bg-pink-300 hover:bg-pink-400 rounded-full text-[1.3rem]"
+      >
+        {isBnDisabled ? "waiting..." : buttonText}
       </Button>
-      
     </form>
   );
 };

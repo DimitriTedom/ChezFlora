@@ -3,9 +3,6 @@ import { Outlet } from "react-router-dom"
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar"
 import AdminSidebar from "./Sidebar"
 import Adminheader from "./header"
-// import { useState } from "react"
-// import AdminSidebar from "@/components/AdminSidebar"
-// import AdminHeader from "@/components/AdminHeader"
 
 const AdminLayout = () => {
   // const [opensidebar,setOpenSidebar] = useState(false)

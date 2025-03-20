@@ -1,30 +1,76 @@
-import { useState } from "react";
+import React, { useState } from "react";
+import { useParams, useNavigate } from "react-router-dom";
 import FormTitle from "@/components/Common/FormTitle";
 import {
-    InputOTP,
-    InputOTPGroup,
-    InputOTPSeparator,
-    InputOTPSlot,
+  InputOTP,
+  InputOTPGroup,
+  InputOTPSeparator,
+  InputOTPSlot,
 } from "@/components/ui/input-otp";
 import { Button } from "@/components/ui/button";
+import { useDispatch } from "react-redux";
+import type { AppDispatch } from "@/store/store";
+import { checkUser, verifyOtp } from "@/store/authSlice"; // action à dispatch pour renvoyer l'OTP
+import { useCustomToast } from "@/hooks/useCustomToast";
 
 const AuthEnterOtp: React.FC = () => {
+  const { email } = useParams<{ email: string }>(); // Récupération de l'email depuis l'URL
   const [otp, setOtp] = useState(""); 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  const dispatch = useDispatch<AppDispatch>();
+  const navigate = useNavigate();
+  const { showToast } = useCustomToast();
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
     setError(null);
-
+  
     try {
-      console.log("Code OTP saisi :", otp);
-      //  la logique pour valider l'OTP (API, etc.)
-      
-    } catch (error: any) {
-      setError(error.message || "OTP verification failed");
-      console.error("OTP error:", error);
+      // Dispatch du thunk verifyOtp avec email et otp
+      await dispatch(verifyOtp({ email: email!, otp })).unwrap().then((data) => {
+        console.log(data);
+        if (data?.success) {
+          showToast({
+            message: data.message,
+            subtitle:"Redirecting to Enter New Password...",
+            type: "info",
+            duration: 5000,
+          });
+        }
+      });
+      navigate(`/auth/enter-new-password/${email}`);
+    } catch (err: any) {
+      setError(err || "OTP verification failed");
+      console.error("OTP error:", err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleResendOtp = async () => {
+    if (!email) {
+      setError("Missing email parameter.");
+      return;
+    }
+    setLoading(true);
+    try {
+      dispatch(checkUser(email))
+        .unwrap()
+        .then((data) => {
+          showToast({
+            message: data.message || "OTP resent successfully.",
+            type: "info",
+            duration: 5000,
+          });
+        })
+        .catch((err) => {
+          setError(err);
+        });
+    } catch (err: any) {
+      setError(err.message || "Error resending OTP.");
     } finally {
       setLoading(false);
     }
@@ -34,11 +80,14 @@ const AuthEnterOtp: React.FC = () => {
     <div className="flex flex-col items-center justify-center">
       <div className="bg-white p-8 rounded-[40px] shadow-2xl border w-full lg:px-[20rem] lg:py-[3rem] xl:px-[10rem]">
         <div className="mb-[1rem] lg:mb-[2rem]">
-          <FormTitle title="Enter OTP" comment="Please enter the OTP sent to your email"/>
+          <FormTitle
+            title="Enter OTP"
+            comment={`Please enter the OTP sent to ${email || "your email"}`}
+          />
         </div> 
 
         <form onSubmit={handleSubmit} className="flex flex-col items-center">
-          {/* OTP Input */}
+          {/* Composant d'entrée OTP */}
           <InputOTP maxLength={6} value={otp} onChange={setOtp}>
             <InputOTPGroup>
               <InputOTPSlot index={0} className="p-5 lg:p-8 border-pink-200"/>
@@ -57,7 +106,6 @@ const AuthEnterOtp: React.FC = () => {
             </InputOTPGroup>
           </InputOTP>
           
-          {/* Bouton de vérification */}
           <Button
             type="submit"
             className="mt-4 w-full p-6 font-semibold text-white bg-pink-300 hover:bg-pink-400 rounded-full text-[1.3rem]"
@@ -67,7 +115,6 @@ const AuthEnterOtp: React.FC = () => {
           </Button>
         </form>
 
-        {/* GESTION DES ERREURS ET CHARGEMENT */}
         {error && <p className="text-red-500 text-center mt-2">{error}</p>}
         {loading && (
           <div className="flex justify-center mt-4">
@@ -87,13 +134,14 @@ const AuthEnterOtp: React.FC = () => {
           </div>
         )}
 
-        {/* Message de rappel */}
         <div className="text-center mt-2">
           If you do not receive the email, check the junk mail (Spam) in your email.
         </div>
 
-        {/* Lien pour renvoyer le code OTP */}
-        <div className="text-[#F98190] hover:text-pink-700 transition-colors underline text-center mt-2 cursor-pointer">
+        <div
+          className="text-[#F98190] hover:text-pink-700 transition-colors underline text-center mt-2 cursor-pointer"
+          onClick={handleResendOtp}
+        >
           Resend OTP
         </div>
       </div>

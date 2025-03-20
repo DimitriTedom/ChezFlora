@@ -62,7 +62,7 @@ model Product {
   saleprice   Float?
   stock       Int
   category    Category
-  image      String
+  image       String
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
@@ -71,13 +71,15 @@ model Product {
 }
 
 model User {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  email     String   @unique
-  name      String
-  password  String
-  role      Role     @default(USER)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id           String    @id @default(auto()) @map("_id") @db.ObjectId
+  email        String    @unique
+  name         String
+  password     String
+  role         Role      @default(USER)
+  otp          String? // Champ pour stocker l'OTP
+  otpExpiresAt DateTime? // Date d'expiration de l'OTP
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
 
   // Relations
   addresses     Address[]
@@ -122,6 +124,7 @@ model Comment {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
+
 // Blog Article
 model Article {
   id          String          @id @default(auto()) @map("_id") @db.ObjectId

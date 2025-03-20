@@ -16,9 +16,7 @@ import ShoppingAccount from "./pages/Shopping-view/Account";
 import ShoppingBlog from "./pages/Shopping-view/Blog";
 import CheckAuth from "./components/Common/Check-auth";
 import UnAuthPage from "./pages/UnAuthPAge";
-import AuthForgotPassword from "./pages/Auth/ForgotPassword";
 import AuthEnterOtp from "./pages/Auth/EnterOTP";
-import AuthNewPassword from "./pages/Auth/EnterNewPassword";
 import ShoppingStore from "./pages/Shopping-view/ShoppingStore";
 import ShoppingAbout from "./pages/Shopping-view/ShoppingAbout";
 import ShoppingContact from "./pages/Shopping-view/ShoppingContact";
@@ -32,13 +30,11 @@ import { AppDispatch, RootState } from "./store/store";
 import ChezFloraLoader from "./components/Common/ChezFloraLoader";
 import AdminQuotes from "./pages/admin-view/Quotes";
 import AdminCustomers from "./pages/admin-view/Customers";
+import ForgotPassword from "./pages/Auth/ForgotPassword";
+import EnterNewPassword from "./pages/Auth/EnterNewPassword";
 // import { Skeleton } from "./components/ui/skeleton";
 export default function Home() {
-  // const isAuthenticated = false;
-  // const user = {
-  //   name: "dimitri",
-  //   role: "admin",
-  // };
+
   const { user, isAuthenticated, isLoading } = useSelector(
     (state: RootState) => state.auth
   );
@@ -49,10 +45,10 @@ export default function Home() {
       .catch(() => console.log("Auth check failed"));
   }, [dispatch]);
   if (isLoading) {
+    
     return (
       <div>
-        <ChezFloraLoader/> 
-        {/* <Skeleton className="w-[800px] h-[600px] bg-black" /> */}
+        <ChezFloraLoader/>
       </div>
     );
   }
@@ -82,9 +78,9 @@ export default function Home() {
         >
           <Route path="login" element={<AuthLogin />} />
           <Route path="register" element={<AuthRegister />} />
-          <Route path="forgot-password" element={<AuthForgotPassword />} />
-          <Route path="verify-otp" element={<AuthEnterOtp />} />
-          <Route path="enter-new-password" element={<AuthNewPassword />} />
+          <Route path="forgot-password" element={<ForgotPassword />} />
+          <Route path="verify-otp/:email" element={<AuthEnterOtp />} />
+          <Route path="enter-new-password/:email" element={<EnterNewPassword/>} />
         </Route>
         <Route
           path="/admin"
