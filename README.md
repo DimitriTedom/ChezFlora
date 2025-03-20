@@ -1,7 +1,7 @@
 # ChezFlora 🌸  
 *Modern e-commerce platform for floral decoration and event services*
 
-![ChezFlora Logo](https://via.placeholder.com/1200x630.png?text=ChezFlora)
+![ChezFlora Logo](/client/public/flowerGen5.jpg)
 
 ---
 
@@ -148,6 +148,114 @@ graph TD
 ```
 
 ---
+Below is an example of how you can extend your README to include all the authentication functionalities we’ve implemented (registration, login, forgot password with OTP, OTP verification, and password update). You can simply copy-paste this section into your README file.
+
+## Authentication Functionality
+
+ChezFlora’s authentication system provides secure endpoints for user registration, login, password recovery, and password update using OTP verification. Below are the key functionalities and code examples for each:
+
+### Endpoints Overview
+
+| Method | Endpoint                        | Description                                                       |
+| ------ | ------------------------------- | ----------------------------------------------------------------- |
+| POST   | `/api/auth/register`            | Registers a new user.                                             |
+| POST   | `/api/auth/login`               | Logs in an existing user.                                         |
+| POST   | `/api/auth/check-user`          | Verifies if a user exists and sends an OTP to the user’s email.     |
+| POST   | `/api/auth/verify-otp`          | Validates the OTP sent to the user’s email.                       |
+| POST   | `/api/auth/update-password`     | Updates the user's password after OTP verification.               |
+| POST   | `/api/auth/logout`              | Logs out the current user.                                          |
+| GET    | `/api/auth/checkauth`           | Checks the authentication status (for protected routes).          |
+
+### Detailed Functionality
+
+#### 1. User Registration
+New users can sign up by providing their name, email, and password.  
+**Example Request:**
+```bash
+curl -X POST http://localhost:5000/api/auth/register \
+-H "Content-Type: application/json" \
+-d '{"name": "John Doe", "email": "john.doe@example.com", "password": "yourPassword"}'
+```
+#### 2. User Login
+Registered users can log in by providing their email and password.  
+**Example Request:**
+```bash
+curl -X POST http://localhost:5000/api/auth/login \
+-H "Content-Type: application/json" \
+-d '{"email": "john.doe@example.com", "password": "yourPassword"}'
+```
+
+#### 3. Forgot Password & OTP Generation
+When a user forgets their password, they submit their email via the `/api/auth/check-user` endpoint.  
+If the user exists, the server:
+- Generates a 6-digit OTP.
+- Stores the OTP with an expiration time in the database.
+- Sends the OTP to the user's email.
+
+**Example Request:**
+```bash
+curl -X POST http://localhost:5000/api/auth/check-user \
+-H "Content-Type: application/json" \
+-d '{"email": "john.doe@example.com"}'
+```
+
+#### 4. OTP Verification
+After receiving the OTP, the user verifies it by calling the `/api/auth/verify-otp` endpoint with their email and OTP.  
+**Example Request:**
+```bash
+curl -X POST http://localhost:5000/api/auth/verify-otp \
+-H "Content-Type: application/json" \
+-d '{"email": "john.doe@example.com", "otp": "123456"}'
+```
+
+On successful verification, the user is redirected to the password update page.
+
+#### 5. Update Password
+Once the OTP is validated, the user can update their password via the `/api/auth/update-password` endpoint.  
+**Example Request:**
+```bash
+curl -X POST http://localhost:5000/api/auth/update-password \
+-H "Content-Type: application/json" \
+-d '{"email": "john.doe@example.com", "password": "newSecurePassword"}'
+```
+
+### Environment Variables Configuration
+
+Ensure you have a `.env` file at the root of your project with these critical values (adjust according to your setup):
+
+```env
+NODE_ENV=development
+PORT=5000
+JWT_SECRET=your-secret-key
+DATABASE_URL=postgresql://user:password@localhost:5432/chezflora
+SMTP_HOST=smtp.gmail.com
+SMTP_PORT=465
+SMTP_USER=your-email@gmail.com
+SMTP_PASS="your-email-app-password"
+```
+
+These variables are used for:
+- **JWT_SECRET**: Signing JSON Web Tokens.
+- **DATABASE_URL**: Connecting to your PostgreSQL database.
+- **SMTP_HOST, SMTP_PORT, SMTP_USER, SMTP_PASS**: Configuring your SMTP server for sending emails (OTP).
+
+### Workflow Example
+
+1. **User Registration**:  
+   The user registers via `/api/auth/register`.
+
+2. **Login**:  
+   The user logs in via `/api/auth/login`.
+
+3. **Forgot Password**:  
+   If the user forgets their password, they submit their email to `/api/auth/check-user`, which sends them an OTP.
+
+4. **OTP Verification**:  
+   The user enters the OTP on the client-side and submits it to `/api/auth/verify-otp`. On success, the client navigates to the password update page with the email in the URL.
+
+5. **Password Update**:  
+   Finally, the user updates their password via `/api/auth/update-password`.
+
 
 ## Contributing  
 Contributions are welcome! Please read the [contributing guidelines](CONTRIBUTING.md) before submitting a pull request. Ensure adherence to design and coding standards.
