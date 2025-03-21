@@ -32,6 +32,7 @@ import AdminQuotes from "./pages/admin-view/Quotes";
 import AdminCustomers from "./pages/admin-view/Customers";
 import ForgotPassword from "./pages/Auth/ForgotPassword";
 import EnterNewPassword from "./pages/Auth/EnterNewPassword";
+import ShoppingProductDetail from "./pages/Shopping-view/ShoppingProductDetail";
 // import { Skeleton } from "./components/ui/skeleton";
 export default function Home() {
 
@@ -108,6 +109,7 @@ export default function Home() {
           <Route path="home" element={<ShoppingHome />} />
           <Route path="listing" element={<ShoppingListing />} />
           <Route path="store" element={<ShoppingStore />} />
+          <Route path="detail/:id" element={<ShoppingProductDetail/>}/>
           <Route path="about" element={<ShoppingAbout />} />
           <Route path="checkout" element={<ShoppingCheckout />} />
           <Route path="account" element={<ShoppingAccount />} />

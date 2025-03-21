@@ -5,6 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { useCustomToast } from "@/hooks/useCustomToast";
 import { ProductFormData } from "@/pages/admin-view/Products";
 import { Product } from "@/pages/Shopping-view/Carts/ProductCart";
+import { Card } from "../ui/card";
 
 export interface AdminProductCardProps {
   product: Product;
@@ -27,6 +28,8 @@ const AdminProductCard: React.FC<AdminProductCardProps> = ({
     : null;
 
   return (
+    <Card>
+
     <motion.div
       className="bg-[#FFF7E0] rounded-xl sm:rounded-2xl shadow-lg overflow-hidden 
                  relative border-2 border-maroon max-w-full transition-shadow 
@@ -140,6 +143,8 @@ const AdminProductCard: React.FC<AdminProductCardProps> = ({
         </div>
       </div>
     </motion.div>
+    </Card>
+
   );
 };
 

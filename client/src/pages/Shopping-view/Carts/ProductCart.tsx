@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { useState } from "react";
+import { Card } from "@/components/ui/card";
 
 export interface Product {
   id: string;
@@ -14,7 +15,7 @@ export interface Product {
 }
 
 const UserProductCard: React.FC<Product> = ({
-product
+product,handleGetProductDetails
 }:Product) => {
   const [isLoaded, setIsLoaded] = useState(false);
   const discountPercentage = product.saleprice 
@@ -23,6 +24,7 @@ product
   const displayPrice = product.saleprice || product.price;
 
   return (
+    <Card onClick={()=>handleGetProductDetails(product?.id)}>
     <motion.div
       className="bg-[#F5E6D3] rounded-xl sm:rounded-2xl shadow-lg overflow-hidden 
                  relative border border-[#D4B08C] max-w-full transition-shadow 
@@ -107,6 +109,8 @@ product
         </Button>
       </div>
     </motion.div>
+    </Card>
+
   );
 };
 

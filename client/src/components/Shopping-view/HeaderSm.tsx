@@ -86,7 +86,7 @@ const HeaderSm: React.FC = () => {
   ];
 
   return (
-    <div className="w-full flex items-center px-10 md:px-14 gap-8 h-16 justify-between bg-white shadow-2xl fixed bg-opacity-90 bottom-0 border-t-2 border-pink-200">
+    <div className="w-screen overflow-x-hidden flex items-center px-10 md:px-14 gap-8 h-16 justify-between bg-white shadow-2xl fixed bg-opacity-90 bottom-0 border-t-2 border-pink-200">
       {navItems.map((item, index) => {
         if (item.title === "Menu") {
           return (
