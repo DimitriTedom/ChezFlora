@@ -58,10 +58,13 @@ const ShoppingHeader = () => {
   const [searchValue, setSearchValue] = useState("");
   const { user, isAuthenticated } = useSelector((state: RootState) => state.auth);
   return (
-    <div className="w-screen lg:mb-32 xl:mb-32">
-      <div className="w-full justify-center border-b-[1px] border-b-pink-700 fixed top-0  z-[50] bg-opacity-50 backdrop-blur-sm transition-all duration-300 lg:hidden bg-white/80 py-3 px-4">
+    <div className="w-screen lg:mb-32 xl:mb-32 overflow-x-hidden">
+      <div className="w-full flex items-center justify-between border-b-[1px] border-b-pink-700 fixed top-0  z-[50] bg-opacity-50 backdrop-blur-sm transition-all duration-300 lg:hidden bg-white/80 py-3 px-4 overflow-x-hidden">
+        <div className="hidden md:block">
+        <Logo/>
+        </div>
         <Sheet>
-          <div className="flex items-center justify-between bg-opacity-50 bg-transparent bg-white shadow-lg rounded-full p-2 w-full">
+          <div className="flex items-center justify-between bg-opacity-50 bg-transparent bg-white shadow-lg rounded-full p-2 w-full md:w-[50%]">
             <button className="mr-2 bg-white rounded-full p-2 flex items-center justify-center shadow-md">
               <MagnifyingGlassIcon className="w-6 h-6 text-black" />
             </button>
@@ -88,6 +91,11 @@ const ShoppingHeader = () => {
 
           </SheetContent>
         </Sheet>
+        <div className="hidden md:block">{isAuthenticated ? (
+            <AvatarCustum user={user} />
+          ) : (
+            <SignInButton />
+          )}</div>
       </div>
     {/* HEADER FOR LG> */}
       <div className="lg:flex w-screen items-center py-5 justify-between border-b-3 border-b-gray-700 border shadow-md px-[6rem] hidden fixed bg-white bg-opacity-85 lg:mb-8">

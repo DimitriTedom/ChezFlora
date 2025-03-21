@@ -36,7 +36,7 @@ export const handleImageUpload = async (req: Request, res: Response) => {
 //CREATE(ADD) PRODUCT
 export const addProduct = async (req: Request, res: Response) => {
 	try {
-	  const { image, name, description, price, category, saleprice, stock } = req.body;
+	  const { image, name, description, price, category,event, saleprice, stock } = req.body;
 	  const parsedPrice = parseFloat(price);
 	  const parsedSaleprice = parseFloat(saleprice);
 	  const parsedStock = parseInt(stock);
@@ -59,6 +59,7 @@ export const addProduct = async (req: Request, res: Response) => {
 		  description,
 		  price: parsedPrice,
 		  category,
+		  event,
 		  saleprice: parsedSaleprice,
 		  stock: parsedStock
 		}
@@ -100,7 +101,7 @@ export const fetchAllProducts = async (req: Request, res: Response) => {
 export const editProducts = async (req: Request, res: Response) => {
 	try {
 		const { id } = req.params;
-		const { image, name, description, price, category, saleprice, stock } = req.body;
+		const { image, name, description, price, category,event, saleprice, stock } = req.body;
 
 		const findProduct = await prisma.product.findUnique({ where: { id } });
 		if (!findProduct) {
@@ -126,6 +127,7 @@ export const editProducts = async (req: Request, res: Response) => {
 				description: description || findProduct.description,
 				price: parsedPrice,
 				category: category || findProduct.category,
+				event: event || findProduct.event,
 				saleprice: parsedSaleprice,
 				stock: parsedStock,
 				image: image || findProduct.image

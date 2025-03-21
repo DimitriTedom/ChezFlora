@@ -1,4 +1,4 @@
-import React, { Fragment, useState, ChangeEvent } from "react";
+import React, { Fragment} from "react";
 import { filterOptions } from "@/config";
 import { Label } from "../ui/label";
 import { Checkbox } from "../ui/checkbox";
@@ -14,59 +14,32 @@ type FilterOptionsMap = {
   [key: string]: FilterOption[];
 };
 
-const filters: FilterOptionsMap = filterOptions;
+const filtersOpt: FilterOptionsMap = filterOptions;
 
-const ProductFilter: React.FC = () => {
-  const [selectedFilters, setSelectedFilters] = useState<{
-    [category: string]: string[]; 
-  }>({});
-
-  // Handler for checkbox changes
-  const handleCheckboxChange = (
-    category: string,
-    optionId: string,
-    e: ChangeEvent<HTMLInputElement>
-  ) => {
-    setSelectedFilters((prev) => {
-      const currentSelections = prev[category] || [];
-      if (e.target.checked) {
-        // Add this option to the selections for the category
-        return { ...prev, [category]: [...currentSelections, optionId] };
-      } else {
-        // Remove this option from the selections for the category
-        return {
-          ...prev,
-          [category]: currentSelections.filter((id) => id !== optionId),
-        };
-      }
-    });
-  };
-
+const ProductFilter: React.FC = ({ filters, handleFilter }) => {
   return (
     <div className="bg-white rounded-lg shadow-sm">
       <div className="p-4 border-b">
         <h2 className="text-lg font-semibold">Filters</h2>
       </div>
       <div className="p-4 space-y-4">
-        {Object.keys(filters).map((category) => (
-          <Fragment key={category}>
+        {Object.keys(filtersOpt) .map((KeyItem) => (
+          <Fragment key={KeyItem}>
             <div>
-              <h3 className="text-base font-bold">{category}</h3>
+              <h3 className="text-base font-bold">{KeyItem}</h3>
               <div className="grid gap-2 mt-2">
-                {filters[category].map((option) => (
+                {filtersOpt[KeyItem].map((option) => (
                   <Label
                     key={option.id}
                     className="flex items-center gap-2 font-normal cursor-pointer"
                   >
                     <Checkbox
-                      onChange={(e) =>
-                        handleCheckboxChange(category, option.id, e)
-                      }
-                      checked={
-                        selectedFilters[category]
-                          ? selectedFilters[category].includes(option.id)
-                          : false
-                      }
+                    checked={
+                      filters && Object.keys(filters).length > 0 &&
+                      filters[KeyItem] &&
+                      filters[KeyItem].indexOf(option.id) > -1
+                    }
+                      onCheckedChange={() => handleFilter(KeyItem, option.id)}
                     />
                     <span>{option.label}</span>
                   </Label>

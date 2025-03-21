@@ -104,8 +104,9 @@ const HeaderSm: React.FC = () => {
                         </span>
                       </button>
                     </SheetTrigger>
-                    <SheetContent className="py-8 px-0 flex flex-col items-center gap-5">
+                    <SheetContent className="py-8 px-0 flex flex-col items-center gap-5 justify-between">
                       {/* Menu header content */}
+                      <div>
                       <div className="space-y-5 px-4">
                         <Link to="/shop/home">
                           <Logo />
@@ -167,6 +168,7 @@ const HeaderSm: React.FC = () => {
                           </NavigationMenuList>
                         </NavigationMenu>
                       </nav>
+                      </div>
                       <div className="space-y-6 flex flex-col">
                         {/* Conditionally render SignInButton only if not authenticated */}
                         {!isAuthenticated && <SignInButton />}
@@ -220,7 +222,6 @@ const HeaderSm: React.FC = () => {
             </NavigationMenu>
           );
         } else {
-          // For Home and Cart items (or any other items), render as simple links.
           return (
             <NavigationMenu key={index}>
               <NavigationMenuList className="flex justify-around">

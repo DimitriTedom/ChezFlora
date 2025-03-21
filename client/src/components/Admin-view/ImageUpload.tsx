@@ -55,10 +55,10 @@ const ProductImageUpload = ({
 
   const handleRemoveImage = () => {
     setImageFile(null);
+    setImageUploadedUrl("");
     if (inputRef.current) {
       inputRef.current.value = "";
     }
-    setImageUploadedUrl("");
   };
   const dispatch = useDispatch<AppDispatch>();
 
@@ -67,13 +67,15 @@ const ProductImageUpload = ({
     try {
       setImageLoadingState(true);
       const result = await dispatch(uploadImage(file)).unwrap();
-      setImageUploadedUrl(result.data.url); // Accéder à data.url
+      console.log(result);
+      setImageUploadedUrl((prev)=>result.data.url); // Accéder à data.url
       setImageLoadingState(false);
       showToast({
         message: result.message,
         type: "success",
         duration: 3000,
       });
+      console.log(imageUploadedUrl,"upload image try")
     } catch (error: any) {
       setImageLoadingState(false);
       handleRemoveImage();
@@ -82,6 +84,7 @@ const ProductImageUpload = ({
         type: "error",
         duration: 3000,
       });
+      console.log(imageUploadedUrl,"upload image catch")
     }
   };
 

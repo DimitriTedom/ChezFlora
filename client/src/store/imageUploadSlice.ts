@@ -27,7 +27,7 @@ export const uploadImage = createAsyncThunk(
         headers: { 'Content-Type': 'multipart/form-data' },
       }
     );
-    // console.log(response);
+    console.log(response, "Uploadimage slice");
     return response.data;
   }
 );
@@ -43,11 +43,12 @@ const imageUploadSlice = createSlice({
       })
       .addCase(uploadImage.fulfilled, (state, action) => {
         state.status = 'succeeded';
-        // console.log(action)
+        console.log(action)
         state.imageUrl = action.payload.data.url; // Accéder à data.url
       })
       .addCase(uploadImage.rejected, (state, action) => {
         state.status = 'failed';
+        console.log(action,"rejected")
         state.error = action.error.message || 'Upload failed';
       });
   },

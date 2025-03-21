@@ -48,8 +48,11 @@ enum ArticleCategory {
 
 enum EventType {
   WEDDING
-  ANNIVERSARY
-  CORPORATE_EVENT
+  BIRTHDAY
+  FUNERAL
+  CHRISTMASS
+  VALENTINES
+  WOMENDAY
 }
 
 // Définition des modèles
@@ -62,6 +65,7 @@ model Product {
   saleprice   Float?
   stock       Int
   category    Category
+  event       EventType
   image       String
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt

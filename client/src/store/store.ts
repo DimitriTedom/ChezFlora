@@ -1,15 +1,15 @@
 // store.ts
 import { configureStore } from "@reduxjs/toolkit";
 import authReducer from "./authSlice"; // Importation du reducer d'authentification depuis le bon dossier
-import cartSlice from './cartSlice';
 import  imageUploadReducer  from "./imageUploadSlice";
 import AdminProductSlice from './ProductSlice'
+import ShopProductSlice from './shop/ShopProductSlice'
 export const store = configureStore({
   reducer: {
     auth: authReducer,
-    cart:cartSlice,
     imageUpload:imageUploadReducer,
-    adminProducts: AdminProductSlice
+    adminProducts: AdminProductSlice,
+    shopProducts:ShopProductSlice,
   },
 });
 

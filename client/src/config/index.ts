@@ -93,6 +93,19 @@ export const addProductFormElements = [
     ],
   },
   {
+    label: "Event",
+    name: "event",
+    component: "select",
+    options: [
+      { id: "WEDDING", label: "Wedding" },
+      { id: "BIRTHDAY", label: "BirthDay" },
+      { id: "FUNERAL", label: "Funeral" }, 
+      { id: "CHRISTMASS", label: "Christmass" },
+      { id: "VALENTINES", label: "Valentine's Day" },
+      { id: "WOMENDAY", label: "Women's Day" },
+    ],
+  },
+  {
     label: "Price",
     name: "price",
     component: "input",
@@ -125,11 +138,19 @@ export const categoryOptionsMap = {
 
 
 export const filterOptions = {
-  Category: [
+  category: [
     { id: "FRESH_FLOWERS", label: "Fresh Flowers" },
     { id: "BOUQUETS", label: "Bouquets" },
     { id: "POTTED_PLANTS", label: "Potted Plants" },
     { id: "DECORATION", label: "Decoration" },
+  ],
+  event:[
+    { id: "WEDDING", label: "Wedding" },
+    { id: "BIRTHDAY", label: "BirthDay" },
+    { id: "FUNERAL", label: "Funeral" }, 
+    { id: "CHRISTMASS", label: "Christmass" },
+    { id: "VALENTINES", label: "Valentine's Day" },
+    { id: "WOMENDAY", label: "Women's Day" },
   ]
 };
 

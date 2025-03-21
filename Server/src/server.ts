@@ -10,6 +10,7 @@ import dotenv from 'dotenv';
 import cors from 'cors';
 import AuthRoutes from './routes/auth.routes';
 import adminProductsRouter from './routes/admin/products.routes';
+import getFiltereProductsRouter from './routes/shop/products.routes';
 import cookieParser from 'cookie-parser';
 import helmet from 'helmet';
 dotenv.config();
@@ -46,14 +47,14 @@ app.use((req, res, next) => {
 	});
 	next();
 });
-
+app.use('/api/shop/products',getFiltereProductsRouter);
 app.use('/api/admin/products', adminProductsRouter);
-app.use((req, res, next) => {
-	if (req.path === '/api/admin/products/upload-image') {
-	  req.setTimeout(10000); // 10s timeout pour les uploads
-	}
-	next();
-  });
+// app.use((req, res, next) => {
+// 	if (req.path === '/api/admin/products/upload-image') {
+// 	  req.setTimeout(10000); // 10s timeout pour les uploads
+// 	}
+// 	next();
+//   });
 app.use(morgan('combined'));
 
 setupSwagger(app);
