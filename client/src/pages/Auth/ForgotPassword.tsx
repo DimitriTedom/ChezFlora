@@ -41,7 +41,12 @@ const ForgotPassword: React.FC = () => {
           }
         });
     } catch (error) {
-      setError("Invalid email or password");
+        showToast({
+          message: "An error occured",
+          type: "error",
+          duration: 5000,
+        });
+      setError(error);
       console.log(error);
     } finally {
       setLoading(false);

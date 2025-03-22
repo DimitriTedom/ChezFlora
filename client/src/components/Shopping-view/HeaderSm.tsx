@@ -80,8 +80,8 @@ const HeaderSm: React.FC = () => {
   // Define the navigation items
   const navItems: NavProps[] = [
     { title: "Home", icon: AiFillHome, url: "/shop/home" },
-    { title: "Cart", icon: AiOutlineShoppingCart, url: "/android/cart" },
-    { title: "Account", icon: MdAccountCircle, url: "/android/account" },
+    { title: "Cart", icon: AiOutlineShoppingCart, url: "/shop/cart" },
+    { title: "Account", icon: MdAccountCircle, url: "/shop/account" },
     { title: "Menu", icon: BiMenuAltRight, url: "/shop/menu" },
   ];
 
@@ -221,7 +221,32 @@ const HeaderSm: React.FC = () => {
               </NavigationMenuList>
             </NavigationMenu>
           );
-        } else {
+        }  else if (item.title === "Cart") {
+          return (
+            <NavigationMenu key={index}>
+              <NavigationMenuList className="flex justify-around w-full">
+                <NavigationMenuItem>
+                  <Sheet>
+                    <SheetTrigger asChild>
+                      <button
+                        className="flex flex-col items-center text-gray-600 space-y-1 transition-colors p-2 rounded-md"
+                      >
+                        <item.icon className="text-2xl" />
+                        <span className="text-xs font-semibold">
+                          {item.title}
+                        </span>
+                      </button>
+                    </SheetTrigger>
+                    <SheetContent className="py-8 px-4 flex flex-col items-center gap-5">
+                    
+                    </SheetContent>
+                  </Sheet>
+                </NavigationMenuItem>
+              </NavigationMenuList>
+            </NavigationMenu>
+          );
+        }
+        else {
           return (
             <NavigationMenu key={index}>
               <NavigationMenuList className="flex justify-around">

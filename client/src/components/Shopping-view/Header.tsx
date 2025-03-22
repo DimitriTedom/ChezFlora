@@ -20,6 +20,7 @@ import { useState } from "react";
 import { Input } from "../ui/input";
 import { useSelector } from "react-redux";
 import { RootState } from "@/store/store";
+import { Button } from "../ui/button";
 
 
 const NavMenuLink = ({ url, text }: { url: string; text: string }) => (
@@ -159,9 +160,14 @@ const ShoppingHeader = () => {
         </nav>
 
         <div className="hidden lg:flex lg:items-center lg:space-x-4">
+          <Button variant={"outline"} size="icon">
           <AiOutlineShoppingCart className="headerIcons" />
+          <span className="sr-only">User Cart</span>
+          </Button>
           <span className="w-[2px] h-8 bg-pink-400"></span>
+          <Button variant={"outline"} size="icon">
           <PopoverCustum />
+          </Button>
           <span className="w-[2px] h-8 bg-pink-400"></span>
 
           {isAuthenticated ? (

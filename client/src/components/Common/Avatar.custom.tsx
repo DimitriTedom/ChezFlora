@@ -56,7 +56,7 @@ user: User
       <DropdownMenuTrigger asChild>
         <Button variant="ghost" className="relative h-10 w-10 rounded-full focus-visible:ring-2 focus-visible:ring-primary">
           <Avatar className="h-10 xl:h-14 xl:w-14 w-10 border-2 border-primary">
-            <AvatarImage src={user?.image || "/avatar2.svg"} alt="user avatar" />
+            <AvatarImage src={user?.image || "/SnowDev (1).png"} alt="user avatar" />
             <AvatarFallback className="bg-primary text-white font-bold">
               {user?.name
                 .split(" ")
@@ -80,7 +80,7 @@ user: User
           </Avatar>
           <div className="flex flex-col space-y-1">
             <p className="text-sm font-medium leading-none">{user?.name}</p>
-            <p className="text-xs text-muted-foreground">{user?.role}</p>
+            <p className="text-xs text-muted-foreground">{user?.email}</p>
           </div>
         </DropdownMenuLabel>
 
