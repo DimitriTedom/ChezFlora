@@ -5,7 +5,7 @@ import compression from 'compression';
 import rateLimit from 'express-rate-limit';
 import { setupSwagger } from './swagger';
 import morgan from 'morgan';
-import { HttpCode, ONE_HUNDRED, SIXTY } from './core/constants';
+import { ONE_HUNDRED, SIXTY } from './core/constants';
 import dotenv from 'dotenv';
 import cors from 'cors';
 import AuthRoutes from './routes/auth.routes';
@@ -38,23 +38,17 @@ app.use(
 		message: 'Excess requests from this IP Adresse '
 	})
 );
-app.use((req, res, next) => {
-	req.setTimeout(5000, () => {
-		res.status(HttpCode.REQUEST_TIMEOUT).json({
-			success: false,
-			message: 'Request timed out'
-		});
-	});
-	next();
-});
+// app.use((req, res, next) => {
+// 	req.setTimeout(5000, () => {
+// 		res.status(HttpCode.REQUEST_TIMEOUT).json({
+// 			success: false,
+// 			message: 'Request timed out'
+// 		});
+// 	});
+// 	next();
+// });
 app.use('/api/shop/products',getFiltereProductsRouter);
 app.use('/api/admin/products', adminProductsRouter);
-// app.use((req, res, next) => {
-// 	if (req.path === '/api/admin/products/upload-image') {
-// 	  req.setTimeout(10000); // 10s timeout pour les uploads
-// 	}
-// 	next();
-//   });
 app.use(morgan('combined'));
 
 setupSwagger(app);

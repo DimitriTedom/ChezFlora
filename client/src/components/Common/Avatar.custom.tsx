@@ -70,7 +70,7 @@ user: User
         {/* User Info Section */}
         <DropdownMenuLabel className="flex items-center space-x-3 px-3 py-2">
           <Avatar className="h-12 w-12 xl:h-14 xl:w-14 border-2 border-primary">
-            <AvatarImage src={user?.image || "/avatar2.svg"} alt="user avatar" />
+            <AvatarImage src={user?.image || "/SnowDev (1).png"} alt="user avatar" />
             <AvatarFallback className="bg-primary text-white font-bold">
               {user?.name
                 .split(" ")

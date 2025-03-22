@@ -7,8 +7,11 @@ import {
   DropdownMenuRadioItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { sortOptions } from "@/config";
-import { fetchAllFilteredProducts, fetchProductDetails } from "@/store/shop/ShopProductSlice";
+import { carouselData, events, sortOptions } from "@/config";
+import {
+  fetchAllFilteredProducts,
+  fetchProductDetails,
+} from "@/store/shop/ShopProductSlice";
 import { AppDispatch, RootState } from "@/store/store";
 import { ArrowUpDownIcon } from "lucide-react";
 import { useEffect, useState } from "react";
@@ -17,19 +20,32 @@ import { useDispatch, useSelector } from "react-redux";
 import UserProductCard, { Product } from "./Carts/ProductCart";
 import ChezFloraLoader from "@/components/Common/ChezFloraLoader";
 import { useNavigate, useSearchParams } from "react-router-dom";
+import QuoteRequestForm from "@/components/Shopping-view/QuoteRequestForm";
+import FormTitle from "@/components/Common/FormTitle";
+import ProductImageCarousel from "@/components/Shopping-view/ProductImageCarousel";
+import MyCarousel from "@/components/Shopping-view/ProductImageCarousel";
+import EventCarousel from "@/components/Shopping-view/ProductImageCarousel";
 
 interface Filters {
   [key: string]: string[];
 }
-
+// const productData = {
+//   images: [
+//     "https://source.unsplash.com/random/800x600/?event",
+//     "https://source.unsplash.com/random/800x600/?table",
+//     "https://source.unsplash.com/random/800x600/?flowers"
+//   ],
+//   title: "Receipt at the Presidency",
+//   price: 2500
+// };
 const createSearchParamsHelper = (filterParams: Filters): string => {
   const queryParams = [];
   for (const [key, value] of Object.entries(filterParams)) {
     if (Array.isArray(value) && value.length > 0) {
-      queryParams.push(`${key}=${encodeURIComponent(value.join(','))}`);
+      queryParams.push(`${key}=${encodeURIComponent(value.join(","))}`);
     }
   }
-  return queryParams.join('&');
+  return queryParams.join("&");
 };
 
 const ShoppingStore = () => {
@@ -40,7 +56,7 @@ const ShoppingStore = () => {
   const [filters, setFilters] = useState<Filters>({});
   const [sort, setSort] = useState<string>("price-lowtohigh");
   const [searchParams, setSearchParams] = useSearchParams();
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   useEffect(() => {
     const savedFilters = JSON.parse(sessionStorage.getItem("filters") || "{}");
@@ -56,7 +72,9 @@ const ShoppingStore = () => {
 
   useEffect(() => {
     if (filters && sort) {
-      dispatch(fetchAllFilteredProducts({ filterParams: filters, sortParams: sort }));
+      dispatch(
+        fetchAllFilteredProducts({ filterParams: filters, sortParams: sort })
+      );
     }
   }, [dispatch, filters, sort]);
 
@@ -65,7 +83,7 @@ const ShoppingStore = () => {
   };
 
   const handleFilter = (sectionId: string, optionId: string) => {
-    setFilters(prevFilters => {
+    setFilters((prevFilters) => {
       const newFilters = { ...prevFilters };
       const section = newFilters[sectionId] || [];
       const index = section.indexOf(optionId);
@@ -73,7 +91,7 @@ const ShoppingStore = () => {
       if (index === -1) {
         newFilters[sectionId] = [...section, optionId];
       } else {
-        newFilters[sectionId] = section.filter(item => item !== optionId);
+        newFilters[sectionId] = section.filter((item) => item !== optionId);
       }
 
       if (newFilters[sectionId].length === 0) {
@@ -86,9 +104,7 @@ const ShoppingStore = () => {
   };
 
   const handleGetProductDetails = (productId: string) => {
-    console.log(productDetails)
-    navigate(`/shop/detail/${productId}`)
-    dispatch(fetchProductDetails(productId));
+    navigate(`/shop/detail/${productId}`);
   };
 
   return (
@@ -121,7 +137,11 @@ const ShoppingStore = () => {
               </span>
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button variant="outline" size="sm" className="flex items-center gap-1">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="flex items-center gap-1"
+                  >
                     <ArrowUpDownIcon className="h-4 w-4" />
                     <span>Sort by</span>
                   </Button>
@@ -131,11 +151,8 @@ const ShoppingStore = () => {
                     onValueChange={handleSort}
                     value={sort}
                   >
-                    {sortOptions.map(option => (
-                      <DropdownMenuRadioItem
-                        key={option.id}
-                        value={option.id}
-                      >
+                    {sortOptions.map((option) => (
+                      <DropdownMenuRadioItem key={option.id} value={option.id}>
                         {option.label}
                       </DropdownMenuRadioItem>
                     ))}
@@ -164,6 +181,29 @@ const ShoppingStore = () => {
           )}
         </div>
       </div>
+      {/* REQUEST YOUR PERSONALIZE QUOTE */}
+
+      <section className="flex flex-col items-center gap-8 mt-[4rem] bg-rose-100 p-[3rem] rounded-3xl relative overflow-hidden">
+        <div>
+          <FormTitle
+            title="Request your personalized quote"
+            comment="Some of our decorations, what do you think about them ?"
+          />
+        </div>
+
+        <div className="flex flex-col lg:flex-row gap-8 justify-between items-center w-full">
+          <div className="lg:w-[50%] h-full">
+          {/* <ProductImageCarousel {...productData} /> */}
+          <EventCarousel/>
+          </div>
+          <QuoteRequestForm />
+        </div>
+        {/* <img
+          src="/ProduitEnVedeteFlower-removebg-preview.png"
+          alt="motifFlower2"
+          className="absolute scale-50 bottom-[-20%] left-[-50%] md:scale-75 opacity-80  xl:left-[-20%]"
+        /> */}
+      </section>
     </div>
   );
 };

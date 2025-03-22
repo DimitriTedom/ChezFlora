@@ -85,6 +85,7 @@ const ProductImageUpload = ({
         duration: 3000,
       });
       console.log(imageUploadedUrl,"upload image catch")
+      console.log(error.message)
     }
   };
 

@@ -191,7 +191,7 @@ const AdminProducts = () => {
               {currentEditedId !== null ? "Edit Product" : "Add New Product"}
             </SheetTitle>
           </SheetHeader>
-          <ProductImageUpload
+          <ProductImageUpload 
             imageFile={imageFile}
             setImageFile={setImageFile}
             imageUploadedUrl={imageUploadedUrl}

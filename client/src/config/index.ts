@@ -1,3 +1,5 @@
+import { FormControlItem } from "@/components/Common/Form";
+
 export const registerFormControls = [
     {
       name: "name",
@@ -161,3 +163,60 @@ export const sortOptions = [
   { id: "title-ztoa", label: "Title: Z to A" },
 ];
 
+export const QuoteRequestformControls: FormControlItem[] = [
+  {
+    name: "eventType",
+    label: "Type of Event",
+    placeholder: "",
+    component: "select",
+    options: [
+      { id: "WEDDING", label: "Wedding" },
+      { id: "BIRTHDAY", label: "BirthDay" },
+      { id: "FUNERAL", label: "Funeral" }, 
+      { id: "CHRISTMASS", label: "Christmass" },
+      { id: "VALENTINES", label: "Valentine's Day" },
+      { id: "WOMENDAY", label: "Women's Day" },
+    ]
+  },
+  {
+    name: "estimatedBudget",
+    label: "Estimated Budget",
+    placeholder: "Ex: $250",
+    component: "input",
+    type: "number",
+  },
+  {
+    name: "dateOfEvent",
+    label: "Date of Event",
+    placeholder: "dd/mm/yy",
+    component: "input",
+    type: "date", // Use date input type for better UX
+  },
+  {
+    name: "description",
+    label: "Tell us more",
+    placeholder: "Tell us more about your use case...",
+    component: "textarea",
+  },
+];
+
+export const events = [
+  {
+    id: "1",
+    title: "Receipt at the Presidency",
+    price: 2500,
+    imageUrl: "/flowerGen5.jpg",
+  },
+  {
+    id: "2",
+    title: "Elegant Garden Party",
+    price: 3000,
+    imageUrl: "/flowerGen4(Services).jpg",
+  },
+  {
+    id: "3",
+    title: "Luxury Wedding Reception",
+    price: 5000,
+    imageUrl: "/contact4.jpg",
+  },
+];
