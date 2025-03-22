@@ -123,7 +123,7 @@ export const checkUser = async (req: Request, res: Response) => {
 		from: '"ChezFlora" <noreply@chezflora.com>',
 		to: email,
 		subject: "Your OTP Code",
-		template: 'otp', // Refers to otp.html
+		template: 'otp',
 		context: {
 		  name: user.name,
 		  otp
@@ -144,7 +144,7 @@ export const checkUser = async (req: Request, res: Response) => {
 		message: 'An error occurred'
 	  });
 	}
-  };
+};
 // Controller to update the user's password
 export const updatePassword = async (req: Request, res: Response) => {
 	try {

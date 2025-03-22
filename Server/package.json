@@ -51,6 +51,7 @@
     "dotenv": "^16.4.7",
     "env-var": "^7.5.0",
     "express": "^4.19.2",
+    "express-handlebars": "^8.0.1",
     "express-rate-limit": "^7.3.1",
     "helmet": "^8.0.0",
     "joi": "^17.13.3",

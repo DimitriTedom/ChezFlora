@@ -4,12 +4,14 @@ import authReducer from "./authSlice"; // Importation du reducer d'authentificat
 import  imageUploadReducer  from "./imageUploadSlice";
 import AdminProductSlice from './ProductSlice'
 import ShopProductSlice from './shop/ShopProductSlice'
+import ShoppingCartSlice from "./shop/cartSlice";
 export const store = configureStore({
   reducer: {
     auth: authReducer,
     imageUpload:imageUploadReducer,
     adminProducts: AdminProductSlice,
     shopProducts:ShopProductSlice,
+    shoppingCart:ShoppingCartSlice
   },
 });
 

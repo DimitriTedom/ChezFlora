@@ -16,7 +16,6 @@ import {
 } from "@/components/ui/card";
 import {
   ArrowRightIcon,
-  CalendarIcon,
   HeartIcon,
   Share2Icon,
   Star,
@@ -26,14 +25,12 @@ import { Button } from "@/components/ui/button";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/store/store";
 import { fetchProductDetails } from "@/store/shop/ShopProductSlice";
-import { Skeleton } from "@/components/ui/skeleton";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import ChezFloraGallery, {
   ChezFloraGalleryProps,
 } from "@/components/Shopping-view/ChezFloraGallery";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Input } from "@/components/ui/input";
 import ChezFloraLoader from "@/components/Common/ChezFloraLoader";
 import { useCustomToast } from "@/hooks/useCustomToast";
 import { Textarea } from "@/components/ui/textarea";
