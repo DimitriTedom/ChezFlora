@@ -424,6 +424,11 @@
   dependencies:
     "@types/node" "*"
 
+"@types/express-handlebars@^5":
+  version "5.3.1"
+  resolved "https://registry.yarnpkg.com/@types/express-handlebars/-/express-handlebars-5.3.1.tgz#30447330fa4b7d19bb953834c7c26077a906e25e"
+  integrity sha512-DSzaERLO4gHb8AqnrL58jzSDyT0yDdl6HqDc+bGz1Hf0nrG1FK30nHGzv8NBEGR8QV9eUGB/YaE0Qj3NjF7siw==
+
 "@types/express-serve-static-core@^4.17.33":
   version "4.19.5"
   resolved "https://registry.yarnpkg.com/@types/express-serve-static-core/-/express-serve-static-core-4.19.5.tgz#218064e321126fcf9048d1ca25dd2465da55d9c6"
@@ -507,7 +512,15 @@
   dependencies:
     undici-types "~6.20.0"
 
-"@types/nodemailer@^6.4.17":
+"@types/nodemailer-express-handlebars@^4.0.5":
+  version "4.0.5"
+  resolved "https://registry.yarnpkg.com/@types/nodemailer-express-handlebars/-/nodemailer-express-handlebars-4.0.5.tgz#514602f8fb14f2fd0584fa7bea37cd8c2521bf3e"
+  integrity sha512-SuSYGNQPGtgMkDlQTO7zacXDENqQR3QXW1Ip5PvvookodvUKCbNVRF1tisY3Bgew1h8Wjfsf6dPQ5E45pJ1bJA==
+  dependencies:
+    "@types/express-handlebars" "^5"
+    "@types/nodemailer" "*"
+
+"@types/nodemailer@*", "@types/nodemailer@^6.4.17":
   version "6.4.17"
   resolved "https://registry.yarnpkg.com/@types/nodemailer/-/nodemailer-6.4.17.tgz#5c82a42aee16a3dd6ea31446a1bd6a447f1ac1a4"
   integrity sha512-I9CCaIp6DTldEg7vyUTZi8+9Vo0hi1/T8gv3C89yk1rSAAzoKQ8H8ki/jBYJSFoH/BisgLP8tkZMlQ91CIquww==
@@ -1992,6 +2005,11 @@ negotiator@0.6.3:
   version "0.6.3"
   resolved "https://registry.yarnpkg.com/negotiator/-/negotiator-0.6.3.tgz#58e323a72fedc0d6f9cd4d31fe49f51479590ccd"
   integrity sha512-+EUsqGPLsM+j/zdChZjsnX51g4XrHFOIXwfnCVPGlQk/k5giakcKsuxCObBRu6DSm9opw/O6slWbJdghQM4bBg==
+
+nodemailer-express-handlebars@^7.0.0:
+  version "7.0.0"
+  resolved "https://registry.yarnpkg.com/nodemailer-express-handlebars/-/nodemailer-express-handlebars-7.0.0.tgz#ce530eebce619613f335d0b99ceb68f486a795b2"
+  integrity sha512-fJ5pj5TaDiXKDShzrOksZDR1iE65W8z40unwM8+wiHT3AhifQsc2/G5uw4DC1LNN4RhqXGkuYuoEkoE+Zk+GHQ==
 
 nodemailer@^6.10.0:
   version "6.10.0"

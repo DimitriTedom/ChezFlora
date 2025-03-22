@@ -39,7 +39,7 @@ import { useCustomToast } from "@/hooks/useCustomToast";
 import { Textarea } from "@/components/ui/textarea";
 
 interface Review {
-  user: string;
+  user: string;//id of user
   rating: number;
   content: string;
   createdAt: string;

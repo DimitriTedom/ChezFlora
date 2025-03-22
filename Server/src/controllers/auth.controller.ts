@@ -6,6 +6,8 @@ import { HttpCode } from '../core/constants';
 import { registerSchema, loginSchema } from '../schemas/auth.schema';
 import { errorHandler } from '../middlewares/auth.middleware';
 import nodemailer from 'nodemailer';
+import hbs from 'nodemailer-express-handlebars';
+import path from 'path';
 const prisma = new PrismaClient();
 
 export const register = async (req: Request, res: Response) => {
@@ -71,13 +73,12 @@ export const login = async (req: Request, res: Response) => {
 		errorHandler(error, res);
 	}
 };
-
-// Controller to find a user by email
+//controller to checkUser and send him otp
 export const checkUser = async (req: Request, res: Response) => {
 	try {
 	  const { email } = req.body;
 	  const user = await prisma.user.findUnique({ where: { email } });
-	  
+  
 	  if (!user) {
 		return res.status(HttpCode.NOT_FOUND).json({
 		  success: false,
@@ -86,31 +87,47 @@ export const checkUser = async (req: Request, res: Response) => {
 	  }
   
 	  const otp = Math.floor(100000 + Math.random() * 900000).toString();
-  
-	  const otpExpiresAt = new Date(Date.now() + 10 * 60 * 1000);
+	  const otpExpiresAt = new Date(Date.now() + 10 * 60 * 1000); //10 fois 60 seconds fois 1000 pour miliseconds
   
 	  await prisma.user.update({
 		where: { email },
 		data: { otp, otpExpiresAt }
 	  });
   
-	  // Configurer le transporteur nodemailer
+	  // Create the transporter
 	  const transporter = nodemailer.createTransport({
-		host: process.env.EMAIL_HOST, 
-		port: Number(process.env.EMAIL_PORT), 
-		secure: process.env.EMAIL_SECURE === "true", 
+		host: process.env.EMAIL_HOST,
+		port: Number(process.env.EMAIL_PORT),
+		secure: process.env.EMAIL_SECURE === "true",
 		auth: {
-		  user: process.env.EMAIL_USER, 
+		  user: process.env.EMAIL_USER,
 		  pass: process.env.EMAIL_PASS  
 		}
 	  });
   
+	  // Setup Handlebars engine
+	  const handlebarOptions = {
+		viewEngine: {
+		  extName: '.hbs',
+		  partialsDir: path.resolve(__dirname, 'templates'),
+		  defaultLayout: false,
+		},
+		viewPath: path.resolve(__dirname, 'templates'),
+		extName: '.hbs',
+	  };
+  
+	  transporter.use('compile', hbs(handlebarOptions));
+  
+	  // Send email using the template
 	  const mailOptions = {
-		from: '"ChezFlora" <noreply@yourapp.com>', 
+		from: '"ChezFlora" <noreply@chezflora.com>',
 		to: email,
 		subject: "Your OTP Code",
-		text: `Your OTP code is ${otp}. It is valid for 10 minutes.`,
-		html: `<h1>Your OTP code is <strong>${otp}</strong>. It is valid for 10 minutes.</h1>`,
+		template: 'otp', // Refers to otp.html
+		context: {
+		  name: user.name,
+		  otp
+		}
 	  };
   
 	  const info = await transporter.sendMail(mailOptions);
@@ -128,7 +145,6 @@ export const checkUser = async (req: Request, res: Response) => {
 	  });
 	}
   };
-
 // Controller to update the user's password
 export const updatePassword = async (req: Request, res: Response) => {
 	try {
