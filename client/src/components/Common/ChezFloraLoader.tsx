@@ -10,7 +10,7 @@ const ChezFloraLoader = () => {
           <div id="ring" />
           <div id="ring" />
           <div id="ring" />
-          <div id="h3">ChezFlora</div>
+          <div id="h3">ChezFlora...</div>
         </div>
       </div>
     </StyledWrapper>

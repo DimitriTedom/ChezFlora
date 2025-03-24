@@ -95,7 +95,6 @@ const ShoppingCartSlice = createSlice({
             state.error = undefined
         }).addCase(addToCart.fulfilled,(state,action:PayloadAction<any>)=>{
             state.isLoading = false
-            console.log(action)
             state.cartItems = action.payload?.data
         }).addCase(addToCart.rejected,(state,action:PayloadAction<any>)=>{
             state.isLoading = false

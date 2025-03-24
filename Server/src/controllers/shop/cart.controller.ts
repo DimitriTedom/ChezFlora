@@ -118,7 +118,7 @@ export const updateCartIemQty = async (req: Request, res: Response) => {
 			});
 		}
 
-		const cart = await prisma.cart.findFirst({ where: userId });
+		const cart = await prisma.cart.findFirst({ where: {userId} });
 		if (!cart) {
 			return res.status(HttpCode.NOT_FOUND).json({
 				success: false,
@@ -157,7 +157,7 @@ export const updateCartIemQty = async (req: Request, res: Response) => {
 
 export const deleteCartITems = async (req: Request, res: Response) => {
 	try {
-		const { userId, productId } = req.body;
+		const { userId, productId } = req.params;
 		if (!userId || !productId) {
 			return res.status(HttpCode.BAD_REQUEST).json({
 				success: false,

@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/carousel"
 import { events } from "@/config"
 
- function CarouselDemo() {
+ function EventCarousel() {
   return (
     <Carousel className="w-full max-w-xs">
       <CarouselContent>
@@ -31,4 +31,4 @@ import { events } from "@/config"
     </Carousel>
   )
 }
-export default CarouselDemo
+export default EventCarousel

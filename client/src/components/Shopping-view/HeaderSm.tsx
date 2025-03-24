@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { NavLink, Link } from "react-router-dom";
 import { AiFillHome, AiOutlineShoppingCart } from "react-icons/ai";
 import { MdAccountCircle } from "react-icons/md";
@@ -16,8 +16,10 @@ import Logo from "../Common/Logo";
 import SocialIcons from "../Common/Contact/SocialIcons";
 import SignInButton from "./SignOrContactButton";
 import AvatarCustum from "../Common/Avatar.custom";
-import { useSelector } from "react-redux";
-import { RootState } from "@/store/store";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "@/store/store";
+import UserCartWrapper from "./CartWrapper";
+import { fetchCartItems } from "@/store/shop/cartSlice";
 
 export interface NavProps {
   title: string;
@@ -75,8 +77,15 @@ const NavMenuLinkSm = ({ title, icon: Icon, url }: NavProps) => (
 
 const HeaderSm: React.FC = () => {
   // Using Redux auth state to conditionally render components
-  const { isAuthenticated, user } = useSelector((state: RootState) => state.auth);
-
+  const { isAuthenticated, user } = useSelector(
+    (state: RootState) => state.auth
+  );
+  const { cartItems } = useSelector((state: RootState) => state.shoppingCart);
+  const [openCartSheet, setOpenCartSheet] = useState<boolean>(false);
+  const dispactch = useDispatch<AppDispatch>();
+  useEffect(() => {
+    dispactch(fetchCartItems(user?.id));
+  }, [dispactch, user]);
   // Define the navigation items
   const navItems: NavProps[] = [
     { title: "Home", icon: AiFillHome, url: "/shop/home" },
@@ -95,9 +104,7 @@ const HeaderSm: React.FC = () => {
                 <NavigationMenuItem>
                   <Sheet>
                     <SheetTrigger asChild>
-                      <button
-                        className="flex flex-col items-center text-gray-600 space-y-1 transition-colors p-2 rounded-md"
-                      >
+                      <button className="flex flex-col items-center text-gray-600 space-y-1 transition-colors p-2 rounded-md">
                         <item.icon className="text-2xl" />
                         <span className="text-xs font-semibold">
                           {item.title}
@@ -107,67 +114,67 @@ const HeaderSm: React.FC = () => {
                     <SheetContent className="py-8 px-0 flex flex-col items-center gap-5 justify-between">
                       {/* Menu header content */}
                       <div>
-                      <div className="space-y-5 px-4">
-                        <Link to="/shop/home">
-                          <Logo />
-                        </Link>
-                        <p>
-                          Discover outstanding articles on all event types.
-                          Write Blogs and share them.
-                        </p>
-                      </div>
-                      <nav className="border-t-2 border-pink-200 w-full py-5 flex flex-col gap-4">
-                        <NavigationMenu>
-                          <NavigationMenuList>
-                            <NavMenuLink url="/shop/home" text="Home" />
-                          </NavigationMenuList>
-                        </NavigationMenu>
-                        <NavigationMenu>
-                          <NavigationMenuList>
-                            <NavMenuLink url="/shop/store" text="Store" />
-                          </NavigationMenuList>
-                        </NavigationMenu>
-                        <NavigationMenu>
-                          <NavigationMenuList>
-                            <NavMenuDropdown text="Services">
-                              <NavigationMenuLink className="rounded-md hover:bg-pink-100">
-                                <Link
-                                  to="/service1"
-                                  className="transition-colors px-4 py-2"
-                                >
-                                  Service 1
-                                </Link>
-                              </NavigationMenuLink>
-                              <NavigationMenuLink className="rounded-md hover:bg-pink-100">
-                                <Link
-                                  to="/service2"
-                                  className="transition-colors px-4 py-2"
-                                >
-                                  Service 2
-                                </Link>
-                              </NavigationMenuLink>
-                              <NavigationMenuLink className="rounded-md hover:bg-pink-100">
-                                <Link
-                                  to="/service3"
-                                  className="transition-colors px-4 py-2"
-                                >
-                                  Service 3
-                                </Link>
-                              </NavigationMenuLink>
-                            </NavMenuDropdown>
-                          </NavigationMenuList>
-                        </NavigationMenu>
-                        <NavigationMenu>
-                          <NavigationMenuList>
-                            <NavMenuLink url="/shop/blog" text="Blog" />
-                          </NavigationMenuList>
-                        </NavigationMenu>
-                        <NavigationMenu>
-                          <NavigationMenuList>
-                            <NavMenuLink url="/shop/about" text="About" />
-                          </NavigationMenuList>
-                        </NavigationMenu>
-                      </nav>
+                        <div className="space-y-5 px-4">
+                          <Link to="/shop/home">
+                            <Logo />
+                          </Link>
+                          <p>
+                            Discover outstanding articles on all event types.
+                            Write Blogs and share them.
+                          </p>
+                        </div>
+                        <nav className="border-t-2 border-pink-200 w-full py-5 flex flex-col gap-4">
+                          <NavigationMenu>
+                            <NavigationMenuList>
+                              <NavMenuLink url="/shop/home" text="Home" />
+                            </NavigationMenuList>
+                          </NavigationMenu>
+                          <NavigationMenu>
+                            <NavigationMenuList>
+                              <NavMenuLink url="/shop/store" text="Store" />
+                            </NavigationMenuList>
+                          </NavigationMenu>
+                          <NavigationMenu>
+                            <NavigationMenuList>
+                              <NavMenuDropdown text="Services">
+                                <NavigationMenuLink className="rounded-md hover:bg-pink-100">
+                                  <Link
+                                    to="/service1"
+                                    className="transition-colors px-4 py-2"
+                                  >
+                                    Service 1
+                                  </Link>
+                                </NavigationMenuLink>
+                                <NavigationMenuLink className="rounded-md hover:bg-pink-100">
+                                  <Link
+                                    to="/service2"
+                                    className="transition-colors px-4 py-2"
+                                  >
+                                    Service 2
+                                  </Link>
+                                </NavigationMenuLink>
+                                <NavigationMenuLink className="rounded-md hover:bg-pink-100">
+                                  <Link
+                                    to="/service3"
+                                    className="transition-colors px-4 py-2"
+                                  >
+                                    Service 3
+                                  </Link>
+                                </NavigationMenuLink>
+                              </NavMenuDropdown>
+                            </NavigationMenuList>
+                          </NavigationMenu>
+                          <NavigationMenu>
+                            <NavigationMenuList>
+                              <NavMenuLink url="/shop/blog" text="Blog" />
+                            </NavigationMenuList>
+                          </NavigationMenu>
+                          <NavigationMenu>
+                            <NavigationMenuList>
+                              <NavMenuLink url="/shop/about" text="About" />
+                            </NavigationMenuList>
+                          </NavigationMenu>
+                        </nav>
                       </div>
                       <div className="space-y-6 flex flex-col">
                         {/* Conditionally render SignInButton only if not authenticated */}
@@ -187,9 +194,7 @@ const HeaderSm: React.FC = () => {
                 <NavigationMenuItem>
                   <Sheet>
                     <SheetTrigger asChild>
-                      <button
-                        className="flex flex-col items-center text-gray-600 space-y-1 transition-colors p-2 rounded-md"
-                      >
+                      <button className="flex flex-col items-center text-gray-600 space-y-1 transition-colors p-2 rounded-md">
                         <item.icon className="text-2xl" />
                         <span className="text-xs font-semibold">
                           {item.title}
@@ -204,7 +209,10 @@ const HeaderSm: React.FC = () => {
                           <Link to="/profile" className="text-lg text-gray-700">
                             Profile
                           </Link>
-                          <Link to="/settings" className="text-lg text-gray-700">
+                          <Link
+                            to="/settings"
+                            className="text-lg text-gray-700"
+                          >
                             Settings
                           </Link>
                           <Link to="/orders" className="text-lg text-gray-700">
@@ -221,32 +229,40 @@ const HeaderSm: React.FC = () => {
               </NavigationMenuList>
             </NavigationMenu>
           );
-        }  else if (item.title === "Cart") {
+        } else if (item.title === "Cart") {
           return (
             <NavigationMenu key={index}>
               <NavigationMenuList className="flex justify-around w-full">
                 <NavigationMenuItem>
-                  <Sheet>
+                  <Sheet
+                    open={openCartSheet}
+                    onOpenChange={() => setOpenCartSheet(!openCartSheet)}
+                  >
                     <SheetTrigger asChild>
-                      <button
-                        className="flex flex-col items-center text-gray-600 space-y-1 transition-colors p-2 rounded-md"
-                      >
+                      <button className="flex flex-col items-center text-gray-600 space-y-1 transition-colors p-2 rounded-md">
                         <item.icon className="text-2xl" />
                         <span className="text-xs font-semibold">
                           {item.title}
                         </span>
                       </button>
                     </SheetTrigger>
-                    <SheetContent className="py-8 px-4 flex flex-col items-center gap-5">
-                    
+                    <SheetContent className="py-8 px-2 flex flex-col items-center gap-5 overflow-y-auto">
+                      <UserCartWrapper
+                        cartItems={
+                          cartItems &&
+                          cartItems.items &&
+                          cartItems.items.length > 0
+                            ? cartItems.items
+                            : []
+                        }
+                      />
                     </SheetContent>
                   </Sheet>
                 </NavigationMenuItem>
               </NavigationMenuList>
             </NavigationMenu>
           );
-        }
-        else {
+        } else {
           return (
             <NavigationMenu key={index}>
               <NavigationMenuList className="flex justify-around">

@@ -7,10 +7,9 @@ import {
   DropdownMenuRadioItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { carouselData, events, sortOptions } from "@/config";
+import { sortOptions } from "@/config";
 import {
   fetchAllFilteredProducts,
-  fetchProductDetails,
 } from "@/store/shop/ShopProductSlice";
 import { AppDispatch, RootState } from "@/store/store";
 import { ArrowUpDownIcon } from "lucide-react";
@@ -22,22 +21,14 @@ import ChezFloraLoader from "@/components/Common/ChezFloraLoader";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import QuoteRequestForm from "@/components/Shopping-view/QuoteRequestForm";
 import FormTitle from "@/components/Common/FormTitle";
-import ProductImageCarousel from "@/components/Shopping-view/ProductImageCarousel";
-import MyCarousel from "@/components/Shopping-view/ProductImageCarousel";
 import EventCarousel from "@/components/Shopping-view/ProductImageCarousel";
+import { addToCart, fetchCartItems } from "@/store/shop/cartSlice";
+import { useCustomToast } from "@/hooks/useCustomToast";
 
 interface Filters {
   [key: string]: string[];
 }
-// const productData = {
-//   images: [
-//     "https://source.unsplash.com/random/800x600/?event",
-//     "https://source.unsplash.com/random/800x600/?table",
-//     "https://source.unsplash.com/random/800x600/?flowers"
-//   ],
-//   title: "Receipt at the Presidency",
-//   price: 2500
-// };
+
 const createSearchParamsHelper = (filterParams: Filters): string => {
   const queryParams = [];
   for (const [key, value] of Object.entries(filterParams)) {
@@ -50,12 +41,14 @@ const createSearchParamsHelper = (filterParams: Filters): string => {
 
 const ShoppingStore = () => {
   const dispatch = useDispatch<AppDispatch>();
-  const { isLoading, productList, productDetails } = useSelector(
+  const { isLoading, productList } = useSelector(
     (state: RootState) => state.shopProducts
   );
+  const {user} = useSelector((state:RootState)=>state.auth);
   const [filters, setFilters] = useState<Filters>({});
   const [sort, setSort] = useState<string>("price-lowtohigh");
   const [searchParams, setSearchParams] = useSearchParams();
+  const {showToast}  = useCustomToast()
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -106,7 +99,26 @@ const ShoppingStore = () => {
   const handleGetProductDetails = (productId: string) => {
     navigate(`/shop/detail/${productId}`);
   };
-
+  const handleAddToCart =(id:string)=>{
+    console.log(id);
+    dispatch(addToCart({userId: user?.id, productId: id, quantity: 1})).unwrap().then((data)=>{
+      console.log(data)
+      if (data?.success) {
+        dispatch(fetchCartItems(user.id));
+        showToast({
+          message:"Product added to cart",
+          type: "success",
+          duration:5000
+        })
+      }
+    }).catch((error)=>{
+      showToast({
+        message:"An Error occured",
+        type: "error",
+        duration:5000
+      })
+    });
+  }
   return (
     <div>
       <Helmet>
@@ -175,6 +187,7 @@ const ShoppingStore = () => {
                   key={product.id}
                   product={product}
                   handleGetProductDetails={handleGetProductDetails}
+                  handleAddToCart={handleAddToCart}
                 />
               ))}
             </div>

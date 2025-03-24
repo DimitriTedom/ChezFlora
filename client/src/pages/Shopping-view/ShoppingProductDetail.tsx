@@ -34,6 +34,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import ChezFloraLoader from "@/components/Common/ChezFloraLoader";
 import { useCustomToast } from "@/hooks/useCustomToast";
 import { Textarea } from "@/components/ui/textarea";
+import { addToCart, fetchCartItems } from "@/store/shop/cartSlice";
 
 interface Review {
   user: string;//id of user
@@ -93,14 +94,26 @@ const ShoppingProductDetail = () => {
     }
   };
 
-  const handleAddToCart = () => {
-    // Add logic to add product to cart
-    console.log("Adding to cart:", productDetails, quantity);
-  };
+  const handleAddToCart = (id:string) => {
+    dispatch(addToCart({userId: user?.id, productId: id, quantity: quantity})).unwrap().then((data)=>{
+      if (data?.success) {
+        dispatch(fetchCartItems(user.id));
+        showToast({
+          message:"Product added to cart",
+          type: "success",
+          duration:5000
+        })
+      }
+    }).catch((error)=>{
+      showToast({
+        message:"An Error occured",
+        type: "error",
+        duration:5000
+      })
+    });  };
   const handleReviewSubmit = () => {
-    // Add logic to submit the review
     console.log("Submitting review:", reviewText);
-    setReviewText(""); // Clear the input field after submission
+    setReviewText(""); 
   };
 
   console.log(productDetails);
@@ -309,7 +322,7 @@ const ShoppingProductDetail = () => {
             <CardHeader>
               <div className="flex justify-between items-center mb-4">
                 <p className="text-3xl font-bold">
-                  ${productDetails?.saleprice}
+                  ${productDetails?.saleprice ? productDetails?.saleprice : productDetails?.price}
                 </p>
                 <Badge className="bg-red-500 flex text-white px-2.5 py-1 gap-1 rounded-full">
                   -{discountPercentage}% <span>PROMO</span>
@@ -354,7 +367,7 @@ const ShoppingProductDetail = () => {
             </CardContent>
             <CardFooter className="flex flex-col gap-2">
               <Button
-                onClick={handleAddToCart}
+                onClick={()=>handleAddToCart(productDetails?.id)}
                 disabled={quantity > (productDetails?.stock || 0)}
                 className="mt-4 w-full p-6 font-semibold text-white bg-pink-300 hover:bg-pink-400 rounded-full text-[1.3rem]"
               >
