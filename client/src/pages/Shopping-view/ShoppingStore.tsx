@@ -10,6 +10,7 @@ import {
 import { sortOptions } from "@/config";
 import {
   fetchAllFilteredProducts,
+  fetchProductDetails,
 } from "@/store/shop/ShopProductSlice";
 import { AppDispatch, RootState } from "@/store/store";
 import { ArrowUpDownIcon } from "lucide-react";
@@ -46,6 +47,7 @@ const ShoppingStore = () => {
   );
   const {user} = useSelector((state:RootState)=>state.auth);
   const [filters, setFilters] = useState<Filters>({});
+  
   const [sort, setSort] = useState<string>("price-lowtohigh");
   const [searchParams, setSearchParams] = useSearchParams();
   const {showToast}  = useCustomToast()
@@ -99,26 +101,38 @@ const ShoppingStore = () => {
   const handleGetProductDetails = (productId: string) => {
     navigate(`/shop/detail/${productId}`);
   };
-  const handleAddToCart =(id:string)=>{
-    console.log(id);
-    dispatch(addToCart({userId: user?.id, productId: id, quantity: 1})).unwrap().then((data)=>{
-      console.log(data)
-      if (data?.success) {
-        dispatch(fetchCartItems(user.id));
-        showToast({
-          message:"Product added to cart",
-          type: "success",
-          duration:5000
-        })
+
+  const items = (useSelector((state: RootState) => state.shoppingCart.cartItems) as any)?.items ;
+  const handleAddToCart = async (productId: string) => {
+    try {
+      const prodResponse = await dispatch(fetchProductDetails(productId)).unwrap();
+      const fetchedProduct = prodResponse.data;
+      
+      if (!fetchedProduct) {
+        showToast({ message: "Failed to fetch product details", type: "error", duration: 5000 });
+        return;
       }
-    }).catch((error)=>{
-      showToast({
-        message:"An Error occured",
-        type: "error",
-        duration:5000
-      })
-    });
-  }
+      
+
+      const found = items.find((item: any) => item.productId === productId);
+      const currentQty: number = found ? found.quantity : 0;
+
+      if (currentQty + 1 > fetchedProduct.stock) {
+        showToast({ message: "Cannot add more than available stock", type: "error", duration: 5000 });
+        return;
+      }
+      
+      const addResponse = await dispatch(addToCart({ userId: user?.id!, productId, quantity: 1 })).unwrap();
+      if (addResponse?.success) {
+        console.log("before fetching items", addResponse)
+        dispatch(fetchCartItems(user!.id));
+        showToast({ message: "Product added to cart", type: "success", duration: 5000 });
+      }
+    } catch (error) {
+      console.error("Add to Cart Error:", error);
+      showToast({ message: "An error occurred while adding to cart", type: "error", duration: 5000 });
+    }
+  };
   return (
     <div>
       <Helmet>
