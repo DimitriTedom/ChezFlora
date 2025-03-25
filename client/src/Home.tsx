@@ -33,7 +33,6 @@ import AdminCustomers from "./pages/admin-view/Customers";
 import ForgotPassword from "./pages/Auth/ForgotPassword";
 import EnterNewPassword from "./pages/Auth/EnterNewPassword";
 import ShoppingProductDetail from "./pages/Shopping-view/ShoppingProductDetail";
-// import { Skeleton } from "./components/ui/skeleton";
 export default function Home() {
 
   const { user, isAuthenticated, isLoading } = useSelector(
