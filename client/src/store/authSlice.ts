@@ -1,14 +1,11 @@
-// store/authSlice.ts
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import axios from "axios";
 
-// Types généraux pour les réponses de l'API
 interface ApiResponse {
   success: boolean;
   message: string;
 }
 
-// Définition du type User et des réponses spécifiques
 export interface User {
   id: string;
   role: string;
@@ -31,14 +28,14 @@ interface AuthState {
 }
 
 const initialState: AuthState = {
-  user: null,
+  user: JSON.parse(localStorage.getItem("user") || "null"),
   isLoading: false,
   error: null,
-  isAuthenticated: false,
+  isAuthenticated: JSON.parse(localStorage.getItem("isAuthenticated") || "false"),
   userExists: false,
+  otpVerified:false,
 };
 
-// Thunk pour l'enregistrement d'un utilisateur
 export const registerUser = createAsyncThunk<
   RegisterResponse,
   { name: string; email: string; password: string },
@@ -58,7 +55,6 @@ export const registerUser = createAsyncThunk<
   }
 });
 
-// Thunk pour la connexion
 export const loginUser = createAsyncThunk<
   LoginResponse,
   { email: string; password: string },
@@ -76,7 +72,6 @@ export const loginUser = createAsyncThunk<
   }
 });
 
-// Thunk pour la mise à jour du mot de passe
 export const updatePassword = createAsyncThunk<
   ApiResponse,
   { email: string; password: string },
@@ -97,7 +92,6 @@ export const updatePassword = createAsyncThunk<
   }
 });
 
-// Thunk pour vérifier l'existence d'un utilisateur
 export const checkUser = createAsyncThunk<
   ApiResponse,
   string,
