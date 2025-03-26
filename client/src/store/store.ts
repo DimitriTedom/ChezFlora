@@ -5,16 +5,17 @@ import  imageUploadReducer  from "./imageUploadSlice";
 import AdminProductSlice from './ProductSlice'
 import ShopProductSlice from './shop/ShopProductSlice'
 import ShoppingCartSlice from "./shop/cartSlice";
+import ShoppingAddressSlice from "./shop/addressSlice";
 export const store = configureStore({
   reducer: {
     auth: authReducer,
     imageUpload:imageUploadReducer,
     adminProducts: AdminProductSlice,
     shopProducts:ShopProductSlice,
-    shoppingCart:ShoppingCartSlice
+    shoppingCart:ShoppingCartSlice,
+    address:ShoppingAddressSlice
   },
 });
 
-// Types Redux pour TypeScript
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;
