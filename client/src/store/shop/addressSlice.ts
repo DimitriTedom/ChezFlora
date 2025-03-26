@@ -6,7 +6,7 @@ import axios, { AxiosError } from "axios";
 // ---------------------
 
 export interface Address {
-  id?: string;
+  id: string;
   userId: string;
   address: string;
   phone: string;
@@ -70,7 +70,7 @@ export const addAddress = createAsyncThunk<
   async (formData, { rejectWithValue }) => {
     try {
       const response = await axios.post<AddressApiResponse<Address>>(
-        "http://localhost:5000/api/shop/adresss/add",
+        "http://localhost:5000/api/shop/address/add",
         formData,
         { headers: { "Content-Type": "application/json" } }
       );
@@ -91,7 +91,7 @@ export const fetchAllAddress = createAsyncThunk<
   async (userId, { rejectWithValue }) => {
     try {
       const response = await axios.get<AddressApiResponse<Address[]>>(
-        `http://localhost:5000/api/shop/adresss/get/${userId}`
+        `http://localhost:5000/api/shop/address/get/${userId}`
       );
       return response.data;
     } catch (error) {
@@ -110,7 +110,7 @@ export const editAddress = createAsyncThunk<
   async ({ userId, addressId, formData }, { rejectWithValue }) => {
     try {
       const response = await axios.put<AddressApiResponse<Address>>(
-        `http://localhost:5000/api/shop/adresss/update/${userId}/${addressId}`,
+        `http://localhost:5000/api/shop/address/update/${userId}/${addressId}`,
         formData,
         { headers: { "Content-Type": "application/json" } }
       );
@@ -131,7 +131,7 @@ export const deleteAddress = createAsyncThunk<
   async ({ userId, addressId }, { rejectWithValue }) => {
     try {
       const response = await axios.delete<AddressApiResponse>(
-        `http://localhost:5000/api/shop/adresss/delete/${userId}/${addressId}`
+        `http://localhost:5000/api/shop/address/delete/${userId}/${addressId}`
       );
       return response.data;
     } catch (error) {
@@ -157,8 +157,7 @@ const ShoppingAddressSlice = createSlice({
       addAddress.fulfilled,
       (state, action: PayloadAction<AddressApiResponse<Address>>) => {
         state.isLoading = false;
-        // Append the new address to the list
-        state.addressList = [...state.addressList, action.payload.data];
+        // state.addressList = [...state.addressList, action.payload.data];
         state.error = null;
       }
     );

@@ -8,7 +8,7 @@ const prisma = new PrismaClient();
 export const addAdresss = async (req: Request, res: Response) => {
   try {
     const { userId, address, city, phone, postalCode, notes } = req.body;
-
+ 
     if (!userId || !address || !city || !phone || !postalCode || !notes) {
       return res.status(HttpCode.BAD_REQUEST).json({
         success: false,

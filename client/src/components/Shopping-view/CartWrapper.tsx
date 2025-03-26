@@ -3,6 +3,7 @@ import CartItemComponent from "@/pages/Shopping-view/Carts/ShoopingCartItem";
 import { SheetHeader } from "../ui/sheet";
 import { Button } from "../ui/button";
 import { CartItem as CartItemType } from "@/store/shop/cartSlice"; // Ensure this type is exported from your cartSlice
+import { useNavigate } from "react-router-dom";
 
 // Define the props interface
 interface UserCartWrapperProps {
@@ -12,6 +13,7 @@ interface UserCartWrapperProps {
 const UserCartWrapper: React.FC<UserCartWrapperProps> = ({ cartItems }) => {
   // Calculate the total amount in the cart.
   // It uses the saleprice if available and > 0, otherwise falls back to the product price.
+  const navigate = useNavigate()
   const totalCartAmount: number =
     cartItems && cartItems.length > 0
       ? cartItems.reduce((sum, currentItem) => {
@@ -42,7 +44,7 @@ const UserCartWrapper: React.FC<UserCartWrapperProps> = ({ cartItems }) => {
           <p className="text-xl font-bold">${totalCartAmount.toFixed(2)}</p>
         </div>
         <Button
-          // onClick={onCheckout} // Checkout logic to be implemented later
+          onClick={()=>navigate('/shop/checkout')}
           className="bg-pink-300 hover:bg-pink-400 text-white font-semibold rounded-full"
         >
           Checkout Now
