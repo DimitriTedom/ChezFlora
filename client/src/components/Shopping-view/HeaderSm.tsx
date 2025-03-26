@@ -20,6 +20,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/store/store";
 import UserCartWrapper from "./CartWrapper";
 import { fetchCartItems } from "@/store/shop/cartSlice";
+import { LogOut, SettingsIcon, User2Icon, UserCog2Icon } from "lucide-react";
+import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 
 export interface NavProps {
   title: string;
@@ -76,7 +78,6 @@ const NavMenuLinkSm = ({ title, icon: Icon, url }: NavProps) => (
 );
 
 const HeaderSm: React.FC = () => {
-  // Using Redux auth state to conditionally render components
   const { isAuthenticated, user } = useSelector(
     (state: RootState) => state.auth
   );
@@ -93,7 +94,26 @@ const HeaderSm: React.FC = () => {
     { title: "Account", icon: MdAccountCircle, url: "/shop/account" },
     { title: "Menu", icon: BiMenuAltRight, url: "/shop/menu" },
   ];
-
+  const handleLogOut = () => {
+    dispatch(logoutUser())
+      .unwrap()
+      .then((data) => {
+        showToast({
+          message: `${data.message}`,
+          subtitle: "See you soon!",
+          type: "warning",
+          duration: 5000,
+        });
+      })
+      .catch((error) => {
+        showToast({
+          message: "Logout failed.",
+          subtitle: error.message || "Please try again.",
+          type: "error",
+          duration: 5000,
+        });
+      });
+  };
   return (
     <div className="w-screen overflow-x-hidden flex items-center px-10 md:px-14 gap-8 h-16 justify-between bg-white shadow-2xl fixed bg-opacity-90 bottom-0 border-t-2 border-pink-200">
       {navItems.map((item, index) => {
@@ -204,20 +224,54 @@ const HeaderSm: React.FC = () => {
                     <SheetContent className="py-8 px-4 flex flex-col items-center gap-5">
                       {isAuthenticated && user ? (
                         // If authenticated, display the AvatarCustom with additional account links
-                        <div className="flex flex-col items-center space-y-4">
-                          <AvatarCustum user={user} />
-                          <Link to="/profile" className="text-lg text-gray-700">
-                            Profile
+                        <div className="flex flex-col items-center space-y-4 w-full">
+                          <div className="self-start w-full bg-pink-100 border border-pink-200 rounded-md">
+                            <div className="flex items-center space-x-3 px-3 py-2">
+                              <Avatar className="h-16 w-16 xl:h-14 xl:w-14 border-2 border-primary">
+                                <AvatarImage
+                                  src={user?.image || "/SnowDev (1).png"}
+                                  alt="user avatar"
+                                />
+                                <AvatarFallback className="bg-primary text-white font-bold">
+                                  {user?.name
+                                    .split(" ")
+                                    .map((n) => n[0])
+                                    .join("")}
+                                </AvatarFallback>
+                              </Avatar>
+                              <div className="flex flex-col space-y-1">
+                                <p className="text-sm font-medium leading-none">
+                                  {user?.name}
+                                </p>
+                                <p className="text-xs text-muted-foreground">
+                                  {user?.email}
+                                </p>
+                              </div>
+                            </div>
+                          </div>
+
+                          <Link
+                            to="/shop/account"
+                            className="flex items-center space-x-2 w-full"
+                          >
+                            <User2Icon className="h-4 w-4 text-muted-foreground" />
+                            <span>Account</span>
                           </Link>
                           <Link
-                            to="/settings"
-                            className="text-lg text-gray-700"
+                            to="/shop/settings"
+                            className="flex items-center space-x-2 w-full"
                           >
-                            Settings
+                            <UserCog2Icon className="h-4 w-4 text-muted-foreground" />
+                            <span>Settings</span>
                           </Link>
-                          <Link to="/orders" className="text-lg text-gray-700">
-                            Orders
-                          </Link>
+
+                          <div
+                            onSelect={handleLogOut}
+                            className="cursor-pointer hover:bg-destructive hover:text-destructive-foreground w-full flex items-center space-x-2"
+                          >
+                            <LogOut className="h-4 w-4" />
+                            <span>Log Out</span>
+                          </div>
                         </div>
                       ) : (
                         // Otherwise, show the SignIn button

@@ -89,6 +89,7 @@ user: User
         {/* Profile Link */}
         <DropdownMenuItem asChild className="cursor-pointer hover:bg-accent">
           <Link to="/shop/account" className="flex items-center space-x-2">
+          
             <UserIcon className="h-4 w-4 text-muted-foreground" />
             <span>Account</span>
           </Link>

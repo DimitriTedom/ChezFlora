@@ -255,3 +255,46 @@ export const products: Product[] = [
     image: "/flowerGen4(Services).jpg"
   }
 ]
+export const initalAddressFormData = {
+  address: '',
+  city: '',
+  postalCode: '',
+  phone: '',
+  notes: ''
+}
+export const addressFormControls:FormControlItem[] = [
+  {
+    label: "Address",
+    name: "address",
+    component: "input",
+    type: "text",
+    placeholder: "Enter your address Ex: 123 avenue snowdev, New york, USA",
+  },
+  {
+    label: "City",
+    name: "city",
+    component: "input",
+    type: "text",
+    placeholder: "Enter your city Ex: New York",
+  },
+  {
+    label: "Postal code",
+    name: "postalCode",
+    component: "input",
+    type: "text",
+    placeholder: "Enter your postal code",
+  },
+  {
+    label: "Phone",
+    name: "phone",
+    component: "input",
+    type: "number",
+    placeholder: "Enter your phone number Ex: +1 234 567 890",
+  },
+  {
+    label: "Notes",
+    name: "notes",
+    component: "textarea",
+    placeholder: "Enter any additional notes",
+  },
+];
