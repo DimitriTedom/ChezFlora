@@ -70,7 +70,7 @@ const CartItem: React.FC<CartItemProps> = ({ cartItem }) => {
   const totalPrice = (unitPrice * cartItem.quantity).toFixed(2);
 
   return (
-    <Card className="w-full max-w-md mx-auto border shadow-sm">
+    <Card className="w-full  mx-auto border shadow-sm">
       <div className="p-2"></div>
       {/* Card Content: Image, Title, and Quantity Controls */}
       <CardContent className="flex flex-col gap-4">

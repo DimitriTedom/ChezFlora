@@ -81,9 +81,9 @@ interface AddressCardProps {
         )}
       </CardContent>
 
-      <Separator />
 
-      <CardFooter className="p-4 flex justify-between">
+      <Separator />
+      <CardFooter className="p-4 flex justify-between self-end">
         <Button
           variant="outline"
           onClick={(e) => {

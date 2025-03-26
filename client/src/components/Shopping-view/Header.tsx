@@ -187,6 +187,7 @@ const ShoppingHeader: React.FC = () => {
             </SheetTrigger>
             <SheetContent className="w-[60%] overflow-y-auto">
               <UserCartWrapper
+              setOpenCartSheet={setOpenCartSheet}
                 cartItems={
                   cartItems && cartItems.items && cartItems.items.length > 0
                     ? cartItems.items
