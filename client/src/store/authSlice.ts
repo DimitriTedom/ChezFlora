@@ -197,12 +197,15 @@ const authSlice = createSlice({
       .addCase(checkAuth.pending, (state) => {
         state.isLoading = true;
         state.error = null;
+        console.log("checkauth pending")
       })
       .addCase(
         checkAuth.fulfilled,
         (state, action: PayloadAction<LoginResponse>) => {
           if (action.payload.success) {
             state.user = action.payload.user;
+        console.log("checkauth fulfilled")
+
             state.isAuthenticated = true;
             localStorage.setItem("user", JSON.stringify(action.payload.user));
             localStorage.setItem("isAuthenticated", "true");
@@ -212,6 +215,8 @@ const authSlice = createSlice({
       )
       .addCase(checkAuth.rejected, (state) => {
         state.isLoading = false;
+        console.log("checkauth rejectetd")
+
         state.user = null;
         state.isAuthenticated = false;
       })

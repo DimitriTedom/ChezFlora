@@ -39,9 +39,6 @@ const CheckAuth = ({ isAuthenticated, user, children }: CheckAuthProps) => {
     return <Navigate to="/auth/login" />;
   }
 
-  if (authState.user === null) {
-    return null;
-  }
 
   if (
     authState.isAuthenticated &&
