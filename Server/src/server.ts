@@ -40,7 +40,6 @@ app.use(
 		message: 'Excess requests from this IP Adresse '
 	})
 );
-
 app.use('/api/shop/products',getFiltereProductsRouter);
 app.use('/api/admin/products', adminProductsRouter);
 app.use('/api/shop/cart',shopProductsRouter)

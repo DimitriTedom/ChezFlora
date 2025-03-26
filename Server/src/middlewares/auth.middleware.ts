@@ -4,10 +4,8 @@ import { verifyToken } from "../utils/jwt";
 import { Request, Response, NextFunction } from "express";
 
 export const authenticateUser = async (req: Request, res: Response, next: NextFunction) => {
-    // Vérifier d'abord le header Authorization
     let token =  req.cookies?.token;
   
-    // Si non trouvé, vérifier les cookies
     if (!token) {
       token = req.cookies.token;
     }

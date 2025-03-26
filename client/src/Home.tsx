@@ -1,4 +1,4 @@
-import { Route, Routes } from "react-router-dom";
+import { Navigate, Route, Routes } from "react-router-dom";
 import AuthLayout from "./components/Auth/AuthLayout";
 import AuthLogin from "./pages/Auth/Login";
 import AuthRegister from "./pages/Auth/Register";
@@ -34,7 +34,6 @@ import ForgotPassword from "./pages/Auth/ForgotPassword";
 import EnterNewPassword from "./pages/Auth/EnterNewPassword";
 import ShoppingProductDetail from "./pages/Shopping-view/ShoppingProductDetail";
 export default function Home() {
-
   const { user, isAuthenticated, isLoading } = useSelector(
     (state: RootState) => state.auth
   );
@@ -42,13 +41,13 @@ export default function Home() {
   useEffect(() => {
     dispatch(checkAuth())
       .unwrap()
-      .catch(() => console.log("Auth check failed"));
+      .catch((error) => console.log("Auth check failed", error));
   }, [dispatch]);
   if (isLoading) {
-    
+    console.log("isLoading = ", isLoading);
     return (
       <div>
-        <ChezFloraLoader/>
+        <ChezFloraLoader />
       </div>
     );
   }
@@ -76,11 +75,15 @@ export default function Home() {
             </CheckAuth>
           }
         >
+          <Route index element={<Navigate to="login" replace />} />
           <Route path="login" element={<AuthLogin />} />
           <Route path="register" element={<AuthRegister />} />
           <Route path="forgot-password" element={<ForgotPassword />} />
           <Route path="verify-otp/:email" element={<AuthEnterOtp />} />
-          <Route path="enter-new-password/:email" element={<EnterNewPassword/>} />
+          <Route
+            path="enter-new-password/:email"
+            element={<EnterNewPassword />}
+          />
         </Route>
         <Route
           path="/admin"
@@ -108,7 +111,7 @@ export default function Home() {
           <Route path="home" element={<ShoppingHome />} />
           <Route path="listing" element={<ShoppingListing />} />
           <Route path="store" element={<ShoppingStore />} />
-          <Route path="detail/:id" element={<ShoppingProductDetail/>}/>
+          <Route path="detail/:id" element={<ShoppingProductDetail />} />
           <Route path="about" element={<ShoppingAbout />} />
           <Route path="checkout" element={<ShoppingCheckout />} />
           <Route path="account" element={<ShoppingAccount />} />
