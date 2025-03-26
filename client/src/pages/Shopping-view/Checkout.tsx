@@ -18,7 +18,7 @@ const ShoppingCheckout = () => {
         <meta property="og:image" content="/assets/og-checkout.jpg" />{" "}
         {/* Payment confirmation mockup */}
       </Helmet>
-      <div>Shopping view Checkout page</div>
+      <div className="mt-32">Shopping view Checkout page</div>
     </div>
   );
 };

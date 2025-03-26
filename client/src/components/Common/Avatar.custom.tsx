@@ -88,15 +88,15 @@ user: User
 
         {/* Profile Link */}
         <DropdownMenuItem asChild className="cursor-pointer hover:bg-accent">
-          <Link to="/profile" className="flex items-center space-x-2">
+          <Link to="/shop/account" className="flex items-center space-x-2">
             <UserIcon className="h-4 w-4 text-muted-foreground" />
-            <span>Profile</span>
+            <span>Account</span>
           </Link>
         </DropdownMenuItem>
 
         {/* Settings Link */}
         <DropdownMenuItem asChild className="cursor-pointer hover:bg-accent">
-          <Link to="/settings" className="flex items-center space-x-2">
+          <Link to="/shop/settings" className="flex items-center space-x-2">
             <SettingsIcon className="h-4 w-4 text-muted-foreground" />
             <span>Settings</span>
           </Link>
@@ -104,7 +104,7 @@ user: User
 
         {/* Dashboard Link Example */}
         <DropdownMenuItem asChild className="cursor-pointer hover:bg-accent">
-          <Link to="/admin/dashboard" className="flex items-center space-x-2">
+          <Link to="/shop/dashboard" className="flex items-center space-x-2">
             <HomeIcon className="h-4 w-4 text-muted-foreground" />
             <span>Dashboard</span>
           </Link>

@@ -18,7 +18,7 @@ const ShoppingAccount = () => {
         <meta property="og:image" content="/assets/og-account.jpg" />{" "}
         {/* Dashboard UI mockup */}
       </Helmet>
-      <div>Shopping view Account page</div>
+      <div className="mt-32">Shopping view Account page</div>
     </div>
   );
 };

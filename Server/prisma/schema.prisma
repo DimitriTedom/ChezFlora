@@ -101,10 +101,11 @@ model Address {
   id         String   @id @default(auto()) @map("_id") @db.ObjectId
   userId     String
   user       User     @relation(fields: [userId], references: [id])
-  street     String
+  address    String
+  phone      String
   city       String
   postalCode String
-  country    String
+  notes      String
   isDefault  Boolean  @default(false)
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
