@@ -1,5 +1,5 @@
 import Address from "@/components/Shopping-view/Address";
-import Orders from "@/components/Shopping-view/Orders";
+import ShoppingOrders from "@/components/Shopping-view/Orders";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Helmet } from "react-helmet-async";
 
@@ -34,7 +34,7 @@ const ShoppingAccount = () => {
                 <TabsTrigger value="address">Address</TabsTrigger>
               </TabsList>
               <TabsContent value="orders">
-                <Orders/>
+                <ShoppingOrders/>
               </TabsContent>
 
               <TabsContent value="address">
