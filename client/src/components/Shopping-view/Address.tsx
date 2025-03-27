@@ -1,20 +1,23 @@
 import { addressFormControls, initalAddressFormData } from "@/config"
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card"
-import { FormEvent, useEffect, useState } from "react"
+import React, { FormEvent, useEffect, useState } from "react"
 import CommonForm from "../Common/Form"
-import AddressList from "./AddressList"
 import { useDispatch, useSelector } from "react-redux"
 import { AppDispatch, RootState } from "@/store/store"
 import { addAddress, deleteAddress, editAddress, fetchAllAddress } from "@/store/shop/addressSlice"
 import AddressCard, { AddressData } from "./AddressCard"
 import { useCustomToast } from "@/hooks/useCustomToast"
 
-
-const Address = () => {
+interface props {
+  selectedId:string
+  setCurrentSelectedAddress :(address: AddressData) => void;
+}
+const Address = ({selectedId,setCurrentSelectedAddress}:props) => {
     const [formData,setFormData] = useState(initalAddressFormData);
     const dispatch = useDispatch<AppDispatch>()
   const {showToast} = useCustomToast();
   const [currentEditedId, setCurrentEditedId] = useState(null)
+  // const [] = React.useState("");
     const {user} = useSelector((state: RootState) => state.auth);
     const {addressList} = useSelector((state:RootState)=>state.address);
     const handleSubmitAddress = async (e: FormEvent) => {
@@ -110,9 +113,6 @@ const Address = () => {
           })
         })
       };
-      const setCurrentSelectedAddress = (getCurrentAddress: AddressData) => {
-
-      };
     return (
     <Card>
         <div className="mb-3 p-3 grid grid-cols-1 sm:grid-cols-2  gap-3">
@@ -122,11 +122,11 @@ const Address = () => {
                 addressList.map((address, index) => (
                     <AddressCard
                       key={index}
-                      // selectedId={selectedId}
                       addressInfo={address}
                       handleEditAddress={handleEdit}
                       handleDeleteAddress={handleDelete}
                       setCurrentSelectedAddress={setCurrentSelectedAddress}
+                      selectedId={selectedId}
                     />
                   )) :
                 <p>No Address Found</p>

@@ -46,7 +46,6 @@ export interface DeleteCartItemsPayload {
   productId: string;
 }
 
-// Define a generic API response type for cart actions
 export interface CartApiResponse {
   success: boolean;
   message: string;
@@ -67,8 +66,8 @@ const initialState: CartState = {
 // ----------------------
 
 export const addToCart = createAsyncThunk<
-  CartApiResponse, // Return type
-  AddToCartPayload, // Argument type
+  CartApiResponse, 
+  AddToCartPayload,
   { rejectValue: string }
 >(
   "cart/addToCart",

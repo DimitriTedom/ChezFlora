@@ -13,6 +13,8 @@ import adminProductsRouter from './routes/admin/products.routes';
 import getFiltereProductsRouter from './routes/shop/products.routes';
 import shopProductsRouter from './routes/shop/cart.routes'
 import shopAdressRouter from './routes/shop/address.routes'
+import shopOrderRouter from './routes/shop/Order.routes'
+
 import cookieParser from 'cookie-parser';
 import helmet from 'helmet';
 dotenv.config();
@@ -44,6 +46,7 @@ app.use('/api/shop/products',getFiltereProductsRouter);
 app.use('/api/admin/products', adminProductsRouter);
 app.use('/api/shop/cart',shopProductsRouter)
 app.use('/api/shop/address',shopAdressRouter);
+app.use('/api/shop/order',shopOrderRouter);
 app.use(morgan('combined'));
 
 setupSwagger(app);

@@ -13,6 +13,9 @@ export const envs = {
 	CLOUDINARY_CLOUD_NAME: get('CLOUDINARY_CLOUD_NAME').default('cloud_name').asString(),
 	CLOUDINARY_API_KEY: get('CLOUDINARY_API_KEY').default('api_key').asString(),
 	CLOUDINARY_API_SECRET:get('CLOUDINARY_API_SECRET').default('your_api_secret').asString(),
+	PAYPAL_MODE:get('PAYPAL_MODE').default('paypal_mode').asString(),
+	PAYPAL_CLIENT_ID:get('PAYPAL_CLIENT_ID').default('your_client_id').asString(),
+	PAYPAL_CLIENT_SECRET:get('PAYPAL_CLIENT_SECRET').default('your_client_secret').asString(),
 };
 
 Object.entries(envs).forEach(([key, value]) => {

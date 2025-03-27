@@ -45,7 +45,30 @@ enum EventType {
   VALENTINES
   WOMENDAY
 }
+enum PaymentStatus {
+  PENDING
+  PAID
+  FAILED
+  REFUNDED
+}
+// Embedded Types (for Order)
 
+type CartItemDetails {
+  productId String
+  title     String
+  image     String
+  price     Float
+  quantity  Int
+}
+
+type AddressInfo {
+  addressId String
+  address   String
+  city      String
+  postalCode   String
+  phone     String
+  notes     String?
+}
 // Models
 
 model Product {
@@ -93,9 +116,9 @@ model Order {
   cartId           String
   cartItems        CartItemDetails[]
   addressInfo      AddressInfo
-  orderStatus      String
+  orderStatus      Status    @default(PENDING)
   paymentMethod    String
-  paymentStatus    String
+  paymentStatus PaymentStatus @default(PENDING)
   totalAmount      Float
   orderDate        DateTime @default(now())
   orderUpdateDate  DateTime @updatedAt
@@ -137,26 +160,8 @@ model CartItem {
   quantity  Int     @default(1)
 }
 
-// Embedded Types (for Order)
 
-type CartItemDetails {
-  productId String
-  title     String
-  image     String
-  price     Float
-  quantity  Int
-}
 
-type AddressInfo {
-  addressId String
-  address   String
-  city      String
-  pincode   String
-  phone     String
-  notes     String?
-}
-
-// Other models remain unchanged
 
 model Comment {
   id        String   @id @default(auto()) @map("_id") @db.ObjectId

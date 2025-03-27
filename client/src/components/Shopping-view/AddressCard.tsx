@@ -38,14 +38,14 @@ interface AddressCardProps {
 }: AddressCardProps) {
   return (
     <Card
-      onClick={() => setCurrentSelectedAddress?.(addressInfo)}
+      onClick={()=>setCurrentSelectedAddress(addressInfo)  ? () => setCurrentSelectedAddress(addressInfo) : null}
       className={`w-full max-w-md relative transition-all ${
-        selectedId === addressInfo._id
+        selectedId === addressInfo.id
           ? "border-2 border-primary shadow-lg"
           : "border border-gray-200"
       }`}
     >
-      {addressInfo.isDefault && (
+      {selectedId === addressInfo.id && (
         <Badge className="absolute top-2 right-2 bg-green-100 text-green-800">
           Default
         </Badge>

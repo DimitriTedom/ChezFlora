@@ -1,13 +1,29 @@
 import Address from "@/components/Shopping-view/Address";
-import { RootState } from "@/store/store";
+import { AppDispatch, RootState } from "@/store/store";
 import { Helmet } from "react-helmet-async";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import CartItemComponent from "@/pages/Shopping-view/Carts/ShoopingCartItem";
 import { Button } from "@/components/ui/button";
-import { useNavigate } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
+import { CartItem } from "@/store/shop/cartSlice";
+import React, { useState } from "react";
+import { AddressData } from "@/components/Shopping-view/AddressCard";
+import { createNewOrder } from "@/store/shop/OrderSlice";
 
 const ShoppingCheckout = () => {
   const {cartItems} = useSelector((state:RootState) => state.shoppingCart)
+  const {user} = useSelector((state:RootState) => state.auth)
+  const [currentSelectedAddress,setCurrentSelectedAddress] = React.useState<AddressData>({
+    id: '',
+    address: '',
+    city: '',
+    postalCode: '',
+    phone: '',
+    notes: '',
+  });
+  const [isPaymentStart,setIsPaymentStart] = useState<boolean>(false);
+  const {approvalURL} = useSelector((state:RootState)=>state.shopOrder)
+  const dispatch = useDispatch<AppDispatch>()
   const totalCartAmount: number =
   cartItems && cartItems.items && cartItems.items.length > 0
     ? cartItems.items.reduce((sum, currentItem) => {
@@ -18,7 +34,47 @@ const ShoppingCheckout = () => {
         return sum + price * currentItem.quantity;
       }, 0)
     : 0;
-    const navigate = useNavigate()
+    // const navigate = useNavigate()
+  const  handleInitiatePayapalPayment = () =>{
+    const orderData = {
+      userId:user?.id,
+      cartId: cartItems?.id,
+      cartItems: cartItems.items.map((singleCartItem :CartItem)=>({
+        productId : singleCartItem.productId,
+        title     : singleCartItem.product.name,
+        image     : singleCartItem.product.image,
+        price     : singleCartItem.product.saleprice > 0 ? singleCartItem.product.saleprice : singleCartItem.product.price,
+        quantity  : singleCartItem.quantity,
+      })),
+      addressInfo:{
+        addressId: currentSelectedAddress.id,
+        address: currentSelectedAddress.address,
+        city: currentSelectedAddress.city,
+        postalCode: currentSelectedAddress.postalCode,
+        phone: currentSelectedAddress.phone,
+        notes: currentSelectedAddress.notes,
+      },
+      orderStatus: 'PENDING',
+      paymentMethod: 'paypal',
+      paymentStatus : 'PENDING',
+      totalAmount : totalCartAmount,
+      orderDate : new Date(),
+      orderUpdateDate : new Date(),
+      paymentId : '',
+      payerId: '',
+    }
+    dispatch(createNewOrder(orderData)).unwrap().then((data)=>{
+      console.log(data,"snow");
+      if(data?.success){
+        setIsPaymentStart(true)
+      }else{
+        setIsPaymentStart(false)
+      }
+    })
+  }
+  if(approvalURL){
+    window.location.href = approvalURL;
+  }
   return (
     <div>
       <Helmet>
@@ -41,7 +97,10 @@ const ShoppingCheckout = () => {
           <img src="/account.jpg" alt="checkout image" className="h-full w-full object-cover object-center"/>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4  p-5">
-          <Address/>
+          <Address
+          selectedId={currentSelectedAddress.id}
+          setCurrentSelectedAddress={setCurrentSelectedAddress}
+          />
           <div className="flex flex-col lg:px-6 gap-4  w-full">
           {cartItems && cartItems?.items && cartItems.items.length > 0 ? (
           cartItems.items.map((item) => (
@@ -56,10 +115,10 @@ const ShoppingCheckout = () => {
           <p className="text-xl font-bold">${totalCartAmount.toFixed(2)}</p>
         </div>
         <Button
-          onClick={()=>navigate('/shop/checkout')}
+          onClick={handleInitiatePayapalPayment}
           className="bg-pink-300 hover:bg-pink-400 text-white font-semibold rounded-full w-full"
         >
-          Checkout Now
+          Checkout with Paypal
         </Button>
       </div>
           </div>
