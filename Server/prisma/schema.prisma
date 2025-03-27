@@ -8,7 +8,6 @@ datasource db {
 }
 
 // Enums (Category, Role, Status, ArticleCategory, EventType)
-// [Enums remain unchanged]
 
 enum Category {
   FRESH_FLOWERS
@@ -88,13 +87,22 @@ model User {
 }
 
 model Order {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  userId    String
-  user      User     @relation(fields: [userId], references: [id])
-  products  Json // Example: [{ productId: "123", quantity: 2 }]
-  status    Status   @default(PENDING)
-  total     Float
-  createdAt DateTime @default(now())
+  id               String    @id @default(auto()) @map("_id") @db.ObjectId
+  userId           String
+  user             User      @relation(fields: [userId], references: [id])
+  cartId           String
+  cartItems        CartItemDetails[]
+  addressInfo      AddressInfo
+  orderStatus      String
+  paymentMethod    String
+  paymentStatus    String
+  totalAmount      Float
+  orderDate        DateTime @default(now())
+  orderUpdateDate  DateTime @updatedAt
+  paymentId        String?
+  payerId          String?
+
+  createdAt        DateTime @default(now())
 }
 
 model Address {
@@ -110,6 +118,45 @@ model Address {
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
 }
+
+model Cart {
+  id        String     @id @default(auto()) @map("_id") @db.ObjectId
+  userId    String
+  user      User       @relation(fields: [userId], references: [id])
+  items     CartItem[]
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+}
+
+model CartItem {
+  id        String  @id @default(auto()) @map("_id") @db.ObjectId
+  cartId    String
+  cart      Cart    @relation(fields: [cartId], references: [id], onDelete: Cascade)
+  productId String
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+  quantity  Int     @default(1)
+}
+
+// Embedded Types (for Order)
+
+type CartItemDetails {
+  productId String
+  title     String
+  image     String
+  price     Float
+  quantity  Int
+}
+
+type AddressInfo {
+  addressId String
+  address   String
+  city      String
+  pincode   String
+  phone     String
+  notes     String?
+}
+
+// Other models remain unchanged
 
 model Comment {
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
@@ -150,24 +197,6 @@ model QuoteRequest {
   updatedAt   DateTime  @updatedAt
 }
 
-model Cart {
-  id        String     @id @default(auto()) @map("_id") @db.ObjectId
-  userId    String
-  user      User       @relation(fields: [userId], references: [id])
-  items     CartItem[]
-  createdAt DateTime   @default(now())
-  updatedAt DateTime   @updatedAt
-}
-
-model CartItem {
-  id        String  @id @default(auto()) @map("_id") @db.ObjectId
-  cartId    String
-  cart      Cart    @relation(fields: [cartId], references: [id], onDelete: Cascade)
-  productId String
-  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
-  quantity  Int     @default(1)
-}
-
 // Refined Review Model
 
 model Review {
@@ -180,6 +209,7 @@ model Review {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
+
 
 //A Review should have a one-to-many relation with User and Product, meaning multiple users can review the same product.
 //A CartItem should have a many-to-one relation with Product because multiple users can add the same product to their cart.
