@@ -1,8 +1,7 @@
-import { PrismaClient } from '@prisma/client';
 import { HttpCode } from '../../core/constants';
 import { Request, Response } from 'express';
+import { prisma } from '../auth.controller';
 
-const prisma = new PrismaClient();
 
 //Add to cart. this is thelogic i propose :
 //1 Find or create a cart for the user.

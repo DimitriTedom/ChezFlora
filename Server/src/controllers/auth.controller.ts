@@ -8,7 +8,7 @@ import { errorHandler } from '../middlewares/auth.middleware';
 import nodemailer from 'nodemailer';
 import hbs from 'nodemailer-express-handlebars';
 import path from 'path';
-const prisma = new PrismaClient();
+export const prisma = new PrismaClient();
 
 export const register = async (req: Request, res: Response) => {
 	try {

@@ -1,94 +1,88 @@
-import { PrismaClient } from "@prisma/client";
 import { HttpCode } from "../../core/constants";
 import { Request, Response } from "express";
-import paypal from '../../Helpers/paypal'
-const prisma = new PrismaClient();
+import { createPayPalPayment, executePayPalPayment } from "../../services/paypal.service";
+import { prisma } from "../auth.controller";
+import paypal from "../../Helpers/paypal";
 
 export const createOrder = async (req: Request, res: Response) => {
     try {
-        const {userId,cartId,cartItems,addressInfo,orderStatus,paymentMethod,paymentStatus,totalAmount,orderDate,orderUpdateDate,paymentId,payerId} = req.body;
+        const {
+            userId, cartId, cartItems, addressInfo, orderStatus, 
+            paymentMethod, paymentStatus, totalAmount, orderDate, 
+            orderUpdateDate, paymentId, payerId
+        } = req.body;
 
-        //create payement json for paypal instance
+        const paymentData = createPayPalPayment(cartItems, totalAmount);
 
-        const create_payment_json = {
-            intent: 'sale',
-            payer: {
-                payment_method: 'paypal'
-            },
-            redirect_urls:{
-                return_url: 'http://localhost:5173/shop/paypal-return',
-                cancel_url:'http://localhost:5173/shop/paypal-cancel'
-            },
-            transactions:[
-                {
-                    item_list:{
-                        items:cartItems.map(item=>({
-                            name:item.title,
-                            sku:item.productId,
-                            price:item.price.toFixed(2),
-                            currency:'USD',
-                            quantity:item.quantity
-                        }))
-                    },
-                    amount:{
-                        currency:'USD',
-                        total: totalAmount.toFixed(2)
-                    },
-                    description:'description'
-                }
-            ]
-        }
-        paypal.payment.create(create_payment_json,async(error,paymentInfo)=>{
+        paypal.payment.create(paymentData, async (error, paymentInfo) => {
             if (error) {
-                console.log(error)
+                console.error("PayPal Error:", error);
                 return res.status(HttpCode.INTERNAL_SERVER_ERROR).json({
-                    success:false,
-                    message:"Error while creating payment"
-                })
-            }else{
-                const newlyCreatedOrder = await prisma.order.create({
-                    data:{
-                        userId,
-                        cartId,
-                        cartItems,
-                        addressInfo,
-                        orderStatus,
-                        paymentMethod,
-                        paymentStatus,
-                        totalAmount,
-                        orderDate,
-                        orderUpdateDate,
-                        paymentId,
-                        payerId
-                    }
-                })
-                const approvalURL = paymentInfo.links?.find(link=>link.rel === 'approval_url')?.href;
-                res.status(HttpCode.CREATED).json({
-                    success:true,
-                    message:"Payment Order Created Successfully",
-                    approvalURL,
-                    orderId:newlyCreatedOrder.id
-                })
+                    success: false,
+                    message: "Error while creating payment",
+                });
             }
-        })
-    } catch (error: any) {
-      console.error("Error adding address:", error);
-      res.status(HttpCode.INTERNAL_SERVER_ERROR).json({
-        success: false,
-        message: "INTERNAL_SERVER_ERROR",
-      });
-    }
-  };
 
-  //This capture payement will help me verify is the payement is well correctly done
-  export const capturePayment = async (req: Request, res: Response) => {
+            const newlyCreatedOrder = await prisma.order.create({
+                data: {
+                    userId, cartId, cartItems, addressInfo, orderStatus,
+                    paymentMethod, paymentStatus, totalAmount, orderDate,
+                    orderUpdateDate, paymentId, payerId
+                },
+            });
+
+            const approvalURL = paymentInfo.links?.find(link => link.rel === "approval_url")?.href;
+            
+            res.status(HttpCode.CREATED).json({
+                success: true,
+                message: "Payment Order Created Successfully",
+                approvalURL,
+                orderId: newlyCreatedOrder.id,
+            });
+        });
+    } catch (error: unknown) {
+        console.error("Error creating order:", error);
+        res.status(HttpCode.INTERNAL_SERVER_ERROR).json({
+            success: false,
+            message: "INTERNAL_SERVER_ERROR",
+        });
+    }
+};
+
+export const capturePayment = async (req: Request, res: Response) => {
     try {
+                // we nedd to get the payemtId,payerId and orderID
+        const { paymentId, payerId, orderId } = req.body;
 
-    } catch (error: any) {
-      console.error("Error adding address:", error);
-      res.status(HttpCode.INTERNAL_SERVER_ERROR).json({
-        success: false,
-        message: "INTERNAL_SERVER_ERROR",
-      });
+        const order = await prisma.order.findUnique({ where: { id: orderId } });
+        if (!order) {
+            return res.status(HttpCode.NOT_FOUND).json({
+                success: false,
+                message: "Order not found",
+            });
+        }
+
+        // await executePayPalPayment(paymentId, payerId);
+
+        // Delete the cart after successful payment
+        await prisma.cart.delete({ where: { id: order.cartId } });
+
+        // Update order status
+        const updatedOrder = await prisma.order.update({
+            where: { id: orderId },
+            data: { paymentStatus: "PAID", orderStatus: "APPROVED", paymentId, payerId },
+        });
+
+        res.status(HttpCode.OK).json({
+            success: true,
+            message: "Order confirmed successfully",
+            data: updatedOrder,
+        });
+    } catch (error: unknown) {
+        console.error("Error capturing payment:", error);
+        res.status(HttpCode.INTERNAL_SERVER_ERROR).json({
+            success: false,
+            message: "INTERNAL_SERVER_ERROR",
+        });
     }
-  };
+};

@@ -1,8 +1,7 @@
-import { PrismaClient } from '@prisma/client';
 import { HttpCode } from '../../core/constants';
 import { Request, Response } from 'express';
+import { prisma } from '../auth.controller';
 
-const prisma = new PrismaClient();
 export const getFiltereProducts = async (req: Request, res: Response) => {
 	try {
 		const { category = [], event = [], sortBy = 'price-lowtohigh' } = req.query;

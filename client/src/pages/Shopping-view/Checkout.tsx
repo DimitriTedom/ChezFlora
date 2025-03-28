@@ -6,9 +6,10 @@ import CartItemComponent from "@/pages/Shopping-view/Carts/ShoopingCartItem";
 import { Button } from "@/components/ui/button";
 // import { useNavigate } from "react-router-dom";
 import { CartItem } from "@/store/shop/cartSlice";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { AddressData } from "@/components/Shopping-view/AddressCard";
 import { createNewOrder } from "@/store/shop/OrderSlice";
+import { useCustomToast } from "@/hooks/useCustomToast";
 
 const ShoppingCheckout = () => {
   const {cartItems} = useSelector((state:RootState) => state.shoppingCart)
@@ -22,8 +23,9 @@ const ShoppingCheckout = () => {
     notes: '',
   });
   const [isPaymentStart,setIsPaymentStart] = useState<boolean>(false);
-  const {approvalURL} = useSelector((state:RootState)=>state.shopOrder)
+  const {approvalURL,isLoading} = useSelector((state:RootState)=>state.shopOrder)
   const dispatch = useDispatch<AppDispatch>()
+  const {showToast}= useCustomToast()
   const totalCartAmount: number =
   cartItems && cartItems.items && cartItems.items.length > 0
     ? cartItems.items.reduce((sum, currentItem) => {
@@ -64,14 +66,29 @@ const ShoppingCheckout = () => {
       payerId: '',
     }
     dispatch(createNewOrder(orderData)).unwrap().then((data)=>{
-      console.log(data,"snow");
       if(data?.success){
         setIsPaymentStart(true)
+        showToast({
+          message:data.message,
+          type:"success",
+          subtitle: "You will soone be redirected to payment page",
+          duration:5000
+        })
       }else{
         setIsPaymentStart(false)
       }
+    }).catch((error)=>{
+
+      showToast({
+        message:'An error Occcured',
+        type:"error",
+        duration:3000
+      })
     })
   }
+  // useEffect(()=>{
+
+  // },[approvalURL,dispatch])
   if(approvalURL){
     window.location.href = approvalURL;
   }
@@ -118,7 +135,7 @@ const ShoppingCheckout = () => {
           onClick={handleInitiatePayapalPayment}
           className="bg-pink-300 hover:bg-pink-400 text-white font-semibold rounded-full w-full"
         >
-          Checkout with Paypal
+         {isLoading ? "please wait..." : "Checkout with Paypal"}
         </Button>
       </div>
           </div>

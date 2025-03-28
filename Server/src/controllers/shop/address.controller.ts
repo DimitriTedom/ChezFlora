@@ -1,8 +1,7 @@
-import { PrismaClient } from "@prisma/client";
 import { HttpCode } from "../../core/constants";
 import { Request, Response } from "express";
+import { prisma } from "../auth.controller";
 
-const prisma = new PrismaClient();
 
 // Create a new address
 export const addAdresss = async (req: Request, res: Response) => {
