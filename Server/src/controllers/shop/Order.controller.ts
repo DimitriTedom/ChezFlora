@@ -62,7 +62,7 @@ export const capturePayment = async (req: Request, res: Response) => {
             });
         }
 
-        // await executePayPalPayment(paymentId, payerId);
+        await executePayPalPayment(paymentId, payerId);
 
         // Delete the cart after successful payment
         await prisma.cart.delete({ where: { id: order.cartId } });

@@ -34,6 +34,7 @@ import ForgotPassword from "./pages/Auth/ForgotPassword";
 import EnterNewPassword from "./pages/Auth/EnterNewPassword";
 import ShoppingProductDetail from "./pages/Shopping-view/ShoppingProductDetail";
 import PaypalReturnPage from "./pages/Shopping-view/Order/PaypalReturn";
+import PaymentSuccessPage from "./pages/Shopping-view/Order/PaymentSuccess";
 export default function Home() {
   const { user, isAuthenticated, isLoading } = useSelector(
     (state: RootState) => state.auth
@@ -120,6 +121,7 @@ export default function Home() {
           <Route path="blog/:id" element={<BlogPostPage />} />
           <Route path="contact" element={<ShoppingContact />} />
           <Route path="paypal-return" element={<PaypalReturnPage />} />
+          <Route path="payment-success" element={<PaymentSuccessPage/>} />
         </Route>
         <Route path="/unauth-page" element={<UnAuthPage />} />
         <Route path="*" element={<NotFound />} />

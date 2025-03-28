@@ -89,6 +89,7 @@ const ShoppingCheckout = () => {
   // useEffect(()=>{
 
   // },[approvalURL,dispatch])
+  console.log(approvalURL,"approval url")
   if(approvalURL){
     window.location.href = approvalURL;
   }
