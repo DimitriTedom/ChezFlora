@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { Button } from "../ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
-import { Dialog } from "../ui/dialog";
+import { Dialog, DialogContent, DialogTrigger } from "../ui/dialog";
 import {
   Table,
   TableBody,
@@ -13,20 +13,34 @@ import {
 import ShoppingOrderDetail from "./ShoppingOrderDetail";
 import { AppDispatch, RootState } from "@/store/store";
 import { useDispatch, useSelector } from "react-redux";
-import { getAllOrdersByUser, Order } from "@/store/shop/OrderSlice";
+import {
+  getAllOrdersByUser,
+  getOrderDetails,
+  Order,
+  resetOrderDetails,
+} from "@/store/shop/OrderSlice";
 import { Badge } from "../ui/badge";
 
 const ShoppingOrders = () => {
   const [openDetailsDialog, setOpenDetailsDialog] = React.useState(false);
   const dispatch = useDispatch<AppDispatch>();
   const { user } = useSelector((state: RootState) => state.auth);
-  const { isLoading, orderList } = useSelector(
+  const { isLoading, orderList, orderDetails } = useSelector(
     (state: RootState) => state.shopOrder
   );
+  const handleFetchOrderDetails = (orderId: string) => {
+    dispatch(getOrderDetails(orderId));
+  };
   useEffect(() => {
     dispatch(getAllOrdersByUser(user?.id));
   }, [dispatch, user]);
-  console.log(orderList, "orderList");
+
+  useEffect(() => {
+    if (orderDetails !== null) {
+      setOpenDetailsDialog(true);
+    }
+  }, [orderDetails]);
+  console.log(orderDetails, "orderdeatils");
   return (
     <Card>
       <CardHeader>
@@ -49,7 +63,7 @@ const ShoppingOrders = () => {
             {orderList &&
               orderList.length > 0 &&
               orderList.map((orderItem: Order) => (
-                <TableRow>
+                <TableRow key={orderItem.id}>
                   <TableCell>#{orderItem.id}</TableCell>
                   <TableCell>
                     <Badge
@@ -79,12 +93,26 @@ const ShoppingOrders = () => {
                   <TableCell>
                     <Dialog
                       open={openDetailsDialog}
-                      onOpenChange={setOpenDetailsDialog}
+                      onOpenChange={(open) => {
+                        if (!open) {
+                          dispatch(resetOrderDetails());
+                        }
+                        setOpenDetailsDialog(open);
+                      }}
                     >
-                      <Button onClick={() => setOpenDetailsDialog(true)}>
-                        View Details
-                      </Button>
-                      <ShoppingOrderDetail />
+                      <DialogTrigger asChild>
+                        <Button
+                          onClick={() => handleFetchOrderDetails(orderItem.id)}
+                          disabled={isLoading}
+                        >
+                          View Details
+                        </Button>
+                      </DialogTrigger>
+                      <DialogContent>
+                        {orderDetails && (
+                          <ShoppingOrderDetail orderDetails={orderDetails} />
+                        )}
+                      </DialogContent>
                     </Dialog>
                   </TableCell>
                 </TableRow>

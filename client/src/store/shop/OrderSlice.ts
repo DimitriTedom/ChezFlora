@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
+import { Square } from "lucide-react";
 
 interface CartItemDetails {
   productId: string;
@@ -55,9 +56,33 @@ const initialState = {
   approvalURL: null,
   isLoading: false,
   orderId: "",
-  orderList: [],
-  orderDetails: null,
+  orderList: [] as Order[], 
+  orderDetails: {
+    id: "",
+    userId: undefined,
+    cartId: "",
+    cartItems: [] as CartItemDetails[], 
+    addressInfo: {
+      addressId: "",
+      address: "",
+      city: "",
+      postalCode: "",
+      phone: "",
+      notes: "",
+    } as AddressInfo,
+    orderStatus: OrderStatus.PENDING,
+    paymentMethod: "",
+    paymentStatus: PaymentStatus.PENDING, 
+    totalAmount: 0,
+    orderDate: new Date(),
+    orderUpdateDate: new Date(), 
+    paymentId: undefined,
+    payerId: undefined,
+  } as Order,
 };
+
+
+
 
 export const createNewOrder = createAsyncThunk(
   "/order/createNewOrder",
@@ -101,7 +126,11 @@ export const getAllOrdersByUser = createAsyncThunk(
 const ShoppingORderSlice = createSlice({
   name: "ShoppingOrderSlice",
   initialState,
-  reducers: {},
+  reducers: {
+    resetOrderDetails:(state)=>{
+      state.orderDetails = null
+    }
+  },
   extraReducers: (builder) => {
     builder
       .addCase(createNewOrder.pending, (state) => {
@@ -150,3 +179,4 @@ const ShoppingORderSlice = createSlice({
 export default ShoppingORderSlice.reducer;
 export type { CartItemDetails, AddressInfo, Order };
 export { OrderStatus, PaymentStatus };
+export const {resetOrderDetails} = ShoppingORderSlice.actions

@@ -22,11 +22,11 @@ const ShoppingAccount = () => {
         {/* Dashboard UI mockup */}
       </Helmet>
       <div className="mt-32 flex flex-col">
-        <div className="relative z-10 h-[300px] w-full overflow-hidden">
-        <img src="/account.jpg" alt="account" className="w-full h-full object-cover object-center"/>
+        <div className="relative z-10 h-[400px] w-full  overflow-hidden rounded-2xl">
+        <img src="/account2.jpg" alt="account" className="w-full h-full object-cover object-center rounded-2xl bg-red-300"/>
         </div>
 
-        <div className="mx-auto mt-8 bg-red-500 w-full">
+        <div className="mx-auto mt-8  w-full">
           <div className="flex flex-col rounded-lg border bg-background p-6 shadow-md w-full bg-green-200">
             <Tabs defaultValue="orders" className="w-full">
               <TabsList>
