@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import { CartItem } from "@/store/shop/cartSlice";
 import React, { useEffect, useState } from "react";
 import { AddressData } from "@/components/Shopping-view/AddressCard";
-import { createNewOrder } from "@/store/shop/OrderSlice";
+import { createNewOrder, Order, OrderStatus, PaymentStatus } from "@/store/shop/OrderSlice";
 import { useCustomToast } from "@/hooks/useCustomToast";
 
 const ShoppingCheckout = () => {
@@ -38,7 +38,24 @@ const ShoppingCheckout = () => {
     : 0;
     // const navigate = useNavigate()
   const  handleInitiatePayapalPayment = () =>{
-    const orderData = {
+    if (cartItems?.length === 0) {
+      showToast({
+        message: "Your cart is empty.",
+        subtitle: "Please add some items to your cart before checking out.",
+        type: "error",
+        duration: 3000,
+      });
+      return;
+    }
+    if(currentSelectedAddress.id === ''){
+      showToast({
+        message: "Please select an address to proceed",
+        type: "error",
+        duration: 3000,
+      });
+      return
+    }
+    const orderData:Order = {
       userId:user?.id,
       cartId: cartItems?.id,
       cartItems: cartItems.items.map((singleCartItem :CartItem)=>({
@@ -56,9 +73,9 @@ const ShoppingCheckout = () => {
         phone: currentSelectedAddress.phone,
         notes: currentSelectedAddress.notes,
       },
-      orderStatus: 'PENDING',
+      orderStatus: OrderStatus.PENDING,
       paymentMethod: 'paypal',
-      paymentStatus : 'PENDING',
+      paymentStatus : PaymentStatus.PENDING,
       totalAmount : totalCartAmount,
       orderDate : new Date(),
       orderUpdateDate : new Date(),
@@ -71,7 +88,7 @@ const ShoppingCheckout = () => {
         showToast({
           message:data.message,
           type:"success",
-          subtitle: "You will soone be redirected to payment page",
+          subtitle: "You will soon be redirected to payment page",
           duration:5000
         })
       }else{
@@ -110,7 +127,7 @@ const ShoppingCheckout = () => {
         <meta property="og:image" content="/assets/og-checkout.jpg" />{" "}
         {/* Payment confirmation mockup */}
       </Helmet>
-      <div className="mt-32 flex flex-col">
+      <div className="mt-32 min-h-screen flex flex-col">
         <div className="relative h-[300px] w-full overflow-hiddden">
           <img src="/account.jpg" alt="checkout image" className="h-full w-full object-cover object-center"/>
         </div>

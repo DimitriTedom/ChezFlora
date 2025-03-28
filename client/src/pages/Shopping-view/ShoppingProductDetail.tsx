@@ -346,7 +346,7 @@ const ShoppingProductDetail: React.FC = () => {
                     : productDetails.price}
                 </p>
                 <Badge className="bg-red-500 flex text-white px-2.5 py-1 gap-1 rounded-full">
-                  -{discountPercentage}% <span>PROMO</span>
+                  -{discountPercentage || 0}% <span>PROMO</span>
                 </Badge>
               </div>
             </CardHeader>

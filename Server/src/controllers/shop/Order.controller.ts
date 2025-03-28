@@ -86,3 +86,52 @@ export const capturePayment = async (req: Request, res: Response) => {
         });
     }
 };
+
+export const getAllOrdersByUser = async (req: Request, res: Response) => {
+    try {
+        const {userId} = req.params;
+
+        const orders = await prisma.order.findMany({where:{userId}});
+        if (!orders) {
+            return res.status(HttpCode.NOT_FOUND).json({
+                success: false,
+                message: "No Orders found",
+            });
+        }
+        res.status(HttpCode.OK).json({
+            success: true,
+            message: "Orders fetched successfully",
+            data: orders,
+        });
+    } catch (error: unknown) {
+        console.error("Error capturing payment:", error);
+        res.status(HttpCode.INTERNAL_SERVER_ERROR).json({
+            success: false,
+            message: "INTERNAL_SERVER_ERROR",
+        });
+    }
+};
+
+export const getOrderDetails = async (req: Request, res: Response) => {
+    try {
+        const {id} = req.params;
+        const order = await prisma.order.findUnique({where:{id}});
+        if (!order) {
+            return res.status(HttpCode.NOT_FOUND).json({
+                success: false,
+                message: "Order not found",
+            });
+        }
+        res.status(HttpCode.OK).json({
+            success: true,
+            message: "Order fetched successfully",
+            data: order,
+        });
+    } catch (error: unknown) {
+        console.error("Error capturing payment:", error);
+        res.status(HttpCode.INTERNAL_SERVER_ERROR).json({
+            success: false,
+            message: "INTERNAL_SERVER_ERROR",
+        });
+    }
+};
