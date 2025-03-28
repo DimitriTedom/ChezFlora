@@ -32,6 +32,7 @@ const ShoppingOrders = () => {
     dispatch(getOrderDetails(orderId));
   };
   useEffect(() => {
+    dispatch(resetOrderDetails());
     dispatch(getAllOrdersByUser(user?.id));
   }, [dispatch, user]);
 
@@ -40,7 +41,6 @@ const ShoppingOrders = () => {
       setOpenDetailsDialog(true);
     }
   }, [orderDetails]);
-  console.log(orderDetails, "orderdeatils");
   return (
     <Card>
       <CardHeader>

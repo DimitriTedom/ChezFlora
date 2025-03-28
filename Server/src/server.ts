@@ -14,6 +14,7 @@ import getFiltereProductsRouter from './routes/shop/products.routes';
 import shopProductsRouter from './routes/shop/cart.routes'
 import shopAdressRouter from './routes/shop/address.routes'
 import shopOrderRouter from './routes/shop/Order.routes'
+import AdminOrderRouter from './routes/admin/Orders.routes'
 
 import cookieParser from 'cookie-parser';
 import helmet from 'helmet';
@@ -47,6 +48,7 @@ app.use('/api/admin/products', adminProductsRouter);
 app.use('/api/shop/cart',shopProductsRouter)
 app.use('/api/shop/address',shopAdressRouter);
 app.use('/api/shop/order',shopOrderRouter);
+app.use('/api/admin/orders',AdminOrderRouter);
 app.use(morgan('combined'));
 
 setupSwagger(app);
