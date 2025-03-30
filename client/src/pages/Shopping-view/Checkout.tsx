@@ -129,7 +129,7 @@ const ShoppingCheckout = () => {
       </Helmet>
       <div className="mt-32 min-h-screen flex flex-col">
         <div className="relative h-[300px] w-full overflow-hiddden">
-          <img src="/account.jpg" alt="checkout image" className="h-full w-full object-cover object-center"/>
+          <img src="/account2.jpg" alt="checkout image" className="h-full w-full object-cover object-center"/>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4  p-5">
           <Address

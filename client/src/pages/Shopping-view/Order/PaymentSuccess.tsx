@@ -11,8 +11,10 @@ import { getOrderDetails } from '@/store/shop/OrderSlice';
 
 const PaymentSuccessPage = () => {
   const history = useNavigate();
-  const {orderDetails,orderId} = useSelector((state: RootState) => state.shopOrder);
+  const {orderDetails} = useSelector((state: RootState) => state.shopOrder);
   // Example order data; in a real app, you might fetch this using the orderId from session or context.
+  const orderId = JSON.parse(sessionStorage.getItem("currentOrderId") || "null");
+
   const dispatch = useDispatch<AppDispatch>()
     dispatch(getOrderDetails(orderId));
 
@@ -23,7 +25,7 @@ const PaymentSuccessPage = () => {
   const handleViewOrderDetails = () => {
     history(`/shop/detail/${orderSummary.orderNumber}`);
   };
-
+          sessionStorage.removeItem("currentOrderId");
   return (
     <div className="min-h-screen flex flex-col items-center justify-center p-4">
       {/* Confetti effect for celebration */}

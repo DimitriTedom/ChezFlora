@@ -19,7 +19,7 @@ const PaypalReturnPage = () => {
       dispatch(capturePayment({paymentId, payerId, orderId})).unwrap().then((data)=>{
         console.log(data,"after capture payment")
         if(data.success){
-          sessionStorage.removeItem("currentOrderId");
+          // sessionStorage.removeItem("currentOrderId");
           showToast({
             message: data.message,
             type: "success",
