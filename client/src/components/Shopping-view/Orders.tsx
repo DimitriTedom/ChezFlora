@@ -23,24 +23,30 @@ import { Badge } from "../ui/badge";
 
 const ShoppingOrders = () => {
   const [openDetailsDialog, setOpenDetailsDialog] = React.useState(false);
+  const [selectedOrderId, setSelectedOrderId] = React.useState<string | null>(
+    null
+  );
   const dispatch = useDispatch<AppDispatch>();
   const { user } = useSelector((state: RootState) => state.auth);
   const { isLoading, orderList, orderDetails } = useSelector(
     (state: RootState) => state.shopOrder
   );
-  const handleFetchOrderDetails = (orderId: string) => {
-    dispatch(getOrderDetails(orderId));
+  const handleFetchOrderDetails = async (orderId: string) => {
+   await dispatch(getOrderDetails(orderId));
+   setSelectedOrderId(orderId);
+   console.log(orderId, "selectedOrderId (before state updates)");
+    setOpenDetailsDialog(true);
   };
   useEffect(() => {
-    dispatch(resetOrderDetails());
     dispatch(getAllOrdersByUser(user?.id));
   }, [dispatch, user]);
 
-  useEffect(() => {
-    if (orderDetails !== null) {
-      setOpenDetailsDialog(true);
-    }
-  }, [orderDetails]);
+
+  const handleCloseDialog = () =>{
+    setOpenDetailsDialog(false);
+    dispatch(resetOrderDetails());
+    setSelectedOrderId(null);
+  }
   return (
     <Card>
       <CardHeader>
@@ -60,20 +66,17 @@ const ShoppingOrders = () => {
             </TableRow>
           </TableHeader>
           <Dialog
-                      open={openDetailsDialog}
-                      onOpenChange={() => {
-                          dispatch(resetOrderDetails());
-                        setOpenDetailsDialog(true);
-                      }}
-                    >
-                      <DialogTrigger asChild>
-                      </DialogTrigger>
-                      <DialogContent>
-                        {orderDetails && (
-                          <ShoppingOrderDetail orderDetails={orderDetails} />
-                        )}
-                      </DialogContent>
-                    </Dialog>
+            open={openDetailsDialog}
+            onOpenChange={handleCloseDialog}
+          >
+            <DialogContent>
+              {orderDetails && selectedOrderId && orderDetails.id === selectedOrderId ? (
+                <ShoppingOrderDetail orderDetails={orderDetails} />
+              ) : (
+                <p>Loading...</p>
+              )}
+            </DialogContent>
+          </Dialog>
           <TableBody>
             {orderList &&
               orderList.length > 0 &&
@@ -106,13 +109,12 @@ const ShoppingOrders = () => {
                   <TableCell>{orderItem.orderDate.split("T")[0]}</TableCell>
                   <TableCell>${orderItem.totalAmount}</TableCell>
                   <TableCell>
-
-                        <Button
-                          onClick={() => handleFetchOrderDetails(orderItem.id)}
-                          disabled={isLoading}
-                        >
-                          View Details
-                        </Button>
+                    <Button
+                      onClick={() => handleFetchOrderDetails(orderItem.id)}
+                      disabled={isLoading}
+                    >
+                      View Details
+                    </Button>
                   </TableCell>
                 </TableRow>
               ))}

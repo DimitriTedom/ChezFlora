@@ -48,11 +48,7 @@ const AdminOrders = () => {
   useEffect(() => {
     dispatch(getAllOrdersofAllUsers());
   }, [dispatch]);
-  // useEffect(()=>{
-  //   if (orderDetails !== null) {
-  //     setOpenDetailsDialog(true);
-  //   }
-  // },[orderDetails])
+
   const handleCloseDialog = () => {
     setOpenDetailsDialog(false);
     dispatch(resetOrderDetails());
