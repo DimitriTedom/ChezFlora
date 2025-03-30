@@ -1,6 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
-import { Square } from "lucide-react";
 
 interface CartItemDetails {
   productId: string;
@@ -128,7 +127,28 @@ const ShoppingORderSlice = createSlice({
   initialState,
   reducers: {
     resetOrderDetails:(state)=>{
-      state.orderDetails = null
+      state.orderDetails = {
+        id: "",
+        userId: undefined,
+        cartId: "",
+        cartItems: [] as CartItemDetails[], 
+        addressInfo: {
+          addressId: "",
+          address: "",
+          city: "",
+          postalCode: "",
+          phone: "",
+          notes: "",
+        } as AddressInfo,
+        orderStatus: OrderStatus.PENDING,
+        paymentMethod: "",
+        paymentStatus: PaymentStatus.PENDING, 
+        totalAmount: 0,
+        orderDate: new Date(),
+        orderUpdateDate: new Date(), 
+        paymentId: undefined,
+        payerId: undefined,
+      } as Order
     }
   },
   extraReducers: (builder) => {
@@ -159,7 +179,28 @@ const ShoppingORderSlice = createSlice({
       })
       .addCase(getOrderDetails.rejected, (state) => {
         state.isLoading = false;
-        state.orderDetails = null;
+        state.orderDetails = {
+          id: "",
+          userId: undefined,
+          cartId: "",
+          cartItems: [] as CartItemDetails[], 
+          addressInfo: {
+            addressId: "",
+            address: "",
+            city: "",
+            postalCode: "",
+            phone: "",
+            notes: "",
+          } as AddressInfo,
+          orderStatus: OrderStatus.PENDING,
+          paymentMethod: "",
+          paymentStatus: PaymentStatus.PENDING, 
+          totalAmount: 0,
+          orderDate: new Date(),
+          orderUpdateDate: new Date(), 
+          paymentId: undefined,
+          payerId: undefined,
+        } as Order;
       })
       .addCase(getAllOrdersByUser.pending, (state) => {
         state.isLoading = true;

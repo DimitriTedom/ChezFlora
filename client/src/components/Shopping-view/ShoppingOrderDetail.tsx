@@ -1,26 +1,18 @@
-import React from "react";
 import { DialogContent } from "../ui/dialog";
-import { Label } from "../ui/label";
 import { Separator } from "../ui/separator";
 import { Order } from "@/store/shop/OrderSlice";
 import { Badge } from "../ui/badge";
 import { Clock, Package, CreditCard, MapPin, Info } from "lucide-react";
+import { formatDate } from "@/lib/utils";
 
 interface Props {
   orderDetails: Order;
 }
 
+
 const ShoppingOrderDetail = ({ orderDetails }: Props) => {
   if (!orderDetails) return null;
 
-  const formatDate = (dateString: string | Date) => {
-    const date = new Date(dateString);
-    return date.toLocaleDateString("en-US", {
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-    });
-  };
 
   return (
     <DialogContent className="max-w-[800px] p-8 rounded-lg shadow-xl">

@@ -1,7 +1,7 @@
 import { HttpCode } from "../../core/constants";
 import { Request, Response } from "express";
-import { createPayPalPayment, executePayPalPayment } from "../../services/paypal.service";
 import { prisma } from "../auth.controller";
+import { createPayPalPayment, executePayPalPayment } from "../../services/paypal.service";
 import paypal from "../../Helpers/paypal";
 
 export const createOrder = async (req: Request, res: Response) => {
@@ -72,10 +72,26 @@ export const capturePayment = async (req: Request, res: Response) => {
             where: { id: orderId },
             data: { paymentStatus: "PAID", orderStatus: "APPROVED", paymentId, payerId },
         });
+        for(const item of order.cartItems){
+            const product = await prisma.product.findUnique({where:{id:item.productId}})
+            if (!product) {
+                return res.status(HttpCode.NOT_FOUND).json({
+                    success:false,
+                    message: `Not enough stock for ${product?.name}`
+                })
+            }
 
+            await prisma.product.update({
+                where:{id:item.productId},
+                data:{
+                    stock: product.stock -= item.quantity
+                }
+            })
+            
+        }
         res.status(HttpCode.OK).json({
             success: true,
-            message: "Order confirmed successfully",
+            message: `Order ${updatedOrder.id} confirmed successfully`,
             data: updatedOrder,
         });
     } catch (error: unknown) {
@@ -104,7 +120,7 @@ export const getAllOrdersByUser = async (req: Request, res: Response) => {
             data: orders,
         });
     } catch (error: unknown) {
-        console.error("Error capturing payment:", error);
+        console.error("Error getting orders:", error);
         res.status(HttpCode.INTERNAL_SERVER_ERROR).json({
             success: false,
             message: "INTERNAL_SERVER_ERROR",
@@ -128,7 +144,7 @@ export const getOrderDetails = async (req: Request, res: Response) => {
             data: order,
         });
     } catch (error: unknown) {
-        console.error("Error capturing payment:", error);
+        console.error("Error getting Order Details:", error);
         res.status(HttpCode.INTERNAL_SERVER_ERROR).json({
             success: false,
             message: "INTERNAL_SERVER_ERROR",

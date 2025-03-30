@@ -13,11 +13,10 @@ import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Input } from "../ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { AiOutlineMinus, AiOutlinePlus } from "react-icons/ai";
 import { Share2Icon, HeartIcon, ArrowRightIcon, Star } from "lucide-react";
-import { useParams, Link } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/store/store";
 import { fetchProductDetails } from "@/store/shop/ShopProductSlice";
@@ -30,7 +29,7 @@ import { fetchCartItems, addToCart } from "@/store/shop/cartSlice";
 import { MdProductionQuantityLimits } from "react-icons/md";
 
 interface Review {
-  user: string; // id of user
+  user: string;
   rating: number;
   content: string;
   createdAt: string;
@@ -59,7 +58,9 @@ interface ProductDetails {
 }
 
 const ShoppingProductDetail: React.FC = () => {
-  const [productDetails, setProductDetails] = useState<ProductDetails | null>(null);
+  const [productDetails, setProductDetails] = useState<ProductDetails | null>(
+    null
+  );
   const [quantity, setQuantity] = useState<number>(1);
   const [reviewText, setReviewText] = useState<string>("");
   const { id: prodId } = useParams<{ id: string }>();
@@ -83,7 +84,9 @@ const ShoppingProductDetail: React.FC = () => {
                 console.error("No product data returned");
               }
             })
-            .catch((error) => console.error("Error fetching product details:", error));
+            .catch((error) =>
+              console.error("Error fetching product details:", error)
+            );
         }
       } catch (error) {
         console.error("Error fetching product details:", error);
@@ -102,14 +105,21 @@ const ShoppingProductDetail: React.FC = () => {
   // Calculate discount percentage if applicable
   const discountPercentage = productDetails?.saleprice
     ? Math.round(
-        ((productDetails.price - productDetails.saleprice) / productDetails.price) * 100
+        ((productDetails.price - productDetails.saleprice) /
+          productDetails.price) *
+          100
       )
     : null;
 
   // Define gallery images for product
   const myImages: ChezFloraGalleryProps = {
     images: productDetails?.image
-      ? [productDetails.image, "/flowerGen5.jpg", "/flower1.jpg", "/flower12.webp"]
+      ? [
+          productDetails.image,
+          "/flowerGen5.jpg",
+          "/flower1.jpg",
+          "/flower12.webp",
+        ]
       : ["/flowerGen5.jpg", "/flower1.jpg", "/flower12.webp"],
   };
 
@@ -125,18 +135,17 @@ const ShoppingProductDetail: React.FC = () => {
   // Simplify the lookup of current cart quantity without useMemo.
   // This expression safely finds the product in the cart; if not found, defaults to 0.
   const currentCartQty: number = cartItems
-  ? (
-      (cartItems as Cart).items && Array.isArray((cartItems as Cart).items)
-        ? (cartItems as Cart).items.find((item: CartItem) => item.productId === productDetails?.id)?.quantity || 0
-        : 0
-    )
-  : 0;
+    ? (cartItems as Cart).items && Array.isArray((cartItems as Cart).items)
+      ? (cartItems as Cart).items.find(
+          (item: CartItem) => item.productId === productDetails?.id
+        )?.quantity || 0
+      : 0
+    : 0;
 
   // Check if adding more would exceed available stock
   const canAddToCart: boolean =
     productDetails !== null &&
     quantity + currentCartQty <= productDetails.stock;
-
   // "Add to Cart" button appears only when the product is not yet in the cart.
   const showAddToCartButton: boolean = currentCartQty === 0;
 
@@ -151,7 +160,9 @@ const ShoppingProductDetail: React.FC = () => {
       return;
     }
     try {
-      const data = await dispatch(addToCart({ userId: user?.id!, productId: id, quantity })).unwrap();
+      const data = await dispatch(
+        addToCart({ userId: user?.id!, productId: id, quantity })
+      ).unwrap();
       if (data?.success) {
         dispatch(fetchCartItems(user!.id));
         showToast({
@@ -171,13 +182,12 @@ const ShoppingProductDetail: React.FC = () => {
   };
 
   const handleReviewSubmit = () => {
-    console.log("Submitting review:", reviewText);
     setReviewText("");
   };
 
   // Calculate total price for the selected quantity
   const totalPrice = productDetails
-    ? ( (productDetails.saleprice || productDetails.price) * quantity ).toFixed(2)
+    ? ((productDetails.saleprice || productDetails.price) * quantity).toFixed(2)
     : "0";
 
   const handleShare = async () => {
@@ -237,13 +247,21 @@ const ShoppingProductDetail: React.FC = () => {
               <h1 className="text-2xl font-bold mb-3">{productDetails.name}</h1>
               <div className="flex items-center space-x-3 px-3 py-2">
                 <Avatar className="h-12 w-12 xl:h-14 xl:w-14 border-2 border-primary">
-                  <AvatarImage src={user?.image || "/avatar2.svg"} alt="user avatar" />
+                  <AvatarImage
+                    src={user?.image || "/SnowDev (1).png"}
+                    alt="user avatar"
+                  />
                   <AvatarFallback className="bg-primary text-white font-bold">
-                    {user?.name.split(" ").map((n) => n[0]).join("")}
+                    {user?.name
+                      .split(" ")
+                      .map((n) => n[0])
+                      .join("")}
                   </AvatarFallback>
                 </Avatar>
                 <div className="flex flex-col space-y-1">
-                  <p className="text-sm font-medium leading-none">{user?.name}</p>
+                  <p className="text-sm font-medium leading-none">
+                    {user?.name}
+                  </p>
                   <p className="text-xs text-muted-foreground">{user?.role}</p>
                 </div>
               </div>
@@ -306,7 +324,9 @@ const ShoppingProductDetail: React.FC = () => {
                     <div className="flex justify-between items-center">
                       <div className="flex items-center gap-3">
                         <Avatar className="h-8 w-8">
-                          <AvatarImage src={review.userImage || "/avatar3.svg"} />
+                          <AvatarImage
+                            src={review.userImage || "/avatar3.svg"}
+                          />
                           <AvatarFallback>{review.user[0]}</AvatarFallback>
                         </Avatar>
                         <div>
@@ -321,7 +341,11 @@ const ShoppingProductDetail: React.FC = () => {
                           <Star
                             key={i}
                             filled={i < review.rating}
-                            className={i < review.rating ? "text-yellow-400" : "text-gray-300"}
+                            className={
+                              i < review.rating
+                                ? "text-yellow-400"
+                                : "text-gray-300"
+                            }
                           />
                         ))}
                       </div>
@@ -355,11 +379,29 @@ const ShoppingProductDetail: React.FC = () => {
               <div className="flex justify-between mb-4 border rounded-lg p-4 items-center">
                 <MdProductionQuantityLimits className="w-6 h-6" />
                 <div className="flex items-center gap-2">
-                  <Button onClick={() => handleQuantityChange(false)} disabled={quantity <= 1} size="icon" variant="ghost">
+                  <Button
+                    onClick={() => handleQuantityChange(false)}
+                    disabled={quantity <= 1}
+                    size="icon"
+                    variant="ghost"
+                  >
                     <AiOutlineMinus className="h-4 w-4" />
                   </Button>
                   <p>{quantity}</p>
-                  <Button onClick={() => handleQuantityChange(true)} disabled={productDetails && quantity + currentCartQty >= productDetails.stock} size="icon" variant={quantity + currentCartQty >= (productDetails?.stock || Infinity) ? "secondary" : "default"}>
+                  <Button
+                    onClick={() => handleQuantityChange(true)}
+                    disabled={
+                      productDetails &&
+                      quantity + currentCartQty >= productDetails.stock
+                    }
+                    size="icon"
+                    variant={
+                      quantity + currentCartQty >=
+                      (productDetails?.stock || Infinity)
+                        ? "secondary"
+                        : "default"
+                    }
+                  >
                     <AiOutlinePlus className="h-4 w-4" />
                   </Button>
                 </div>
@@ -372,8 +414,19 @@ const ShoppingProductDetail: React.FC = () => {
             </CardContent>
             <CardFooter className="flex flex-col gap-2">
               {/* Only display Add to Cart button if the product is not already in the cart */}
-              {showAddToCartButton && (
-                <Button onClick={() => handleAddToCart(productDetails.id)} disabled={!canAddToCart} className="mt-4 w-full p-6 font-semibold text-white bg-pink-300 hover:bg-pink-400 rounded-full text-[1.3rem]">
+              {showAddToCartButton && productDetails.stock === 0 ? (
+                <Button
+                  disabled={!canAddToCart}
+                  className="mt-4 w-full p-6 font-semibold text-white bg-pink-300 hover:bg-pink-400 rounded-full text-[1.3rem] opacity-60 cursor-not-allowed"
+                >
+                  Out of Stock
+                </Button>
+              ) : (
+                <Button
+                  onClick={() => handleAddToCart(productDetails.id)}
+                  disabled={!canAddToCart}
+                  className="mt-4 w-full p-6 font-semibold text-white bg-pink-300 hover:bg-pink-400 rounded-full text-[1.3rem]"
+                >
                   Add to Cart
                 </Button>
               )}

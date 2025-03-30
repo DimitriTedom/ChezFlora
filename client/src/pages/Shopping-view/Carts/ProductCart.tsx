@@ -17,7 +17,7 @@ export interface Product {
 interface UserProductCardProps {
   product: Product;
   handleGetProductDetails: (id: string) => void;
-  handleAddToCart:(id:string) =>void;
+  handleAddToCart: (id: string) => void;
 }
 
 const UserProductCard: React.FC<UserProductCardProps> = ({
@@ -26,13 +26,16 @@ const UserProductCard: React.FC<UserProductCardProps> = ({
   handleAddToCart,
 }) => {
   const [isLoaded, setIsLoaded] = useState(false);
-  const discountPercentage = product.saleprice 
+  const discountPercentage = product.saleprice
     ? Math.round(((product.price - product.saleprice) / product.price) * 100)
     : null;
   const displayPrice = product.saleprice || product.price;
 
   return (
-    <Card onClick={() => handleGetProductDetails(product.id)} className="w-full">
+    <Card
+      onClick={() => handleGetProductDetails(product.id)}
+      className="w-full"
+    >
       <motion.div
         className="bg-[#F5E6D3] rounded-xl sm:rounded-2xl shadow-lg overflow-hidden relative border border-[#D4B08C] max-w-full transition-shadow duration-300 hover:shadow-2xl"
         whileHover={{ scale: 1.02 }}
@@ -98,23 +101,35 @@ const UserProductCard: React.FC<UserProductCardProps> = ({
 
             {/* Stock Info */}
             <div className="flex items-center gap-1 text-gray-600">
-              <span className="text-sm sm:text-base">Stock: {product.stock}</span>
+              <span className="text-sm sm:text-base">
+                Stock: {product.stock}
+              </span>
             </div>
           </div>
 
           {/* Add to Cart Button */}
-          <Button
-            className="w-full bg-pink-200 hover:bg-pink-300 text-black font-medium shadow-md transition-all duration-200 active:scale-95"
-            size="lg"
-            onClick={(e) => {
-              e.stopPropagation(); // Prevent triggering card click
-              handleAddToCart(product?.id)
-              console.log(`Adding ${product.name} to cart`);
-            }}
-          >
-            <BsCartPlus className="mr-2" />
-            Add to Cart
-          </Button>
+          {product.stock === 0 ? (
+            <Button
+              className="w-full bg-pink-200 hover:bg-pink-300 text-black font-medium shadow-md transition-all duration-200 active:scale-95 opacity-60 cursor-not-allowed"
+              size="lg"
+            >
+              <BsCartPlus className="mr-2" />
+              Out of Stock
+            </Button>
+          ) : (
+            <Button
+              className="w-full bg-pink-200 hover:bg-pink-300 text-black font-medium shadow-md transition-all duration-200 active:scale-95"
+              size="lg"
+              onClick={(e) => {
+                e.stopPropagation(); // Prevent triggering card click
+                handleAddToCart(product?.id);
+                console.log(`Adding ${product.name} to cart`);
+              }}
+            >
+              <BsCartPlus className="mr-2" />
+              Add to Cart
+            </Button>
+          )}
         </div>
       </motion.div>
     </Card>
