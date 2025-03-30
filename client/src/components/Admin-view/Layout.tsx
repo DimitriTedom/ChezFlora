@@ -21,8 +21,8 @@ const AdminLayout = () => {
           </div>
 
           {/* Contenu de la page */}
-          <main className="flex-1 bg-gray-100 p-4 md:p-6">
-            <Outlet />
+          <main className="flex-1 bg-gray-100 p-4 md:p-6 min-h-screen">
+            <Outlet/>
           </main>
         </div>
       </div>

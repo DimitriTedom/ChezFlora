@@ -26,6 +26,7 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Order } from "@/store/shop/OrderSlice";
 import FormTitle from "@/components/Common/FormTitle";
+import ChezFloraLoader from "@/components/Common/ChezFloraLoader";
 
 const AdminOrders = () => {
   const [openDetailsDialog, setOpenDetailsDialog] = React.useState(false);
@@ -66,6 +67,11 @@ const AdminOrders = () => {
           />
         </CardTitle>
       </CardHeader>
+      {isLoading ? <ChezFloraLoader/> : orderList.length === 0 ? (
+        <div className="flex justify-center items-center h-[300px]">
+          <span className="text-3xl font-bold">No Orders for the moment</span>
+        </div>
+      ) : 
       <CardContent>
         <Table>
           <TableHeader>
@@ -134,6 +140,7 @@ const AdminOrders = () => {
           </TableBody>
         </Table>
       </CardContent>
+}
     </Card>
   );
 };

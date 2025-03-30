@@ -71,7 +71,7 @@ const AdminOrderDetail = ({ orderDetails }: Props) => {
         }  
     }
   return (
-    <DialogContent className='overflow-y-auto w-full p-8 rounded-lg shadow-xl'>
+    <DialogContent className='overflow-y-auto w-full lg:h-[100vh] p-8 rounded-lg shadow-xl'>
         <div className='flex flex-col items-center gap-3 w-full'>
 
       <div className="grid gap-8">

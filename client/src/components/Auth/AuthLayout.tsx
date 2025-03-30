@@ -9,7 +9,7 @@ const AuthLayout = () => {
       {/* Header Component */}
       {/* <ShoppingHeader /> */}
       <div className="py-8 lg:py-16 w-full bg-pink-200 absolute top-[12%] lg:top-[7.5%] z-[-1]"></div>
-      <div className="lg:px-[30rem] lg:pb-[8rem] pt-5 p-8 xl:px-[20rem]">
+      <div className="lg:px-[30rem] lg:pb-[8rem] pt-5 p-8 xl:px-[20rem] min-h-screen">
         <Outlet />
       </div>
       {/* footer component */}

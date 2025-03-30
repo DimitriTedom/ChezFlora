@@ -10,7 +10,7 @@ const ShoppingLayout = () => {
       <div className="mb-32 bg-opacity-95 absolute top-0 z-[50] overflow-x-hidden">
         <ShoppingHeader />
       </div>
-      <div className="lg:px-[20rem] lg:pb-[8rem] pt-5 p-8 xl:px-[6rem] w-full h-full md:px-[4rem] overflow-x-hidden">
+      <div className="lg:px-[20rem] lg:pb-[8rem] pt-5 p-8 xl:px-[6rem] w-full h-full md:px-[4rem] overflow-x-hidden min-h-screen">
         <Outlet />
       </div>
       {/* footer component */}

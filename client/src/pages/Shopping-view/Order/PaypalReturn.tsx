@@ -1,9 +1,10 @@
+import FormTitle from '@/components/Common/FormTitle'
 import { useCustomToast } from '@/hooks/useCustomToast'
 import { capturePayment } from '@/store/shop/OrderSlice'
 import { AppDispatch } from '@/store/store'
-import React, { useEffect } from 'react'
+import  { useEffect } from 'react'
 import { useDispatch } from 'react-redux'
-import { useLocation } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 
 const PaypalReturnPage = () => {
   const dispatch = useDispatch<AppDispatch>()
@@ -12,7 +13,6 @@ const PaypalReturnPage = () => {
   const paymentId = params.get('paymentId');
   const {showToast} = useCustomToast()
   const payerId = params.get('PayerID');
-alert("we are on the return page")
   useEffect(()=>{
     if (payerId && paymentId) {
       const orderId = JSON.parse(sessionStorage.getItem("currentOrderId") || "null");
@@ -30,9 +30,12 @@ alert("we are on the return page")
         }
       })
     }
-  },[paymentId,payerId,dispatch])
+  },[paymentId,payerId,dispatch,showToast])
   return (
-    <div className='mt-16'>PaypalReturnPage</div>
+    <div className='mt-16 min-h-screen flex flex-col items-center justify-center'>
+      <FormTitle title='Paypal Processing Payment...' comment='Do not refresh the page'/>
+      <div className='text-lg font-semibold text-gray-600'>If you are not redirected, click <Link to="/shop/pLinkyment-success">here</Link></div>
+    </div>
   )
 }
 
