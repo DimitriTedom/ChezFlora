@@ -1,5 +1,10 @@
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "../../components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "../../components/ui/card";
 import {
   Table,
   TableBody,
@@ -13,24 +18,36 @@ import React, { useEffect } from "react";
 import AdminOrderDetail from "@/components/Admin-view/OrderDetail";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/store/store";
-import { getAllOrdersofAllUsers, getOrderDetailsForAdmin, resetOrderDetails } from "@/store/admin/OrderSlice";
+import {
+  getAllOrdersofAllUsers,
+  getOrderDetailsForAdmin,
+  resetOrderDetails,
+} from "@/store/admin/OrderSlice";
 import { Badge } from "@/components/ui/badge";
 import { Order } from "@/store/shop/OrderSlice";
+import FormTitle from "@/components/Common/FormTitle";
 
 const AdminOrders = () => {
   const [openDetailsDialog, setOpenDetailsDialog] = React.useState(false);
-  const {orderList,orderDetails,isLoading} = useSelector((state:RootState) => state.adminOrder);
-  const [selectedOrderId, setSelectedOrderId] = React.useState<string | null>(null);
+  const { orderList, orderDetails, isLoading } = useSelector(
+    (state: RootState) => state.adminOrder
+  );
+  const [selectedOrderId, setSelectedOrderId] = React.useState<string | null>(
+    null
+  );
   const dispatch = useDispatch<AppDispatch>();
-  const handleFetchOrderDetails = (getId:string) => {
-    dispatch(getOrderDetailsForAdmin(getId)) 
+  const handleFetchOrderDetails = async (getId: string) => {
+    await dispatch(getOrderDetailsForAdmin(getId));
+
     setSelectedOrderId(getId);
+    console.log(getId, "selectedOrderId (before state updates)");
+
     setOpenDetailsDialog(true);
-  }
-  useEffect(()=>{
-    dispatch(getAllOrdersofAllUsers())
-    
-  },[dispatch])
+  };
+
+  useEffect(() => {
+    dispatch(getAllOrdersofAllUsers());
+  }, [dispatch]);
   // useEffect(()=>{
   //   if (orderDetails !== null) {
   //     setOpenDetailsDialog(true);
@@ -41,12 +58,17 @@ const AdminOrders = () => {
     dispatch(resetOrderDetails());
     setSelectedOrderId(null);
   };
-  console.log(orderList,"orderList");
-  console.log(orderDetails,"orderDetails");
+  console.log(orderList, "orderList");
+  console.log(orderDetails, "orderDetails");
   return (
     <Card>
       <CardHeader>
-        <CardTitle>All Orders</CardTitle>
+        <CardTitle className="flex items-start">
+          <FormTitle
+            title="All Orders"
+            comment="As an admin, you have the ability to view and manage all orders"
+          />
+        </CardTitle>
       </CardHeader>
       <CardContent>
         <Table>
@@ -61,8 +83,19 @@ const AdminOrders = () => {
               </TableHead>
             </TableRow>
           </TableHeader>
+          <Dialog open={openDetailsDialog} onOpenChange={handleCloseDialog}>
+            <DialogContent className="overflow-y-auto">
+              {orderDetails &&
+              selectedOrderId &&
+              orderDetails.id === selectedOrderId ? (
+                <AdminOrderDetail orderDetails={orderDetails} />
+              ) : (
+                <p>Loading...</p>
+              )}
+            </DialogContent>
+          </Dialog>
           <TableBody>
-          {orderList &&
+            {orderList &&
               orderList.length > 0 &&
               orderList.map((orderItem: Order) => (
                 <TableRow key={orderItem.id}>
@@ -93,24 +126,12 @@ const AdminOrders = () => {
                   <TableCell>{orderItem.orderDate.split("T")[0]}</TableCell>
                   <TableCell>${orderItem.totalAmount}</TableCell>
                   <TableCell>
-                    <Dialog
-                      open={openDetailsDialog}
-                      onOpenChange={handleCloseDialog}
+                    <Button
+                      onClick={() => handleFetchOrderDetails(orderItem.id)}
+                      disabled={isLoading}
                     >
-                      <DialogTrigger asChild>
-                        <Button
-                          onClick={() => handleFetchOrderDetails(orderItem.id)}
-                          disabled={isLoading}
-                        >
-                          View Detail
-                        </Button>
-                      </DialogTrigger>
-                      <DialogContent>
-                        {orderDetails && selectedOrderId && orderDetails.id === selectedOrderId ? (
-                          <AdminOrderDetail orderDetails={orderDetails} />
-                        ) : (<p>Loading...</p>)}
-                      </DialogContent>
-                    </Dialog>
+                      View Detail
+                    </Button>
                   </TableCell>
                 </TableRow>
               ))}
@@ -118,7 +139,7 @@ const AdminOrders = () => {
         </Table>
       </CardContent>
     </Card>
-  )
-}
+  );
+};
 
-export default AdminOrders
+export default AdminOrders;

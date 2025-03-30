@@ -59,6 +59,21 @@ const ShoppingOrders = () => {
               </TableHead>
             </TableRow>
           </TableHeader>
+          <Dialog
+                      open={openDetailsDialog}
+                      onOpenChange={() => {
+                          dispatch(resetOrderDetails());
+                        setOpenDetailsDialog(true);
+                      }}
+                    >
+                      <DialogTrigger asChild>
+                      </DialogTrigger>
+                      <DialogContent>
+                        {orderDetails && (
+                          <ShoppingOrderDetail orderDetails={orderDetails} />
+                        )}
+                      </DialogContent>
+                    </Dialog>
           <TableBody>
             {orderList &&
               orderList.length > 0 &&
@@ -91,29 +106,13 @@ const ShoppingOrders = () => {
                   <TableCell>{orderItem.orderDate.split("T")[0]}</TableCell>
                   <TableCell>${orderItem.totalAmount}</TableCell>
                   <TableCell>
-                    <Dialog
-                      open={openDetailsDialog}
-                      onOpenChange={(open) => {
-                        if (!open) {
-                          dispatch(resetOrderDetails());
-                        }
-                        setOpenDetailsDialog(open);
-                      }}
-                    >
-                      <DialogTrigger asChild>
+
                         <Button
                           onClick={() => handleFetchOrderDetails(orderItem.id)}
                           disabled={isLoading}
                         >
                           View Details
                         </Button>
-                      </DialogTrigger>
-                      <DialogContent>
-                        {orderDetails && (
-                          <ShoppingOrderDetail orderDetails={orderDetails} />
-                        )}
-                      </DialogContent>
-                    </Dialog>
                   </TableCell>
                 </TableRow>
               ))}

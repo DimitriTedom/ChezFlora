@@ -71,17 +71,16 @@ const AdminOrderDetail = ({ orderDetails }: Props) => {
         }  
     }
   return (
-    <DialogContent className='max-w-[800px] p-8 rounded-lg shadow-xl'>
-        <div className='flex flex-col items-center gap-3'>
+    <DialogContent className='overflow-y-auto w-full p-8 rounded-lg shadow-xl'>
+        <div className='flex flex-col items-center gap-3 w-full'>
 
       <div className="grid gap-8">
         {/* Order Header */}
         <div className="space-y-2">
-          <h2 className="scroll-m-20 border-b pb-2 text-3xl font-semibold tracking-tight transition-colors first:mt-0">
+          <h2 className="scroll-m-20 border-b pb-2 flex items-center gap-2 text-3xl font-semibold tracking-tight transition-colors first:mt-0">
             <Package className="w-6 h-6" />
             Order Details
           </h2>
-          <Separator />
           <div className="flex items-center gap-4 text-sm text-muted-foreground">
             <span>Order #{orderDetails.id}</span>
             <span>•</span>
@@ -139,7 +138,6 @@ const AdminOrderDetail = ({ orderDetails }: Props) => {
             </div>
           </div>
         </div>
-
         {/* Order Items */}
         <div className="space-y-4">
           <h3 className="font-medium text-lg flex items-center gap-2">
@@ -223,7 +221,7 @@ const AdminOrderDetail = ({ orderDetails }: Props) => {
       </div>
 
       <Separator />
-            <div>
+            <div className="w-full">
                 <CommonForm 
                 formControls={[
                     {
