@@ -2,7 +2,7 @@
 
 import { CgOptions } from "react-icons/cg";
 import React, { useEffect, useState } from "react";
-import { NavLink, Link, useSearchParams } from "react-router-dom";
+import { NavLink, Link, useSearchParams, useNavigate } from "react-router-dom";
 import { AiOutlineShoppingCart } from "react-icons/ai";
 import Logo from "../Common/Logo";
 import {
@@ -21,11 +21,15 @@ import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/store/store";
 import { Button } from "../ui/button";
 import UserCartWrapper from "./CartWrapper";
-import { fetchCartItems } from "@/store/shop/cartSlice";
+import { addToCart, fetchCartItems } from "@/store/shop/cartSlice";
 import { BsSearch } from "react-icons/bs";
 import FormTitle from "../Common/FormTitle";
 import { SearchIcon } from "lucide-react";
-import { getSearchResults } from "@/store/shop/SearchProductsSlice";
+import { getSearchResults, resetProductSearchResults } from "@/store/shop/SearchProductsSlice";
+import ChezFloraLoader from "../Common/ChezFloraLoader";
+import UserProductCard, { Product } from "@/pages/Shopping-view/Carts/ProductCart";
+import { useCustomToast } from "@/hooks/useCustomToast";
+import { fetchProductDetails } from "@/store/shop/ShopProductSlice";
 
 interface NavMenuLinkProps {
   url: string;
@@ -47,7 +51,6 @@ const NavMenuLink: React.FC<NavMenuLinkProps> = ({ url, text }) => (
   </NavigationMenuItem>
 );
 
-
 // const NavMenuDropdown: React.FC<NavMenuDropdownProps> = ({
 //   text,
 //   children,
@@ -66,13 +69,17 @@ const ShoppingHeader: React.FC = () => {
   const [searchValue, setSearchValue] = useState<string>("");
   const { user, isAuthenticated } = useSelector(
     (state: RootState) => state.auth
-  ); 
+  );
   const [productKeyword, setProductKeyword] = useState("");
   const [productSearchParams, setProductSearchParams] = useSearchParams();
-  const { searchResults } = useSelector((state: RootState) => state.searchPrdouct);
+  const { searchResults,isLoading } = useSelector(
+    (state: RootState) => state.searchPrdouct
+  );
   const { cartItems } = useSelector((state: RootState) => state.shoppingCart);
   const [openCartSheet, setOpenCartSheet] = useState<boolean>(false);
   const dispatch = useDispatch<AppDispatch>();
+  const navigate = useNavigate();
+  const { showToast } = useCustomToast();
 
   useEffect(() => {
     if (user?.id) {
@@ -93,8 +100,66 @@ const ShoppingHeader: React.FC = () => {
         );
         dispatch(getSearchResults(productKeyword));
       }, 1000);
-    }
-  }, [productKeyword]);
+    }else{
+          dispatch(resetProductSearchResults())
+        }
+  }, [productKeyword,productSearchParams]);
+    const handleGetProductDetails = (productId: string) => {
+      navigate(`/shop/detail/${productId}`);
+    };
+    const items = (
+      useSelector((state: RootState) => state.shoppingCart.cartItems) as any
+    )?.items;
+  
+    const handleAddToCart = async (productId: string) => {
+      try {
+        const prodResponse = await dispatch(
+          fetchProductDetails(productId)
+        ).unwrap();
+        const fetchedProduct = prodResponse.data;
+  
+        if (!fetchedProduct) {
+          showToast({
+            message: "Failed to fetch product details",
+            type: "error",
+            duration: 5000,
+          });
+          return;
+        }
+  
+        const found = items.find((item: any) => item.productId === productId);
+        const currentQty: number = found ? found.quantity : 0;
+  
+        if (currentQty + 1 > fetchedProduct.stock) {
+          showToast({
+            message: "Cannot add more than available stock",
+            type: "error",
+            duration: 5000,
+          });
+          return;
+        }
+  
+        const addResponse = await dispatch(
+          addToCart({ userId: user?.id!, productId, quantity: 1 })
+        ).unwrap();
+        if (addResponse?.success) {
+          console.log("before fetching items", addResponse);
+          dispatch(fetchCartItems(user!.id));
+          showToast({
+            message: "Product added to cart",
+            type: "success",
+            duration: 5000,
+          });
+        }
+      } catch (error) {
+        console.error("Add to Cart Error:", error);
+        showToast({
+          message: "An error occurred while adding to cart",
+          type: "error",
+          duration: 5000,
+        });
+      }
+    };
   console.log(searchResults, "searchResultsProducts");
 
   return (
@@ -156,11 +221,29 @@ const ShoppingHeader: React.FC = () => {
                           value={productKeyword}
                           className="rounded-full p-5 border-black"
                           placeholder="Search Products..."
-                          onChange={(e) =>
-                            setProductKeyword(e.target.value)
-                          }
+                          onChange={(e) => setProductKeyword(e.target.value)}
                         />
                       </div>
+                      {isLoading ? (
+                  <ChezFloraLoader />
+                ) : searchResults.length === 0 ? (
+                  <div className="flex justify-center items-center h-[300px]">
+                    <span className="text-3xl font-bold">
+                      No Results Found
+                    </span>
+                  </div>
+                ) : (
+                  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4 py-8 px-4">
+                    {searchResults.map((product: Product) => (
+                      <UserProductCard
+                        key={product.id}
+                        product={product}
+                        handleGetProductDetails={handleGetProductDetails}
+                        handleAddToCart={handleAddToCart}
+                      />
+                    ))}
+                  </div>
+                )}
                     </TabsContent>
 
                     <TabsContent value="blogs">
@@ -245,12 +328,12 @@ const ShoppingHeader: React.FC = () => {
             </SheetContent>
           </Sheet>
           <span className="w-[2px] h-8 bg-pink-400"></span>
-          <Button variant="outline" size="icon">
-            <Link to="/shop/search">
+          <Link to="/shop/search">
+            <Button variant="outline" size="icon">
               <BsSearch className="headerIcons" />
               <span className="sr-only">Search</span>
-            </Link>
-          </Button>
+            </Button>
+          </Link>
           <span className="w-[2px] h-8 bg-pink-400"></span>
           {isAuthenticated ? <AvatarCustum user={user} /> : <SignInButton />}
         </div>

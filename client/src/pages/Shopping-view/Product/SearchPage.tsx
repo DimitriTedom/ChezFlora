@@ -39,7 +39,7 @@ const SearchPage = () => {
     }else{
       dispatch(resetProductSearchResults())
     }
-  }, [productKeyword]);
+  }, [productKeyword,productSearchParams]);
 
   const handleGetProductDetails = (productId: string) => {
     navigate(`/shop/detail/${productId}`);
