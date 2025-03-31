@@ -1,18 +1,15 @@
 "use client";
 
 import { CgOptions } from "react-icons/cg";
-import React, { FormEvent, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { NavLink, Link, useSearchParams } from "react-router-dom";
 import { AiOutlineShoppingCart } from "react-icons/ai";
 import Logo from "../Common/Logo";
 import {
   NavigationMenu,
-  NavigationMenuContent,
   NavigationMenuItem,
   NavigationMenuLink as NavLinkUI,
   NavigationMenuList,
-  NavigationMenuTrigger,
-  NavigationMenuLink,
 } from "@/components/ui/navigation-menu";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import AvatarCustum from "../Common/Avatar.custom";
@@ -50,10 +47,6 @@ const NavMenuLink: React.FC<NavMenuLinkProps> = ({ url, text }) => (
   </NavigationMenuItem>
 );
 
-interface NavMenuDropdownProps {
-  text: string;
-  children: React.ReactNode;
-}
 
 // const NavMenuDropdown: React.FC<NavMenuDropdownProps> = ({
 //   text,
@@ -73,7 +66,7 @@ const ShoppingHeader: React.FC = () => {
   const [searchValue, setSearchValue] = useState<string>("");
   const { user, isAuthenticated } = useSelector(
     (state: RootState) => state.auth
-  );
+  ); 
   const [productKeyword, setProductKeyword] = useState("");
   const [productSearchParams, setProductSearchParams] = useSearchParams();
   const { searchResults } = useSelector((state: RootState) => state.searchPrdouct);
