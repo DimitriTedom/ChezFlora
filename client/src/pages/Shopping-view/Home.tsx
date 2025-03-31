@@ -165,7 +165,6 @@ const ShoppingHome = () => {
       })
     );
   }, [dispatch]);
-  console.log(productList, "productList");
   const handleGetProductDetails = (productId: string) => {
     navigate(`/shop/detail/${productId}`);
   };
@@ -255,7 +254,7 @@ const ShoppingHome = () => {
 
       <div className="w-48 h-48 rounded-full bg-pink-100 blur-3xl absolute z-[-2] left-[10%] lg:w-60 lg:h-60"></div>
       {/* Hero Section */}
-      <section className="w-full flex flex-col lg:flex-row lg:items-center lg:min-h-screen relative py-16 lg:py-0 ">
+      <section className="w-full flex flex-col lg:flex-row lg:items-center lg:min-h-screen relative py-16 lg:py-0">
         <div className="flex flex-col gap-6 lg:w-[55%] xl:w-[50%] px-4 lg:pl-16 xl:pl-32">
           <h1 className="text-3xl lg:text-5xl xl:text-6xl font-bold font-Poppins leading-tight lg:leading-snug">
             Decorate your life with nature

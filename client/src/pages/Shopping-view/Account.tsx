@@ -27,7 +27,7 @@ const ShoppingAccount = () => {
         </div>
 
         <div className="mx-auto mt-8  w-full">
-          <div className="flex flex-col rounded-lg border bg-background p-6 shadow-md w-full bg-green-200">
+          <div className="flex flex-col rounded-lg border bg-background p-6 shadow-md w-full">
             <Tabs defaultValue="orders" className="w-full">
               <TabsList className="flex justify-center space-x-4">
                 <TabsTrigger value="profile">Profile</TabsTrigger>

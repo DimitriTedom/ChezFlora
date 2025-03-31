@@ -47,7 +47,6 @@ export default function Home() {
       .catch((error) => console.log("Auth check failed", error));
   }, [dispatch]);
   if (isLoading) {
-    console.log("isLoading = ", isLoading);
     return (
       <div>
         <ChezFloraLoader />

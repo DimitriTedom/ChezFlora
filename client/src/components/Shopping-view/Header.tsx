@@ -1,8 +1,8 @@
 "use client";
 
 import { CgOptions } from "react-icons/cg";
-import React, { useEffect, useState } from "react";
-import { NavLink, Link } from "react-router-dom";
+import React, { FormEvent, useEffect, useState } from "react";
+import { NavLink, Link, useSearchParams } from "react-router-dom";
 import { AiOutlineShoppingCart } from "react-icons/ai";
 import Logo from "../Common/Logo";
 import {
@@ -14,6 +14,7 @@ import {
   NavigationMenuTrigger,
   NavigationMenuLink,
 } from "@/components/ui/navigation-menu";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import AvatarCustum from "../Common/Avatar.custom";
 import SignInButton from "./SignOrContactButton";
 import { Sheet, SheetTrigger, SheetContent } from "@/components/ui/sheet";
@@ -25,6 +26,9 @@ import { Button } from "../ui/button";
 import UserCartWrapper from "./CartWrapper";
 import { fetchCartItems } from "@/store/shop/cartSlice";
 import { BsSearch } from "react-icons/bs";
+import FormTitle from "../Common/FormTitle";
+import { SearchIcon } from "lucide-react";
+import { getSearchResults } from "@/store/shop/SearchProductsSlice";
 
 interface NavMenuLinkProps {
   url: string;
@@ -51,32 +55,54 @@ interface NavMenuDropdownProps {
   children: React.ReactNode;
 }
 
-const NavMenuDropdown: React.FC<NavMenuDropdownProps> = ({ text, children }) => (
-  <NavigationMenuItem>
-    <NavigationMenuTrigger className="text-gray-700 hover:bg-pink-100 transition-colors py-2 px-4 rounded-md text-xl">
-      {text}
-    </NavigationMenuTrigger>
-    <NavigationMenuContent className="flex flex-col p-4 w-fit h-fit gap-3">
-      {children}
-    </NavigationMenuContent>
-  </NavigationMenuItem>
-);
+// const NavMenuDropdown: React.FC<NavMenuDropdownProps> = ({
+//   text,
+//   children,
+//  }) => (
+//   <NavigationMenuItem>
+//     <NavigationMenuTrigger className="text-gray-700 hover:bg-pink-100 transition-colors py-2 px-4 rounded-md text-xl">
+//       {text}
+//     </NavigationMenuTrigger>
+//     <NavigationMenuContent className="flex flex-col p-4 w-fit h-fit gap-3">
+//       {children}
+//     </NavigationMenuContent>
+//   </NavigationMenuItem>
+// );
 
 const ShoppingHeader: React.FC = () => {
   const [searchValue, setSearchValue] = useState<string>("");
-  const { user, isAuthenticated } = useSelector((state: RootState) => state.auth);
+  const { user, isAuthenticated } = useSelector(
+    (state: RootState) => state.auth
+  );
+  const [productKeyword, setProductKeyword] = useState("");
+  const [productSearchParams, setProductSearchParams] = useSearchParams();
+  const { searchResults } = useSelector((state: RootState) => state.searchPrdouct);
   const { cartItems } = useSelector((state: RootState) => state.shoppingCart);
   const [openCartSheet, setOpenCartSheet] = useState<boolean>(false);
   const dispatch = useDispatch<AppDispatch>();
 
-  // Fetch cart items whenever user changes or cartItems update.
   useEffect(() => {
     if (user?.id) {
       dispatch(fetchCartItems(user.id));
     }
   }, [dispatch, user, cartItems]);
 
-  // console.log(cartItems, "header");
+  useEffect(() => {
+    if (
+      productKeyword &&
+      productKeyword.trim() !== "" &&
+      productKeyword.trim().length > 3
+    ) {
+      console.log("searching for product", productKeyword);
+      setTimeout(() => {
+        setProductSearchParams(
+          new URLSearchParams(`?keyword:${productKeyword}`)
+        );
+        dispatch(getSearchResults(productKeyword));
+      }, 1000);
+    }
+  }, [productKeyword]);
+  console.log(searchResults, "searchResultsProducts");
 
   return (
     <div className="w-screen lg:mb-32 bg-opacity-95 overflow-x-hidden">
@@ -95,11 +121,11 @@ const ShoppingHeader: React.FC = () => {
                 type="text"
                 value={searchValue}
                 onChange={(e) => setSearchValue(e.target.value)}
-                placeholder="Which flower ?"
-                className="bg-white outline-none w-full text-black px-2 border-none shadow-none"
+                placeholder="Store or Blogs ?"
+                className="bg-white outline-none w-full text-gray-700 px-2 border-none shadow-none"
               />
               <div className="ml-4 text-gray-400 md:block">
-                where • week • Event
+                category • name • event
               </div>
             </div>
             <SheetTrigger>
@@ -108,7 +134,54 @@ const ShoppingHeader: React.FC = () => {
               </button>
             </SheetTrigger>
           </div>
-          <SheetContent side="top" className="h-screen"></SheetContent>
+          <SheetContent side="top" className="h-screen">
+            <div className="flex flex-col">
+              {/* <div className="relative z-10 h-[400px] w-full  overflow-hidden rounded-2xl">
+                <img
+                  src="/account2.jpg"
+                  alt="account"
+                  className="w-full h-full object-cover object-center rounded-2xl bg-red-300"
+                />
+              </div> */}
+
+              <div className="mx-auto mt-8  w-full">
+                <div className="flex flex-col rounded-lg border bg-background p-6 shadow-md w-full">
+                  <Tabs defaultValue="products" className="w-full">
+                    <TabsList className="rounded-xl grid grid-cols-2">
+                      <TabsTrigger value="products">Products</TabsTrigger>
+                      <TabsTrigger value="blogs">Blogs</TabsTrigger>
+                    </TabsList>
+                    <TabsContent value="products">
+                      <FormTitle
+                        title="Products ?"
+                        comment="Find your favorite products here"
+                        snowStyle="items-start gap-1"
+                      />
+                      <div className="mt-5 relative">
+                        <SearchIcon className="w-6 h-6 text-black absolute top-2 right-3" />
+                        <Input
+                          value={productKeyword}
+                          className="rounded-full p-5 border-black"
+                          placeholder="Search Products..."
+                          onChange={(e) =>
+                            setProductKeyword(e.target.value)
+                          }
+                        />
+                      </div>
+                    </TabsContent>
+
+                    <TabsContent value="blogs">
+                      <FormTitle
+                        title="Blogs ?"
+                        comment="Find your favorite Blogs here"
+                        snowStyle="items-start gap-1"
+                      />
+                    </TabsContent>
+                  </Tabs>
+                </div>
+              </div>
+            </div>
+          </SheetContent>
         </Sheet>
         <div className="hidden md:block">
           {isAuthenticated ? <AvatarCustum user={user} /> : <SignInButton />}
@@ -158,14 +231,18 @@ const ShoppingHeader: React.FC = () => {
             onOpenChange={() => setOpenCartSheet(!openCartSheet)}
           >
             <SheetTrigger>
-              <Button onClick={() => setOpenCartSheet(true)} variant="outline" size="icon">
+              <Button
+                onClick={() => setOpenCartSheet(true)}
+                variant="outline"
+                size="icon"
+              >
                 <AiOutlineShoppingCart className="headerIcons" />
                 <span className="sr-only">User Cart</span>
               </Button>
             </SheetTrigger>
             <SheetContent className="w-[60%] overflow-y-auto">
               <UserCartWrapper
-              setOpenCartSheet={setOpenCartSheet}
+                setOpenCartSheet={setOpenCartSheet}
                 cartItems={
                   cartItems && cartItems.items && cartItems.items.length > 0
                     ? cartItems.items

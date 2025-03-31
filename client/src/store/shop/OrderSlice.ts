@@ -207,7 +207,6 @@ const ShoppingORderSlice = createSlice({
       })
       .addCase(getAllOrdersByUser.fulfilled, (state, action) => {
         state.isLoading = false;
-        console.log(action);
         state.orderList = action.payload.data;
       })
       .addCase(getAllOrdersByUser.rejected, (state) => {

@@ -222,7 +222,7 @@ const ShoppingCartSlice = createSlice({
     });
     builder.addCase(
       deleteCartITems.fulfilled,
-      (state, action: PayloadAction<CartApiResponse>) => {
+      (state) => {
         state.isLoading = false;
       }
     );

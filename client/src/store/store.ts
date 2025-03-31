@@ -8,6 +8,7 @@ import ShoppingCartSlice from "./shop/cartSlice";
 import ShoppingAddressSlice from "./shop/addressSlice";
 import ShoppingORderSlice from "./shop/OrderSlice"
 import adminOrderSlice from "./admin/OrderSlice"
+import searchProductSlice from "./shop/SearchProductsSlice"
 
 export const store = configureStore({
   reducer: {
@@ -18,7 +19,8 @@ export const store = configureStore({
     shoppingCart:ShoppingCartSlice,
     address:ShoppingAddressSlice,
     shopOrder:ShoppingORderSlice,
-    adminOrder:adminOrderSlice
+    adminOrder:adminOrderSlice,
+    searchPrdouct:searchProductSlice
   },
 });
 
