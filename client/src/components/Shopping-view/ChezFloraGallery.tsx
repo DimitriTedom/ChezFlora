@@ -36,7 +36,7 @@ export interface ChezFloraGalleryProps {
           />
         ) : (
           <div className="w-full h-64 bg-gray-200 flex items-center justify-center rounded-lg">
-            <span className="text-gray-500">Aucune image disponible</span>
+            <span className="text-gray-500">No image Available</span>
           </div>
         )}
       </div>
@@ -112,7 +112,7 @@ export interface ChezFloraGalleryProps {
             </div>
           ) : (
             <div className="p-4">
-              <p className="text-gray-500">Aucune image disponible</p>
+              <p className="text-gray-500">No image Available</p>
             </div>
           )}
 
@@ -122,7 +122,7 @@ export interface ChezFloraGalleryProps {
                          hover:bg-pink-300 transition-colors"
               onClick={() => setOpen(false)}
             >
-              Fermer
+              Close
             </button>
           </DialogFooter>
         </DialogContent>

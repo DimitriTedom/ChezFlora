@@ -2,7 +2,10 @@ import ChezFloraLoader from "@/components/Common/ChezFloraLoader";
 import FormTitle from "@/components/Common/FormTitle";
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { getSearchResults, resetProductSearchResults } from "@/store/shop/SearchProductsSlice";
+import {
+  getSearchResults,
+  resetProductSearchResults,
+} from "@/store/shop/SearchProductsSlice";
 import { AppDispatch, RootState } from "@/store/store";
 import { SearchIcon } from "lucide-react";
 import { useEffect, useState } from "react";
@@ -29,17 +32,16 @@ const SearchPage = () => {
       productKeyword.trim() !== "" &&
       productKeyword.trim().length > 3
     ) {
-      console.log("searching for product", productKeyword);
       setTimeout(() => {
         setProductSearchParams(
           new URLSearchParams(`?keyword=${productKeyword}`)
         );
         dispatch(getSearchResults(productKeyword));
       }, 1000);
-    }else{
-      dispatch(resetProductSearchResults())
+    } else {
+      dispatch(resetProductSearchResults());
     }
-  }, [productKeyword,productSearchParams]);
+  }, [productKeyword, productSearchParams]);
 
   const handleGetProductDetails = (productId: string) => {
     navigate(`/shop/detail/${productId}`);
@@ -80,7 +82,6 @@ const SearchPage = () => {
         addToCart({ userId: user?.id!, productId, quantity: 1 })
       ).unwrap();
       if (addResponse?.success) {
-        console.log("before fetching items", addResponse);
         dispatch(fetchCartItems(user!.id));
         showToast({
           message: "Product added to cart",
@@ -97,7 +98,6 @@ const SearchPage = () => {
       });
     }
   };
-  console.log(searchResults, "searchResultsProducts");
   return (
     <div className="mt-32">
       <div className="flex flex-col">
@@ -136,9 +136,7 @@ const SearchPage = () => {
                   <ChezFloraLoader />
                 ) : searchResults.length === 0 ? (
                   <div className="flex justify-center items-center h-[300px]">
-                    <span className="text-3xl font-bold">
-                      No Results Found
-                    </span>
+                    <span className="text-3xl font-bold">No Results Found</span>
                   </div>
                 ) : (
                   <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4 py-8 px-4">

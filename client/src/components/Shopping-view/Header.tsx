@@ -25,9 +25,14 @@ import { addToCart, fetchCartItems } from "@/store/shop/cartSlice";
 import { BsSearch } from "react-icons/bs";
 import FormTitle from "../Common/FormTitle";
 import { SearchIcon } from "lucide-react";
-import { getSearchResults, resetProductSearchResults } from "@/store/shop/SearchProductsSlice";
+import {
+  getSearchResults,
+  resetProductSearchResults,
+} from "@/store/shop/SearchProductsSlice";
 import ChezFloraLoader from "../Common/ChezFloraLoader";
-import UserProductCard, { Product } from "@/pages/Shopping-view/Carts/ProductCart";
+import UserProductCard, {
+  Product,
+} from "@/pages/Shopping-view/Carts/ProductCart";
 import { useCustomToast } from "@/hooks/useCustomToast";
 import { fetchProductDetails } from "@/store/shop/ShopProductSlice";
 
@@ -72,7 +77,7 @@ const ShoppingHeader: React.FC = () => {
   );
   const [productKeyword, setProductKeyword] = useState("");
   const [productSearchParams, setProductSearchParams] = useSearchParams();
-  const { searchResults,isLoading } = useSelector(
+  const { searchResults, isLoading } = useSelector(
     (state: RootState) => state.searchPrdouct
   );
   const { cartItems } = useSelector((state: RootState) => state.shoppingCart);
@@ -93,74 +98,71 @@ const ShoppingHeader: React.FC = () => {
       productKeyword.trim() !== "" &&
       productKeyword.trim().length > 3
     ) {
-      console.log("searching for product", productKeyword);
       setTimeout(() => {
         setProductSearchParams(
           new URLSearchParams(`?keyword:${productKeyword}`)
         );
         dispatch(getSearchResults(productKeyword));
       }, 1000);
-    }else{
-          dispatch(resetProductSearchResults())
-        }
-  }, [productKeyword,productSearchParams]);
-    const handleGetProductDetails = (productId: string) => {
-      navigate(`/shop/detail/${productId}`);
-    };
-    const items = (
-      useSelector((state: RootState) => state.shoppingCart.cartItems) as any
-    )?.items;
-  
-    const handleAddToCart = async (productId: string) => {
-      try {
-        const prodResponse = await dispatch(
-          fetchProductDetails(productId)
-        ).unwrap();
-        const fetchedProduct = prodResponse.data;
-  
-        if (!fetchedProduct) {
-          showToast({
-            message: "Failed to fetch product details",
-            type: "error",
-            duration: 5000,
-          });
-          return;
-        }
-  
-        const found = items.find((item: any) => item.productId === productId);
-        const currentQty: number = found ? found.quantity : 0;
-  
-        if (currentQty + 1 > fetchedProduct.stock) {
-          showToast({
-            message: "Cannot add more than available stock",
-            type: "error",
-            duration: 5000,
-          });
-          return;
-        }
-  
-        const addResponse = await dispatch(
-          addToCart({ userId: user?.id!, productId, quantity: 1 })
-        ).unwrap();
-        if (addResponse?.success) {
-          console.log("before fetching items", addResponse);
-          dispatch(fetchCartItems(user!.id));
-          showToast({
-            message: "Product added to cart",
-            type: "success",
-            duration: 5000,
-          });
-        }
-      } catch (error) {
-        console.error("Add to Cart Error:", error);
+    } else {
+      dispatch(resetProductSearchResults());
+    }
+  }, [productKeyword, productSearchParams]);
+  const handleGetProductDetails = (productId: string) => {
+    navigate(`/shop/detail/${productId}`);
+  };
+  const items = (
+    useSelector((state: RootState) => state.shoppingCart.cartItems) as any
+  )?.items;
+
+  const handleAddToCart = async (productId: string) => {
+    try {
+      const prodResponse = await dispatch(
+        fetchProductDetails(productId)
+      ).unwrap();
+      const fetchedProduct = prodResponse.data;
+
+      if (!fetchedProduct) {
         showToast({
-          message: "An error occurred while adding to cart",
+          message: "Failed to fetch product details",
           type: "error",
           duration: 5000,
         });
+        return;
       }
-    };
-  console.log(searchResults, "searchResultsProducts");
+
+      const found = items.find((item: any) => item.productId === productId);
+      const currentQty: number = found ? found.quantity : 0;
+
+      if (currentQty + 1 > fetchedProduct.stock) {
+        showToast({
+          message: "Cannot add more than available stock",
+          type: "error",
+          duration: 5000,
+        });
+        return;
+      }
+
+      const addResponse = await dispatch(
+        addToCart({ userId: user?.id!, productId, quantity: 1 })
+      ).unwrap();
+      if (addResponse?.success) {
+        dispatch(fetchCartItems(user!.id));
+        showToast({
+          message: "Product added to cart",
+          type: "success",
+          duration: 5000,
+        });
+      }
+    } catch (error) {
+      console.error("Add to Cart Error:", error);
+      showToast({
+        message: "An error occurred while adding to cart",
+        type: "error",
+        duration: 5000,
+      });
+    }
+  };
 
   return (
     <div className="w-screen lg:mb-32 bg-opacity-95 overflow-x-hidden">
@@ -170,28 +172,28 @@ const ShoppingHeader: React.FC = () => {
           <Logo />
         </div>
         <Sheet>
-          <div className="flex items-center justify-between bg-opacity-50 bg-transparent bg-white shadow-lg rounded-full p-2 w-full md:w-[50%]">
-            <button className="mr-2 bg-white rounded-full p-2 flex items-center justify-center shadow-md">
-              <MagnifyingGlassIcon className="w-6 h-6 text-black" />
-            </button>
-            <div className="flex flex-col w-[17rem] md:w-[40rem] justify-center">
-              <Input
-                type="text"
-                value={searchValue}
-                onChange={(e) => setSearchValue(e.target.value)}
-                placeholder="Store or Blogs ?"
-                className="bg-white outline-none w-full text-gray-700 px-2 border-none shadow-none"
-              />
-              <div className="ml-4 text-gray-400 md:block">
-                category • name • event
+          <SheetTrigger>
+            <div className="flex items-center justify-between bg-opacity-50 bg-transparent bg-white shadow-lg rounded-full p-2 w-full md:w-[50%]">
+              <button className="mr-2 bg-white rounded-full p-2 flex items-center justify-center shadow-md">
+                <MagnifyingGlassIcon className="w-6 h-6 text-black" />
+              </button>
+              <div className="flex flex-col w-[17rem] md:w-[40rem] justify-center">
+                <Input
+                  type="text"
+                  value={searchValue}
+                  onChange={(e) => setSearchValue(e.target.value)}
+                  placeholder="Store or Blogs ?"
+                  className="bg-white outline-none w-full text-gray-700 px-2 border-none shadow-none"
+                />
+                <div className="ml-4 text-gray-400 md:block">
+                  category • name • event
+                </div>
               </div>
-            </div>
-            <SheetTrigger>
               <button className="bg-white rounded-full p-2 flex items-center justify-center shadow-md">
                 <CgOptions className="w-6 h-6 text-black" />
               </button>
-            </SheetTrigger>
-          </div>
+            </div>
+          </SheetTrigger>
           <SheetContent side="top" className="h-screen">
             <div className="flex flex-col">
               {/* <div className="relative z-10 h-[400px] w-full  overflow-hidden rounded-2xl">
@@ -225,25 +227,25 @@ const ShoppingHeader: React.FC = () => {
                         />
                       </div>
                       {isLoading ? (
-                  <ChezFloraLoader />
-                ) : searchResults.length === 0 ? (
-                  <div className="flex justify-center items-center h-[300px]">
-                    <span className="text-3xl font-bold">
-                      No Results Found
-                    </span>
-                  </div>
-                ) : (
-                  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4 py-8 px-4">
-                    {searchResults.map((product: Product) => (
-                      <UserProductCard
-                        key={product.id}
-                        product={product}
-                        handleGetProductDetails={handleGetProductDetails}
-                        handleAddToCart={handleAddToCart}
-                      />
-                    ))}
-                  </div>
-                )}
+                        <ChezFloraLoader />
+                      ) : searchResults.length === 0 ? (
+                        <div className="flex justify-center items-center h-[300px]">
+                          <span className="text-3xl font-bold">
+                            No Results Found
+                          </span>
+                        </div>
+                      ) : (
+                        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4 py-8 px-4">
+                          {searchResults.map((product: Product) => (
+                            <UserProductCard
+                              key={product.id}
+                              product={product}
+                              handleGetProductDetails={handleGetProductDetails}
+                              handleAddToCart={handleAddToCart}
+                            />
+                          ))}
+                        </div>
+                      )}
                     </TabsContent>
 
                     <TabsContent value="blogs">

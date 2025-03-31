@@ -45,8 +45,8 @@ interface Order {
   paymentMethod: string;
   paymentStatus: PaymentStatus;
   totalAmount: number;
-  orderDate: Date;
-  orderUpdateDate: Date;
+  orderDate: string;
+  orderUpdateDate: string;
   paymentId?: string;
   payerId?: string;
 }
@@ -73,8 +73,8 @@ const initialState = {
     paymentMethod: "",
     paymentStatus: PaymentStatus.PENDING, 
     totalAmount: 0,
-    orderDate: new Date(),
-    orderUpdateDate: new Date(), 
+    orderDate: new Date().toISOString(),
+    orderUpdateDate: new Date().toISOString(), 
     paymentId: undefined,
     payerId: undefined,
   } as Order,
@@ -144,8 +144,8 @@ const ShoppingORderSlice = createSlice({
         paymentMethod: "",
         paymentStatus: PaymentStatus.PENDING, 
         totalAmount: 0,
-        orderDate: new Date(),
-        orderUpdateDate: new Date(), 
+        orderDate: new Date().toISOString(),
+        orderUpdateDate: new Date().toISOString(), 
         paymentId: undefined,
         payerId: undefined,
       } as Order
