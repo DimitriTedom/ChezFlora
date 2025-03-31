@@ -14,7 +14,6 @@ import {
   NavigationMenuTrigger,
   NavigationMenuLink,
 } from "@/components/ui/navigation-menu";
-import PopoverCustum from "../Common/PopoverCustum";
 import AvatarCustum from "../Common/Avatar.custom";
 import SignInButton from "./SignOrContactButton";
 import { Sheet, SheetTrigger, SheetContent } from "@/components/ui/sheet";
@@ -25,14 +24,13 @@ import { AppDispatch, RootState } from "@/store/store";
 import { Button } from "../ui/button";
 import UserCartWrapper from "./CartWrapper";
 import { fetchCartItems } from "@/store/shop/cartSlice";
+import { BsSearch } from "react-icons/bs";
 
-// Define interface for NavMenuLink props.
 interface NavMenuLinkProps {
   url: string;
   text: string;
 }
 
-// NavMenuLink renders a single navigation link.
 const NavMenuLink: React.FC<NavMenuLinkProps> = ({ url, text }) => (
   <NavigationMenuItem>
     <NavLink
@@ -48,13 +46,11 @@ const NavMenuLink: React.FC<NavMenuLinkProps> = ({ url, text }) => (
   </NavigationMenuItem>
 );
 
-// Define interface for NavMenuDropdown props.
 interface NavMenuDropdownProps {
   text: string;
   children: React.ReactNode;
 }
 
-// NavMenuDropdown renders a dropdown menu in the navigation.
 const NavMenuDropdown: React.FC<NavMenuDropdownProps> = ({ text, children }) => (
   <NavigationMenuItem>
     <NavigationMenuTrigger className="text-gray-700 hover:bg-pink-100 transition-colors py-2 px-4 rounded-md text-xl">
@@ -68,9 +64,7 @@ const NavMenuDropdown: React.FC<NavMenuDropdownProps> = ({ text, children }) => 
 
 const ShoppingHeader: React.FC = () => {
   const [searchValue, setSearchValue] = useState<string>("");
-  // Access user and authentication state from Redux.
   const { user, isAuthenticated } = useSelector((state: RootState) => state.auth);
-  // Access cart state from Redux.
   const { cartItems } = useSelector((state: RootState) => state.shoppingCart);
   const [openCartSheet, setOpenCartSheet] = useState<boolean>(false);
   const dispatch = useDispatch<AppDispatch>();
@@ -85,7 +79,7 @@ const ShoppingHeader: React.FC = () => {
   // console.log(cartItems, "header");
 
   return (
-    <div className="w-screen lg:mb-32 xl:mb-32 overflow-x-hidden">
+    <div className="w-screen lg:mb-32 bg-opacity-95 overflow-x-hidden">
       {/* Mobile Header */}
       <div className="w-full flex items-center justify-between border-b-[1px] border-b-pink-700 fixed top-0 z-[50] bg-opacity-50 backdrop-blur-sm transition-all duration-300 lg:hidden bg-white/80 py-3 px-4 overflow-x-hidden">
         <div className="hidden md:block">
@@ -137,27 +131,11 @@ const ShoppingHeader: React.FC = () => {
               <NavMenuLink url="/shop/store" text="Store" />
             </NavigationMenuList>
           </NavigationMenu>
-          <NavigationMenu>
+          {/* <NavigationMenu>
             <NavigationMenuList>
-              <NavMenuDropdown text="Services">
-                <NavigationMenuLink className="rounded-md hover:bg-pink-100">
-                  <Link to="/service1" className="transition-colors px-4 py-2">
-                    Service 1
-                  </Link>
-                </NavigationMenuLink>
-                <NavigationMenuLink className="rounded-md hover:bg-pink-100">
-                  <Link to="/service2" className="transition-colors px-4 py-2">
-                    Service 2
-                  </Link>
-                </NavigationMenuLink>
-                <NavigationMenuLink className="rounded-md hover:bg-pink-100">
-                  <Link to="/service3" className="transition-colors px-4 py-2">
-                    Service 3
-                  </Link>
-                </NavigationMenuLink>
-              </NavMenuDropdown>
+              <NavMenuLink url="/shop/search" text="" />
             </NavigationMenuList>
-          </NavigationMenu>
+          </NavigationMenu> */}
           <NavigationMenu>
             <NavigationMenuList>
               <NavMenuLink url="/shop/blog" text="Blog" />
@@ -180,10 +158,10 @@ const ShoppingHeader: React.FC = () => {
             onOpenChange={() => setOpenCartSheet(!openCartSheet)}
           >
             <SheetTrigger>
-              <button onClick={() => setOpenCartSheet(true)}>
+              <Button onClick={() => setOpenCartSheet(true)} variant="outline" size="icon">
                 <AiOutlineShoppingCart className="headerIcons" />
                 <span className="sr-only">User Cart</span>
-              </button>
+              </Button>
             </SheetTrigger>
             <SheetContent className="w-[60%] overflow-y-auto">
               <UserCartWrapper
@@ -198,7 +176,10 @@ const ShoppingHeader: React.FC = () => {
           </Sheet>
           <span className="w-[2px] h-8 bg-pink-400"></span>
           <Button variant="outline" size="icon">
-            <PopoverCustum />
+            <Link to="/shop/search">
+              <BsSearch className="headerIcons" />
+              <span className="sr-only">Search</span>
+            </Link>
           </Button>
           <span className="w-[2px] h-8 bg-pink-400"></span>
           {isAuthenticated ? <AvatarCustum user={user} /> : <SignInButton />}

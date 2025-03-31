@@ -1,3 +1,9 @@
+import { GrValidate } from "react-icons/gr"; 
+import { MdSystemUpdateAlt } from "react-icons/md"; 
+import { MdEmojiEvents } from "react-icons/md"; 
+import { BiCategoryAlt } from "react-icons/bi"; 
+import { MdCategory } from "react-icons/md"; 
+import { AiOutlineStock } from "react-icons/ai"; 
 "use client";
 
 import React, { useEffect, useState } from "react";
@@ -268,13 +274,20 @@ const ShoppingProductDetail: React.FC = () => {
               <Separator />
               <div className="flex gap-4 mt-4 flex-wrap">
                 <Badge className="flex items-center gap-2">
-                  <span className="text-sm">Stock: {productDetails.stock}</span>
+                  <AiOutlineStock />
+                  <span className="text-sm">{productDetails.stock}</span>
                 </Badge>
                 <Badge className="flex items-center gap-2">
+                  <BiCategoryAlt />
                   <span className="text-sm">{productDetails.category}</span>
                 </Badge>
                 <Badge className="flex items-center gap-2 p-2">
+                  <MdEmojiEvents />
                   <span className="text-sm">{productDetails.event}</span>
+                </Badge>
+                <Badge className="flex items-center gap-2 p-2">
+                    <GrValidate />
+                  <span className="text-sm">{productDetails.createdAt.split("T")[0]}</span>
                 </Badge>
               </div>
             </CardContent>

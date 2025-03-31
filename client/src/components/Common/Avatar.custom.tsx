@@ -1,3 +1,6 @@
+import { HiOutlineClipboardList } from "react-icons/hi"; 
+import { FaClipboardList } from "react-icons/fa"; 
+import { AiOutlineUser } from "react-icons/ai"; 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   DropdownMenu,
@@ -66,7 +69,7 @@ user: User
           </Avatar>
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent className="w-64 bg-background shadow-lg rounded-md border border-border">
+      <DropdownMenuContent className="w-64 bg-background shadow-lg rounded-md border border-border m-4">
         {/* User Info Section */}
         <DropdownMenuLabel className="flex items-center space-x-3 px-3 py-2">
           <Avatar className="h-12 w-12 xl:h-14 xl:w-14 border-2 border-primary">
@@ -89,25 +92,16 @@ user: User
         {/* Profile Link */}
         <DropdownMenuItem asChild className="cursor-pointer hover:bg-accent">
           <Link to="/shop/account" className="flex items-center space-x-2">
-          
-            <UserIcon className="h-4 w-4 text-muted-foreground" />
-            <span>Account</span>
+            <AiOutlineUser className="h-4 w-4 text-muted-foreground" />
+            <span>Account DashBoard</span>
           </Link>
         </DropdownMenuItem>
 
         {/* Settings Link */}
         <DropdownMenuItem asChild className="cursor-pointer hover:bg-accent">
           <Link to="/shop/settings" className="flex items-center space-x-2">
-            <SettingsIcon className="h-4 w-4 text-muted-foreground" />
-            <span>Settings</span>
-          </Link>
-        </DropdownMenuItem>
-
-        {/* Dashboard Link Example */}
-        <DropdownMenuItem asChild className="cursor-pointer hover:bg-accent">
-          <Link to="/shop/dashboard" className="flex items-center space-x-2">
-            <HomeIcon className="h-4 w-4 text-muted-foreground" />
-            <span>Dashboard</span>
+            <HiOutlineClipboardList className="h-4 w-4 text-muted-foreground" />
+            <span>My Bookings</span>
           </Link>
         </DropdownMenuItem>
 
@@ -116,7 +110,7 @@ user: User
         {/* Logout Button */}
         <DropdownMenuItem
           onSelect={handleLogOut}
-          className="cursor-pointer hover:bg-destructive hover:text-destructive-foreground"
+          className="cursor-pointer hover:bg-red-500 hover:text-white"
         >
           <LogOut className="mr-2 h-4 w-4" />
           <span>Log Out</span>

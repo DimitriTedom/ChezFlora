@@ -8,11 +8,11 @@ import { useNavigate } from "react-router-dom";
 // Define the props interface
 interface UserCartWrapperProps {
   cartItems: CartItemType[];
+  setOpenCartSheet: React.Dispatch<SetStateAction<boolean>>;
 }
 
 const UserCartWrapper: React.FC<UserCartWrapperProps> = ({ cartItems,setOpenCartSheet }) => {
-  // Calculate the total amount in the cart.
-  // It uses the saleprice if available and > 0, otherwise falls back to the product price.
+
   const navigate = useNavigate()
   const totalCartAmount: number =
     cartItems && cartItems.length > 0

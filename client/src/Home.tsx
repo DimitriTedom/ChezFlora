@@ -35,6 +35,7 @@ import EnterNewPassword from "./pages/Auth/EnterNewPassword";
 import ShoppingProductDetail from "./pages/Shopping-view/ShoppingProductDetail";
 import PaypalReturnPage from "./pages/Shopping-view/Order/PaypalReturn";
 import PaymentSuccessPage from "./pages/Shopping-view/Order/PaymentSuccess";
+import SearchPage from "./pages/Shopping-view/Product/SearchPage";
 export default function Home() {
   const { user, isAuthenticated, isLoading } = useSelector(
     (state: RootState) => state.auth
@@ -115,6 +116,7 @@ export default function Home() {
           <Route path="store" element={<ShoppingStore />} />
           <Route path="detail/:id" element={<ShoppingProductDetail />} />
           <Route path="about" element={<ShoppingAbout />} />
+          <Route path="search" element={<SearchPage />} />
           <Route path="checkout" element={<ShoppingCheckout />} />
           <Route path="account" element={<ShoppingAccount />} />
           <Route path="blog" element={<ShoppingBlog />} />
