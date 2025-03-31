@@ -7,8 +7,7 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-// Enums (Category, Role, Status, ArticleCategory, EventType)
-
+// Enums
 enum Category {
   FRESH_FLOWERS
   BOUQUETS
@@ -45,14 +44,15 @@ enum EventType {
   VALENTINES
   WOMENDAY
 }
+
 enum PaymentStatus {
   PENDING
   PAID
   FAILED
   REFUNDED
 }
-// Embedded Types (for Order)
 
+// Embedded Types
 type CartItemDetails {
   productId String
   title     String
@@ -62,15 +62,15 @@ type CartItemDetails {
 }
 
 type AddressInfo {
-  addressId String
-  address   String
-  city      String
-  postalCode   String
-  phone     String
-  notes     String?
+  addressId  String
+  address    String
+  city       String
+  postalCode String
+  phone      String
+  notes      String?
 }
-// Models
 
+// Models
 model Product {
   id          String    @id @default(auto()) @map("_id") @db.ObjectId
   name        String
@@ -84,9 +84,24 @@ model Product {
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
 
-  comments  Comment[]
-  reviews   Review[]
-  cartItems CartItem[]
+  productComments ProductComment[]
+  reviews         ProductReview[]
+  cartItems       CartItem[]
+}
+
+model Article {
+  id          String          @id @default(auto()) @map("_id") @db.ObjectId
+  title       String
+  content     String
+  authorId    String
+  author      User            @relation(fields: [authorId], references: [id])
+  category    ArticleCategory
+  publishedAt DateTime
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt
+
+  blogComments BlogComment[]
+  reviews      BlogReview[]
 }
 
 model User {
@@ -100,32 +115,80 @@ model User {
   createdAt    DateTime  @default(now())
   updatedAt    DateTime  @updatedAt
 
-  addresses     Address[]
-  orders        Order[]
-  comments      Comment[]
-  articles      Article[]
-  quoteRequests QuoteRequest[]
-
-  carts Cart[]
+  addresses       Address[]
+  orders          Order[]
+  productComments ProductComment[]
+  blogComments    BlogComment[]
+  articles        Article[]
+  quoteRequests   QuoteRequest[]
+  carts           Cart[]
+  productReviews  ProductReview[]
+  blogReviews     BlogReview[]
 }
 
-model Order {
-  id               String    @id @default(auto()) @map("_id") @db.ObjectId
-  userId           String
-  user             User      @relation(fields: [userId], references: [id])
-  cartId           String
-  cartItems        CartItemDetails[]
-  addressInfo      AddressInfo
-  orderStatus      Status    @default(PENDING)
-  paymentMethod    String
-  paymentStatus PaymentStatus @default(PENDING)
-  totalAmount      Float
-  orderDate        DateTime @default(now())
-  orderUpdateDate  DateTime @updatedAt
-  paymentId        String?
-  payerId          String?
+model ProductComment {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  productId String
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  content   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
 
-  createdAt        DateTime @default(now())
+model BlogComment {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  articleId String
+  article   Article  @relation(fields: [articleId], references: [id], onDelete: Cascade)
+  content   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model ProductReview {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  productId String
+  product   Product  @relation(fields: [productId], references: [id])
+  rating    Int
+  content   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model BlogReview {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  articleId String
+  article   Article  @relation(fields: [articleId], references: [id])
+  rating    Int
+  content   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// Other models remain unchanged
+model Order {
+  id              String            @id @default(auto()) @map("_id") @db.ObjectId
+  userId          String
+  user            User              @relation(fields: [userId], references: [id])
+  cartId          String
+  cartItems       CartItemDetails[]
+  addressInfo     AddressInfo
+  orderStatus     Status            @default(PENDING)
+  paymentMethod   String
+  paymentStatus   PaymentStatus     @default(PENDING)
+  totalAmount     Float
+  orderDate       DateTime          @default(now())
+  orderUpdateDate DateTime          @updatedAt
+  paymentId       String?
+  payerId         String?
+  createdAt       DateTime          @default(now())
 }
 
 model Address {
@@ -160,36 +223,6 @@ model CartItem {
   quantity  Int     @default(1)
 }
 
-
-
-
-model Comment {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  userId    String
-  user      User     @relation(fields: [userId], references: [id])
-  content   String
-  productId String?
-  product   Product? @relation(fields: [productId], references: [id])
-  articleId String?
-  article   Article? @relation(fields: [articleId], references: [id])
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-}
-
-model Article {
-  id          String          @id @default(auto()) @map("_id") @db.ObjectId
-  title       String
-  content     String
-  authorId    String
-  author      User            @relation(fields: [authorId], references: [id])
-  category    ArticleCategory
-  publishedAt DateTime
-  createdAt   DateTime        @default(now())
-  updatedAt   DateTime        @updatedAt
-
-  comments Comment[]
-}
-
 model QuoteRequest {
   id          String    @id @default(auto()) @map("_id") @db.ObjectId
   userId      String
@@ -201,20 +234,3 @@ model QuoteRequest {
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
 }
-
-// Refined Review Model
-
-model Review {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  userId    String
-  productId String
-  product   Product  @relation(fields: [productId], references: [id])
-  rating    Int
-  content   String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-}
-
-
-//A Review should have a one-to-many relation with User and Product, meaning multiple users can review the same product.
-//A CartItem should have a many-to-one relation with Product because multiple users can add the same product to their cart.
