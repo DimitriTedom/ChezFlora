@@ -1,5 +1,5 @@
-import { AiFillStar } from "react-icons/ai"; 
 import { Button } from "../ui/button";
+import { Star } from "lucide-react";
 
 const StarRating = ({ rating, handleRatingChange }: { rating: number, handleRatingChange: (rating: number) => void }) => {
   console.log(rating,'inside star rating')
@@ -15,7 +15,7 @@ const StarRating = ({ rating, handleRatingChange }: { rating: number, handleRati
           }`}
           onClick={handleRatingChange ? () => handleRatingChange(star) : () => {}} // Ensure we pass index + 1
         >
-          <AiFillStar className={`w-6 h-6 ${star <= rating ? "fill-pink-400" : "fill-gray-400"}`} />
+          <Star className={`w-6 h-6 ${star <= rating ? "fill-pink-400" : "fill-gray-400"}`} />
         </Button>
       ))}
     </div>

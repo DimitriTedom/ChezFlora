@@ -1,10 +1,10 @@
-import { GrValidate } from "react-icons/gr"; 
-import { MdSystemUpdateAlt } from "react-icons/md"; 
-import { MdEmojiEvents } from "react-icons/md"; 
-import { BiCategoryAlt } from "react-icons/bi"; 
-import { MdCategory } from "react-icons/md"; 
-import { AiOutlineStock } from "react-icons/ai"; 
-"use client";
+import { GrValidate } from "react-icons/gr";
+import { MdSystemUpdateAlt } from "react-icons/md";
+import { MdEmojiEvents } from "react-icons/md";
+import { BiCategoryAlt } from "react-icons/bi";
+import { MdCategory } from "react-icons/md";
+import { AiOutlineStock } from "react-icons/ai";
+("use client");
 
 import React, { useEffect, useState } from "react";
 import {
@@ -34,7 +34,12 @@ import { useCustomToast } from "@/hooks/useCustomToast";
 import { fetchCartItems, addToCart } from "@/store/shop/cartSlice";
 import { MdProductionQuantityLimits } from "react-icons/md";
 import StarRating from "@/components/Common/StarRating";
-import { addProductReview } from "@/store/shop/ProductReviewSlice";
+import {
+  addProductReview,
+  getProductReview,
+} from "@/store/shop/ProductReviewSlice";
+import { formatDate } from "@/lib/utils";
+import { Label } from "@/components/ui/label";
 
 interface Review {
   user: string;
@@ -76,8 +81,12 @@ const ShoppingProductDetail: React.FC = () => {
   const { user } = useSelector((state: RootState) => state.auth);
   const { cartItems } = useSelector((state: RootState) => state.shoppingCart);
   const { isLoading } = useSelector((state: RootState) => state.shopProducts);
+  const { isLoading: isProductReviewLoading, productReviews } = useSelector(
+    (state: RootState) => state.shopProductReview
+  );
+
   const { showToast } = useCustomToast();
-  const [rating,setRating] = useState<number>(0);
+  const [rating, setRating] = useState<number>(0);
   // Fetch product details on mount
   useEffect(() => {
     const fetchProductDetail = async () => {
@@ -190,31 +199,48 @@ const ShoppingProductDetail: React.FC = () => {
   };
 
   const handleReviewSubmit = () => {
-    dispatch(addProductReview({productId:productDetails?.id,userId:user?.id,content:reviewContent,rating:rating,userName:user?.name})).unwrap().then((data)=>{
-      console.log(data);
-      if(data.success){
+    dispatch(
+      addProductReview({
+        productId: productDetails?.id,
+        userId: user?.id,
+        content: reviewContent,
+        rating: rating,
+        userName: user?.name,
+      })
+    )
+      .unwrap()
+      .then((data) => {
+        console.log(data);
+        if (data.success) {
+          showToast({
+            message: data.message,
+            type: "success",
+            duration: 2000,
+          });
+        }
+      })
+      .catch((error) => {
         showToast({
-          message: data.message,
-          type: "success",
-          duration:2000
+          message: error.message,
+          type: "error",
+          duration: 2000,
         });
-      }
-    }).catch((error)=>{
-      showToast({
-        message: error.message,
-        type: "error",
-        duration:2000
       });
-    })
     setReviewContent("");
     setRating(0);
   };
-const handleRatingChange = (getRating:number) => {
-  console.log(getRating)
-  setRating(getRating)
-  console.log(rating,"rating")
-}
-  // Calculate total price for the selected quantity
+  useEffect(() => {
+    if (productDetails !== null) {
+      dispatch(getProductReview(productDetails.id));
+    }
+  }, [productDetails]);
+  // console.log(productReviews, "productReviews");
+  const handleRatingChange = (getRating: number) => {
+    // console.log(getRating);
+    setRating(getRating);
+    // console.log(rating, "rating");
+  };
+
   const totalPrice = productDetails
     ? ((productDetails.saleprice || productDetails.price) * quantity).toFixed(2)
     : "0";
@@ -236,7 +262,6 @@ const handleRatingChange = (getRating:number) => {
     }
   };
 
-  // If loading or no product details yet, show loader or message
   if (isLoading) {
     return <ChezFloraLoader />;
   }
@@ -245,7 +270,7 @@ const handleRatingChange = (getRating:number) => {
   }
 
   return (
-    <div className="flex flex-col gap-8 p-4 mt-24">
+    <div className="flex flex-col gap-8 p-4 mt-24 min-h-screen">
       {/* Product Images */}
       <div className="w-full">
         <ChezFloraGallery images={myImages.images} />
@@ -309,8 +334,10 @@ const handleRatingChange = (getRating:number) => {
                   <span className="text-sm">{productDetails.event}</span>
                 </Badge>
                 <Badge className="flex items-center gap-2 p-2">
-                    <GrValidate />
-                  <span className="text-sm">{productDetails.createdAt.split("T")[0]}</span>
+                  <GrValidate />
+                  <span className="text-sm">
+                    {productDetails.createdAt.split("T")[0]}
+                  </span>
                 </Badge>
               </div>
             </CardContent>
@@ -330,71 +357,94 @@ const handleRatingChange = (getRating:number) => {
           </Card>
 
           {/* Reviews Section */}
-          <Card className="w-full lg:w-[75%]">
+          <Card className="w-full  lg:w-[75%] shadow-lg rounded-lg p-4">
             <CardHeader>
               <CardTitle className="space-y-4">
-                <div>
-                Reviews ({productDetails.reviews?.length || 0})
-                </div>
-                <StarRating rating={rating} handleRatingChange={handleRatingChange}/>
+                <Label className="text-2xl font-bold text-gray-800">
+                  Reviews ({productReviews.length || 0} reviews)
+                </Label>
+                <StarRating
+                  rating={rating}
+                  handleRatingChange={handleRatingChange}
+                />
                 <Separator />
               </CardTitle>
             </CardHeader>
-            <CardContent className="space-y-4">
+
+            <CardContent className="space-y-6">
+              {/* Review Input Section */}
               <div className="relative">
                 <Textarea
-                name="reviewContent"
-                  placeholder="Share your thoughts..."
+                  name="reviewContent"
+                  placeholder="Share your thoughts...(You can oonly review products you've bought)"
                   value={reviewContent}
                   onChange={(e) => setReviewContent(e.target.value)}
-                  className="pr-12 border rounded-lg focus-visible:ring-0 focus-visible:ring-offset-0"
+                  className="w-full border rounded-lg p-3 text-gray-700 focus:ring-2 focus:ring-pink-400 transition-all duration-200"
                   rows={5}
                 />
                 <Button
                   variant="ghost"
                   size="icon"
-                  className="absolute bottom-2 bg-pink-300 right-2 p-2 hover:bg-pink-500 text-white rounded-full"
+                  className="absolute bottom-2 right-2 bg-pink-500 p-2 hover:bg-pink-600 text-white rounded-full shadow-md transition-all duration-200"
                   onClick={handleReviewSubmit}
                   disabled={reviewContent.trim() === ""}
                 >
                   <ArrowRightIcon className="h-5 w-5" />
                 </Button>
               </div>
-              <div className="space-y-4 max-h-[400px] overflow-y-auto">
-                {productDetails.reviews?.map((review, index) => (
-                  <div key={index} className="flex flex-col gap-2">
-                    <div className="flex justify-between items-center">
-                      <div className="flex items-center gap-3">
-                        <Avatar className="h-8 w-8">
-                          <AvatarImage
-                            src={review.userImage || "/avatar3.svg"}
-                          />
-                          <AvatarFallback>{review.user[0]}</AvatarFallback>
-                        </Avatar>
-                        <div>
-                          <p className="font-medium">{review.user}</p>
-                          <p className="text-xs text-muted-foreground">
-                            {/* {formatDate(review?.createdAt)} */}
-                          </p>
+
+              {/* Reviews Display */}
+              <div className="space-y-4 max-h-[400px] overflow-y-auto px-2">
+                {productReviews.length > 0 ? (
+                  productReviews.map((review, index) => (
+                    <div
+                      key={index}
+                      className="flex flex-col gap-3 border-b pb-3 last:border-none"
+                    >
+                      <div className="flex flex-col lg:flex-row justify-between lg:items-center">
+                        <div className="flex items-center gap-3">
+                          <Avatar className="h-10 w-10 border">
+                            <AvatarImage
+                              src={review.userImage || "/avatar3.svg"}
+                            />
+                            <AvatarFallback>
+                              {review.userName.charAt(0).toUpperCase()}
+                            </AvatarFallback>
+                          </Avatar>
+                          <div>
+                            <p className="font-semibold text-gray-800">
+                              {review.userName}
+                            </p>
+                            <p className="text-xs text-gray-500">
+                              {formatDate(review?.createdAt)}
+                            </p>
+                          </div>
+                        </div>
+                        <div className="flex gap-1">
+                          {[...Array(5)].map((_, i) => (
+                            <Star
+                              key={i}
+                              filled={i < review.rating}
+                              className={`w-5 h-5 transition-all duration-200 ${
+                                i < review.rating
+                                  ? "text-pink-400 fill-pink-400"
+                                  : "text-gray-300 fill-gray-300"
+                              }`}
+                            />
+                          ))}
                         </div>
                       </div>
-                      <div className="flex gap-1">
-                        {[...Array(5)].map((_, i) => (
-                          <Star
-                            key={i}
-                            filled={i < review.rating}
-                            className={
-                              i < review.rating
-                                ? "text-yellow-400"
-                                : "text-gray-300"
-                            }
-                          />
-                        ))}
-                      </div>
+                      <p className="text-sm text-gray-600 ml-4">
+                        {review.content}
+                      </p>
+                      <Separator />
                     </div>
-                    <p className="text-sm">{review.content}</p>
-                  </div>
-                ))}
+                  ))
+                ) : (
+                  <p className="text-center text-gray-500 mt-4 text-xl">
+                    No reviews yet. Be the first to share your thoughts!
+                  </p>
+                )}
               </div>
             </CardContent>
           </Card>
