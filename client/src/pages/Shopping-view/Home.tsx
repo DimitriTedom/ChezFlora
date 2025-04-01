@@ -236,7 +236,6 @@ const ShoppingHome = () => {
           name="description"
           content="Discover fresh floral arrangements, plants, and bespoke decoration services for events. Order online with fast delivery. Eco-friendly and artisanal quality since 2016."
         />
-        {/* Open Graph Tags */}
         <meta
           property="og:title"
           content="ChezFlora - Floral Décoration Experts"
@@ -247,7 +246,6 @@ const ShoppingHome = () => {
         />
         <meta property="og:type" content="website" />
         <meta property="og:image" content="/assets/og-home.jpg" />
-        {/* Replace with your hero image */}
         <meta property="og:url" content="https://www.chezflora.com/shop/home" />
       </Helmet>
 

@@ -10,7 +10,6 @@ import AdminProducts from "./pages/admin-view/Products";
 import ShoppingLayout from "./components/Shopping-view/Layout";
 import NotFound from "./pages/Not-Found";
 import ShoppingHome from "./pages/Shopping-view/Home";
-import ShoppingListing from "./pages/Shopping-view/Listing";
 import ShoppingCheckout from "./pages/Shopping-view/Checkout";
 import ShoppingAccount from "./pages/Shopping-view/Account";
 import ShoppingBlog from "./pages/Shopping-view/Blog";
@@ -119,7 +118,6 @@ export default function Home() {
           }
         >
           <Route path="home" element={<ShoppingHome />} />
-          <Route path="listing" element={<ShoppingListing />} />
           <Route path="store" element={<ShoppingStore />} />
           <Route path="detail/:id" element={<ShoppingProductDetail />} />
           <Route path="about" element={<ShoppingAbout />} />

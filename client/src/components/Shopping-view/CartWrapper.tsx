@@ -34,7 +34,10 @@ const UserCartWrapper: React.FC<UserCartWrapperProps> = ({ cartItems,setOpenCart
             <CartItemComponent key={item.id} cartItem={item} />
           ))
         ) : (
-          <p className="text-gray-500">Your cart is empty.</p>
+          <div className="space-y-4 text-center">
+            <img src="/yourCartIsEmpty.svg" alt="Your cart is empty" />
+            <p className="text-gray-500 text-2xl font-bold">Your cart is empty.</p>
+          </div>
         )}
       </div>
 

@@ -11,6 +11,7 @@ import { getOrderDetails } from "@/store/shop/OrderSlice";
 import { useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import FormTitle from "@/components/Common/FormTitle";
+import { Helmet } from "react-helmet-async";
 
 const PaymentSuccessPage = () => {
   const navigate = useNavigate();
@@ -32,12 +33,31 @@ const PaymentSuccessPage = () => {
   console.log(orderId);
   return (
     <div className="min-h-screen flex flex-col items-center justify-center p-4">
-
+      <Helmet>
+        <title>Payment Successful | ChezFlora</title>
+        <meta
+          name="description"
+          content="Your payment was processed successfully. A confirmation email has been sent."
+        />
+        <meta property="og:title" content="Payment Successful | ChezFlora" />
+        <meta
+          property="og:description"
+          content="Your ChezFlora order is confirmed! We’ll notify you when it ships."
+        />
+        <meta property="og:type" content="website" />
+        <meta
+          property="og:url"
+          content="https://www.chezflora.com/shop/payment-success"
+        />
+        <meta
+          property="og:image"
+          content="https://www.chezflora.com/images/payment-success-preview.jpg"
+        />
+      </Helmet>
       <FormTitle title="Congratulations 🎉 !" />
       <Confetti recycle={false} numberOfPieces={1000} />
       <Card className="max-w-[800px] p-8 rounded-lg shadow-xl">
         <div className="grid gap-8">
-
           <div className="space-y-2">
             <h2 className="text-2xl font-bold flex items-center gap-2">
               <Package className="w-6 h-6" />
@@ -49,7 +69,6 @@ const PaymentSuccessPage = () => {
               <span>{formatDate(orderDetails.orderDate)}</span>
             </div>
           </div>
-
 
           <div className="grid grid-cols-2 gap-4">
             <div className="bg-accent/30 p-4 rounded-lg border">
@@ -99,7 +118,6 @@ const PaymentSuccessPage = () => {
             </div>
           </div>
 
-
           <div className="space-y-4">
             <h3 className="font-medium text-lg flex items-center gap-2">
               <Package className="w-5 h-5" />
@@ -133,7 +151,6 @@ const PaymentSuccessPage = () => {
             </div>
           </div>
 
-
           <div className="grid grid-cols-2 gap-8">
             <div className="space-y-4">
               <h3 className="font-medium text-lg flex items-center gap-2">
@@ -159,7 +176,6 @@ const PaymentSuccessPage = () => {
               </div>
             </div>
 
-
             <div className="space-y-4">
               <h3 className="font-medium text-lg">Order Summary</h3>
               <div className="space-y-2 text-sm bg-accent/30 p-4 rounded-lg border">
@@ -180,12 +196,12 @@ const PaymentSuccessPage = () => {
             </div>
           </div>
         </div>
-      <Button
-        className="w-full mt-4 rounded-full bg-pink-300 hover:bg-pink-500 transition-colors duration-200"
-        onClick={handleContinueShopping}
-      >
-        Continue to shop
-      </Button>
+        <Button
+          className="w-full mt-4 rounded-full bg-pink-300 hover:bg-pink-500 transition-colors duration-200"
+          onClick={handleContinueShopping}
+        >
+          Continue to shop
+        </Button>
       </Card>
     </div>
   );

@@ -24,6 +24,7 @@ import { Product } from "../Shopping-view/Carts/ProductCart";
 import FormTitle from "@/components/Common/FormTitle";
 import AdminProductCard from "@/components/Admin-view/AdminProductCard";
 import ChezFloraLoader from "@/components/Common/ChezFloraLoader";
+import { Helmet } from "react-helmet-async";
 
 export interface ProductFormData {
   image: null | string;
@@ -53,7 +54,7 @@ const AdminProducts = () => {
   const [imageLoadingState, setImageLoadingState] = useState<boolean>(false);
   const dispatch = useDispatch<AppDispatch>();
   const { showToast } = useCustomToast();
-  const { productList,isLoading } = useSelector(
+  const { productList, isLoading } = useSelector(
     (state: RootState) => state.adminProducts
   );
   const [currentEditedId, setCurrentEditedId] = useState(null);
@@ -116,19 +117,21 @@ const AdminProducts = () => {
       });
   };
 
-  const handleDelete = (getCurrentProductId:string) =>{
+  const handleDelete = (getCurrentProductId: string) => {
     console.log(getCurrentProductId);
-    dispatch(deleteProduct(getCurrentProductId)).unwrap().then((data)=>{
-      if(data?.success){
-        dispatch(fetchAllProducts());
-        showToast({
-          message: `${data.message}`,
-          type: "success",
-          duration: 5000,
-        });
-      }
-    })
-  }
+    dispatch(deleteProduct(getCurrentProductId))
+      .unwrap()
+      .then((data) => {
+        if (data?.success) {
+          dispatch(fetchAllProducts());
+          showToast({
+            message: `${data.message}`,
+            type: "success",
+            duration: 5000,
+          });
+        }
+      });
+  };
 
   const isFormValid = () => {
     return Object.keys(formData)
@@ -137,6 +140,27 @@ const AdminProducts = () => {
   };
   return (
     <Fragment>
+      <Helmet>
+        <title>Manage Products | ChezFlora Admin</title>
+        <meta
+          name="description"
+          content="Add, edit, or remove floral products, manage inventory, and update promotions."
+        />
+        <meta property="og:title" content="Manage Products | ChezFlora Admin" />
+        <meta
+          property="og:description"
+          content="Manage ChezFlora's product catalog and inventory."
+        />
+        <meta property="og:type" content="website" />
+        <meta
+          property="og:url"
+          content="https://www.chezflora.com/admin/products"
+        />
+        <meta
+          property="og:image"
+          content="https://www.chezflora.com/images/admin-products-preview.jpg"
+        />
+      </Helmet>
       <div className="w-full mb-5 flex-col gap-3 flex justify-between items-center lg:flex-row">
         <div>
           <FormTitle
@@ -158,7 +182,9 @@ const AdminProducts = () => {
         <ChezFloraLoader />
       ) : productList.length === 0 ? (
         <div className="flex justify-center items-center h-[300px]">
-          <span className="text-3xl font-bold">No Product, Add products first</span>
+          <span className="text-3xl font-bold">
+            No Product, Add products first
+          </span>
         </div>
       ) : (
         <div className="grid gap-4 md:grid-cols-3 lg:grid-cols-4">
@@ -191,7 +217,7 @@ const AdminProducts = () => {
               {currentEditedId !== null ? "Edit Product" : "Add New Product"}
             </SheetTitle>
           </SheetHeader>
-          <ProductImageUpload 
+          <ProductImageUpload
             imageFile={imageFile}
             setImageFile={setImageFile}
             imageUploadedUrl={imageUploadedUrl}

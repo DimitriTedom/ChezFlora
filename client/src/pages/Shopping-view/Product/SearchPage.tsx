@@ -15,6 +15,7 @@ import UserProductCard, { Product } from "../Carts/ProductCart";
 import { useCustomToast } from "@/hooks/useCustomToast";
 import { fetchProductDetails } from "@/store/shop/ShopProductSlice";
 import { addToCart, fetchCartItems } from "@/store/shop/cartSlice";
+import { Helmet } from "react-helmet-async";
 
 const SearchPage = () => {
   const [productKeyword, setProductKeyword] = useState("");
@@ -100,6 +101,27 @@ const SearchPage = () => {
   };
   return (
     <div className="mt-32">
+      <Helmet>
+        <title>Find Flowers & Blogs | ChezFlora</title>
+        <meta
+          name="description"
+          content="Search for fresh flowers, plants, and floral décor at ChezFlora. Filter by category, price, or season."
+        />
+        <meta property="og:title" content="Find Flowers & Blogs | ChezFlora" />
+        <meta
+          property="og:description"
+          content="Discover the perfect floral arrangements for any occasion at ChezFlora."
+        />
+        <meta property="og:type" content="website" />
+        <meta
+          property="og:url"
+          content="https://www.chezflora.com/shop/search"
+        />
+        <meta
+          property="og:image"
+          content="https://www.chezflora.com/images/search-preview.jpg"
+        />
+      </Helmet>
       <div className="flex flex-col">
         {/* <div className="relative z-10 h-[400px] w-full  overflow-hidden rounded-2xl">
                 <img
@@ -135,7 +157,8 @@ const SearchPage = () => {
                 {isLoading ? (
                   <ChezFloraLoader />
                 ) : searchResults.length === 0 ? (
-                  <div className="flex justify-center items-center h-[300px]">
+                  <div className="flex justify-center flex-col items-center h-[300px]">
+                    <img src="/NoProducts.svg" alt="No Prouct" className="w-[200px]"/>
                     <span className="text-3xl font-bold">No Results Found</span>
                   </div>
                 ) : (

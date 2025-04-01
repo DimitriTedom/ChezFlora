@@ -40,6 +40,7 @@ import {
 } from "@/store/shop/ProductReviewSlice";
 import { formatDate } from "@/lib/utils";
 import { Label } from "@/components/ui/label";
+import { Helmet } from "react-helmet-async";
 
 interface Review {
   user: string;
@@ -165,7 +166,6 @@ const ShoppingProductDetail: React.FC = () => {
   // "Add to Cart" button appears only when the product is not yet in the cart.
   const showAddToCartButton: boolean = currentCartQty === 0;
 
-  // Add product to cart handler
   const handleAddToCart = async (id: string) => {
     if (!canAddToCart) {
       showToast({
@@ -260,7 +260,11 @@ const ShoppingProductDetail: React.FC = () => {
       });
     }
   };
-  const averageReview = productReviews && productReviews.length > 0 ?  productReviews.reduce((sum, review) => sum + review.rating, 0) / productReviews.length : 0;
+  const averageReview =
+    productReviews && productReviews.length > 0
+      ? productReviews.reduce((sum, review) => sum + review.rating, 0) /
+        productReviews.length
+      : 0;
   if (isLoading) {
     return <ChezFloraLoader />;
   }
@@ -270,11 +274,36 @@ const ShoppingProductDetail: React.FC = () => {
 
   return (
     <div className="flex flex-col gap-8 p-4 mt-24 min-h-screen">
+      <Helmet>
+        <title>{productDetails.name} | ChezFlora</title>
+        <meta
+          name="description"
+          content={`Discover ${productDetails.name} at ChezFlora: ${productDetails.description}. Perfect for ${productDetails.event}.`}
+        />
+        <meta
+          property="og:title"
+          content={`${productDetails.name} | ChezFlora`}
+        />
+        <meta
+          property="og:description"
+          content={`${productDetails.description} – Available now at ChezFlora.`}
+        />
+        <meta property="og:type" content="product" />
+        <meta
+          property="og:url"
+          content={`https://www.chezflora.com/shop/detail/${productDetails.id}`}
+        />
+        <meta property="og:image" content={productDetails.image} />
+        <meta
+          property="og:price:amount"
+          content={productDetails.price.toString()}
+        />
+        <meta property="og:price:currency" content="EUR" />
+      </Helmet>
       {/* Product Images */}
       <div className="w-full">
         <ChezFloraGallery images={myImages.images} />
       </div>
-
       <div className="lg:flex-row flex flex-col gap-8 w-full justify-between">
         <div className="lg:w-[75%] flex flex-col gap-8">
           {/* Product Details Card */}
@@ -299,9 +328,11 @@ const ShoppingProductDetail: React.FC = () => {
             <CardContent>
               <h1 className="text-2xl font-bold mb-3">{productDetails.name}</h1>
               <div className="flex items-center gap-1">
-              {/* <Star className="fill-yellow-400 text-yellow-400"/> */}
-              <StarRating rating={averageReview} />
-              <h1>{averageReview}({productReviews.length})</h1>
+                {/* <Star className="fill-yellow-400 text-yellow-400"/> */}
+                <StarRating rating={averageReview} />
+                <h1>
+                  {averageReview}({productReviews.length})
+                </h1>
               </div>
               <div className="flex items-center space-x-3 px-3 py-2">
                 <Avatar className="h-12 w-12 xl:h-14 xl:w-14 border-2 border-primary">
