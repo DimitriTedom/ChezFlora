@@ -233,7 +233,7 @@ const ShoppingProductDetail: React.FC = () => {
     if (productDetails !== null) {
       dispatch(getProductReview(productDetails.id));
     }
-  }, [productDetails]);
+  }, [productDetails, dispatch]);
   // console.log(productReviews, "productReviews");
   const handleRatingChange = (getRating: number) => {
     // console.log(getRating);

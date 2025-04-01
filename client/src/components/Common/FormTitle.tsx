@@ -2,7 +2,7 @@ import { cn } from "@/lib/utils";
 
 interface TitleProps {
   title: string;
-  comment: string;
+  comment?: string;
   snowStyle?: string;
 }
 

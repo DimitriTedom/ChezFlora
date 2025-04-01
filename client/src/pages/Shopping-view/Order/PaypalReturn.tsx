@@ -20,6 +20,10 @@ const PaypalReturnPage = () => {
         console.log(data,"after capture payment")
         if(data.success){
           // sessionStorage.removeItem("currentOrderId");
+          sessionStorage.setItem(
+            "currentOrderId",
+            JSON.stringify(orderId)
+          );
           showToast({
             message: data.message,
             type: "success",
