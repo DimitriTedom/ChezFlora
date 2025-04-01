@@ -70,6 +70,14 @@ export default function Home() {
       />
       <Routes>
         <Route
+          path="/"
+          element={
+            <CheckAuth isAuthenticated={isAuthenticated} user={user}>
+            </CheckAuth>
+          }
+        />
+
+        <Route
           path="/auth"
           element={
             <CheckAuth isAuthenticated={isAuthenticated} user={user}>
@@ -122,7 +130,7 @@ export default function Home() {
           <Route path="blog/:id" element={<BlogPostPage />} />
           <Route path="contact" element={<ShoppingContact />} />
           <Route path="paypal-return" element={<PaypalReturnPage />} />
-          <Route path="payment-success" element={<PaymentSuccessPage/>} />
+          <Route path="payment-success" element={<PaymentSuccessPage />} />
         </Route>
         <Route path="/unauth-page" element={<UnAuthPage />} />
         <Route path="*" element={<NotFound />} />

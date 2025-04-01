@@ -4,10 +4,10 @@ import { useEffect, useState } from "react";
 interface CheckAuthProps {
   isAuthenticated: boolean;
   user: { role?: string } | null;
-  children: React.ReactNode;
+  children?: React.ReactNode;
 }
 
-const CheckAuth = ({ isAuthenticated, user, children }: CheckAuthProps) => {
+const  CheckAuth = ({ isAuthenticated, user, children }: CheckAuthProps) => {
   const location = useLocation();
   const [authState, setAuthState] = useState({
     isAuthenticated: JSON.parse(localStorage.getItem("isAuthenticated") || "false"),
@@ -25,7 +25,18 @@ const CheckAuth = ({ isAuthenticated, user, children }: CheckAuthProps) => {
       setAuthState({ isAuthenticated: false, user: null });
     }
   }, [isAuthenticated, user]);
-
+  if (location.pathname === '/') {
+    if (isAuthenticated) {
+    return <Navigate to="/auth/login" />;
+      
+    }else{
+      if (authState.user?.role === "ADMIN" && !location.pathname.includes("/admin")) {
+        return <Navigate to="/admin/dashboard" />;
+      } else if (authState.user?.role !== "ADMIN" && !location.pathname.includes("/shop")) {
+        return <Navigate to="/shop/home" />;
+      }
+    }
+  }
   if (
     !authState.isAuthenticated &&
     !(

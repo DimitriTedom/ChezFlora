@@ -266,9 +266,11 @@ const ShoppingHome = () => {
           </p>
           <div className="relative max-w-fit">
             <FaSearchengin className="absolute top-1/2 left-4 transform -translate-y-1/2 text-white w-6 h-6" />
+            <Link to="/shop/search">
             <Button className="bg-pink-300 rounded-full px-8 py-4 pl-12 text-lg hover:bg-pink-400 transition-colors">
               Start your search
             </Button>
+            </Link>
           </div>
           <div className="grid grid-cols-3 gap-4 mt-8 lg:mt-12 max-w-2xl">
             {hereoStats.map((item, index) => (
