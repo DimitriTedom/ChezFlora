@@ -313,8 +313,10 @@ const ShoppingHeader: React.FC = () => {
                 onClick={() => setOpenCartSheet(true)}
                 variant="outline"
                 size="icon"
+                className="relative"
               >
                 <AiOutlineShoppingCart className="headerIcons" />
+                <span className={`absolute -top-2 -right-2 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-white bg-pink-400 rounded-full ${cartItems?.items?.length == 0 ? "hidden" : ""}`}>{cartItems?.items?.length}</span>
                 <span className="sr-only">User Cart</span>
               </Button>
             </SheetTrigger>
