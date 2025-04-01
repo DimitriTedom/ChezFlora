@@ -83,9 +83,11 @@ model Product {
   image       String
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
+  averageReview Float?
 
   productComments ProductComment[]
   reviews         ProductReview[]
+
   cartItems       CartItem[]
 }
 
@@ -151,6 +153,7 @@ model BlogComment {
 model ProductReview {
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
   userId    String
+  userName  String
   user      User     @relation(fields: [userId], references: [id])
   productId String
   product   Product  @relation(fields: [productId], references: [id])
@@ -163,6 +166,7 @@ model ProductReview {
 model BlogReview {
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
   userId    String
+  userName  String
   user      User     @relation(fields: [userId], references: [id])
   articleId String
   article   Article  @relation(fields: [articleId], references: [id])

@@ -41,7 +41,6 @@ export const createOrder = async (req: Request, res: Response) => {
             });
         });
     } catch (error: unknown) {
-        console.error("Error creating order:", error);
         res.status(HttpCode.INTERNAL_SERVER_ERROR).json({
             success: false,
             message: "INTERNAL_SERVER_ERROR",
@@ -95,7 +94,6 @@ export const capturePayment = async (req: Request, res: Response) => {
             data: updatedOrder,
         });
     } catch (error: unknown) {
-        console.error("Error capturing payment:", error);
         res.status(HttpCode.INTERNAL_SERVER_ERROR).json({
             success: false,
             message: "INTERNAL_SERVER_ERROR",
@@ -120,7 +118,6 @@ export const getAllOrdersByUser = async (req: Request, res: Response) => {
             data: orders,
         });
     } catch (error: unknown) {
-        console.error("Error getting orders:", error);
         res.status(HttpCode.INTERNAL_SERVER_ERROR).json({
             success: false,
             message: "INTERNAL_SERVER_ERROR",
@@ -144,7 +141,6 @@ export const getOrderDetails = async (req: Request, res: Response) => {
             data: order,
         });
     } catch (error: unknown) {
-        console.error("Error getting Order Details:", error);
         res.status(HttpCode.INTERNAL_SERVER_ERROR).json({
             success: false,
             message: "INTERNAL_SERVER_ERROR",

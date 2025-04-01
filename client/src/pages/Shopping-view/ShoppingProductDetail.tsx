@@ -33,6 +33,8 @@ import ChezFloraLoader from "@/components/Common/ChezFloraLoader";
 import { useCustomToast } from "@/hooks/useCustomToast";
 import { fetchCartItems, addToCart } from "@/store/shop/cartSlice";
 import { MdProductionQuantityLimits } from "react-icons/md";
+import StarRating from "@/components/Common/StarRating";
+import { addProductReview } from "@/store/shop/ProductReviewSlice";
 
 interface Review {
   user: string;
@@ -68,14 +70,14 @@ const ShoppingProductDetail: React.FC = () => {
     null
   );
   const [quantity, setQuantity] = useState<number>(1);
-  const [reviewText, setReviewText] = useState<string>("");
+  const [reviewContent, setReviewContent] = useState<string>("");
   const { id: prodId } = useParams<{ id: string }>();
   const dispatch = useDispatch<AppDispatch>();
   const { user } = useSelector((state: RootState) => state.auth);
   const { cartItems } = useSelector((state: RootState) => state.shoppingCart);
   const { isLoading } = useSelector((state: RootState) => state.shopProducts);
   const { showToast } = useCustomToast();
-
+  const [rating,setRating] = useState<number>(0);
   // Fetch product details on mount
   useEffect(() => {
     const fetchProductDetail = async () => {
@@ -148,7 +150,7 @@ const ShoppingProductDetail: React.FC = () => {
       : 0
     : 0;
 
-  // Check if adding more would exceed available stock
+  // here i Check if adding more would exceed available stock
   const canAddToCart: boolean =
     productDetails !== null &&
     quantity + currentCartQty <= productDetails.stock;
@@ -188,9 +190,30 @@ const ShoppingProductDetail: React.FC = () => {
   };
 
   const handleReviewSubmit = () => {
-    setReviewText("");
+    dispatch(addProductReview({productId:productDetails?.id,userId:user?.id,content:reviewContent,rating:rating,userName:user?.name})).unwrap().then((data)=>{
+      console.log(data);
+      if(data.success){
+        showToast({
+          message: data.message,
+          type: "success",
+          duration:2000
+        });
+      }
+    }).catch((error)=>{
+      showToast({
+        message: error.message,
+        type: "error",
+        duration:2000
+      });
+    })
+    setReviewContent("");
+    setRating(0);
   };
-
+const handleRatingChange = (getRating:number) => {
+  console.log(getRating)
+  setRating(getRating)
+  console.log(rating,"rating")
+}
   // Calculate total price for the selected quantity
   const totalPrice = productDetails
     ? ((productDetails.saleprice || productDetails.price) * quantity).toFixed(2)
@@ -309,24 +332,30 @@ const ShoppingProductDetail: React.FC = () => {
           {/* Reviews Section */}
           <Card className="w-full lg:w-[75%]">
             <CardHeader>
-              <CardTitle>
+              <CardTitle className="space-y-4">
+                <div>
                 Reviews ({productDetails.reviews?.length || 0})
+                </div>
+                <StarRating rating={rating} handleRatingChange={handleRatingChange}/>
+                <Separator />
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="relative">
                 <Textarea
+                name="reviewContent"
                   placeholder="Share your thoughts..."
-                  value={reviewText}
-                  onChange={(e) => setReviewText(e.target.value)}
+                  value={reviewContent}
+                  onChange={(e) => setReviewContent(e.target.value)}
                   className="pr-12 border rounded-lg focus-visible:ring-0 focus-visible:ring-offset-0"
                   rows={5}
                 />
                 <Button
                   variant="ghost"
                   size="icon"
-                  className="absolute bottom-2 right-2 p-2 bg-primary text-white rounded-full hover:bg-primary/90"
+                  className="absolute bottom-2 bg-pink-300 right-2 p-2 hover:bg-pink-500 text-white rounded-full"
                   onClick={handleReviewSubmit}
+                  disabled={reviewContent.trim() === ""}
                 >
                   <ArrowRightIcon className="h-5 w-5" />
                 </Button>

@@ -196,8 +196,8 @@ const ShoppingORderSlice = createSlice({
           paymentMethod: "",
           paymentStatus: PaymentStatus.PENDING, 
           totalAmount: 0,
-          orderDate: new Date(),
-          orderUpdateDate: new Date(), 
+          orderDate: new Date().toISOString(),
+          orderUpdateDate: new Date().toISOString(), 
           paymentId: undefined,
           payerId: undefined,
         } as Order;
