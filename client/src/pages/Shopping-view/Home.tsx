@@ -4,12 +4,11 @@ import { GiVineFlower } from "react-icons/gi";
 import { FaSearchengin } from "react-icons/fa";
 import { Button } from "@/components/ui/button";
 import FormTitle from "@/components/Common/FormTitle";
-import ProductCard, { Product } from "./Carts/ProductCart";
+import  { Product } from "./Carts/ProductCart";
 import Spinner from "@/components/Shopping-view/ShowMoreSpinner";
 import TestimonialCard, { Testimonial } from "./Carts/TestimonialCard";
 import BlogCard from "./Carts/BlogCard";
 import { blogsArray } from "@/data/blogs";
-import { products } from "@/data/Products";
 import { Link, useNavigate } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import UserProductCard from "./Carts/ProductCart";
@@ -30,11 +29,11 @@ import {
 } from "@/store/shop/ShopProductSlice";
 import { useCustomToast } from "@/hooks/useCustomToast";
 import { addToCart, fetchCartItems } from "@/store/shop/cartSlice";
-import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 import { Flower, Sprout, Home, Cake, Cross, Heart, Gift } from "lucide-react";
 const images = [
   "/flowerGen5.jpg",
-  "/flower2.jpg", // Add your other image paths
+  "/flower2.jpg",
   "/flower3.jpg",
   "/flower4.jpg",
 ];

@@ -1,27 +1,30 @@
 import React, { useEffect, useState } from "react";
 import { NavLink, Link } from "react-router-dom";
-import { AiFillHome, AiOutlineShoppingCart } from "react-icons/ai";
+import {
+  AiFillHome,
+  AiOutlineShoppingCart,
+  AiOutlineUser,
+} from "react-icons/ai";
 import { MdAccountCircle } from "react-icons/md";
 import { BiMenuAltRight } from "react-icons/bi";
 import {
   NavigationMenu,
-  NavigationMenuContent,
   NavigationMenuItem,
-  NavigationMenuLink,
   NavigationMenuList,
-  NavigationMenuTrigger,
 } from "@/components/ui/navigation-menu";
 import { Sheet, SheetTrigger, SheetContent } from "@/components/ui/sheet";
 import Logo from "../Common/Logo";
 import SocialIcons from "../Common/Contact/SocialIcons";
 import SignInButton from "./SignOrContactButton";
-import AvatarCustum from "../Common/Avatar.custom";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/store/store";
 import UserCartWrapper from "./CartWrapper";
 import { fetchCartItems } from "@/store/shop/cartSlice";
-import { LogOut, SettingsIcon, User2Icon, UserCog2Icon } from "lucide-react";
+import { LogOut } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
+import { logoutUser } from "@/store/authSlice";
+import { useCustomToast } from "@/hooks/useCustomToast";
+import { HiOutlineClipboardList } from "react-icons/hi";
 
 export interface NavProps {
   title: string;
@@ -41,23 +44,6 @@ const NavMenuLink = ({ url, text }: { url: string; text: string }) => (
     >
       {text}
     </NavLink>
-  </NavigationMenuItem>
-);
-
-const NavMenuDropdown = ({
-  text,
-  children,
-}: {
-  text: string;
-  children: React.ReactNode;
-}) => (
-  <NavigationMenuItem>
-    <NavigationMenuTrigger className="w-full text-gray-700 hover:bg-pink-100 active:bg-pink-100 transition-colors py-2 px-4 rounded-md text-xl">
-      {text}
-    </NavigationMenuTrigger>
-    <NavigationMenuContent className="flex flex-col p-4 w-fit h-fit gap-3">
-      {children}
-    </NavigationMenuContent>
   </NavigationMenuItem>
 );
 
@@ -84,10 +70,11 @@ const HeaderSm: React.FC = () => {
   const { cartItems } = useSelector((state: RootState) => state.shoppingCart);
   const [openCartSheet, setOpenCartSheet] = useState<boolean>(false);
   const dispactch = useDispatch<AppDispatch>();
+  const { showToast } = useCustomToast();
   useEffect(() => {
     dispactch(fetchCartItems(user?.id));
   }, [dispactch, user]);
-  // Define the navigation items
+
   const navItems: NavProps[] = [
     { title: "Home", icon: AiFillHome, url: "/shop/home" },
     { title: "Cart", icon: AiOutlineShoppingCart, url: "/shop/cart" },
@@ -95,7 +82,7 @@ const HeaderSm: React.FC = () => {
     { title: "Menu", icon: BiMenuAltRight, url: "/shop/menu" },
   ];
   const handleLogOut = () => {
-    dispatch(logoutUser())
+    dispactch(logoutUser())
       .unwrap()
       .then((data) => {
         showToast({
@@ -156,36 +143,6 @@ const HeaderSm: React.FC = () => {
                           </NavigationMenu>
                           <NavigationMenu>
                             <NavigationMenuList>
-                              <NavMenuDropdown text="Services">
-                                <NavigationMenuLink className="rounded-md hover:bg-pink-100">
-                                  <Link
-                                    to="/service1"
-                                    className="transition-colors px-4 py-2"
-                                  >
-                                    Service 1
-                                  </Link>
-                                </NavigationMenuLink>
-                                <NavigationMenuLink className="rounded-md hover:bg-pink-100">
-                                  <Link
-                                    to="/service2"
-                                    className="transition-colors px-4 py-2"
-                                  >
-                                    Service 2
-                                  </Link>
-                                </NavigationMenuLink>
-                                <NavigationMenuLink className="rounded-md hover:bg-pink-100">
-                                  <Link
-                                    to="/service3"
-                                    className="transition-colors px-4 py-2"
-                                  >
-                                    Service 3
-                                  </Link>
-                                </NavigationMenuLink>
-                              </NavMenuDropdown>
-                            </NavigationMenuList>
-                          </NavigationMenu>
-                          <NavigationMenu>
-                            <NavigationMenuList>
                               <NavMenuLink url="/shop/blog" text="Blog" />
                             </NavigationMenuList>
                           </NavigationMenu>
@@ -197,7 +154,6 @@ const HeaderSm: React.FC = () => {
                         </nav>
                       </div>
                       <div className="space-y-6 flex flex-col">
-                        {/* Conditionally render SignInButton only if not authenticated */}
                         {!isAuthenticated && <SignInButton />}
                         <SocialIcons />
                       </div>
@@ -223,7 +179,6 @@ const HeaderSm: React.FC = () => {
                     </SheetTrigger>
                     <SheetContent className="py-8 px-4 flex flex-col items-center gap-5">
                       {isAuthenticated && user ? (
-                        // If authenticated, display the AvatarCustom with additional account links
                         <div className="flex flex-col items-center space-y-4 w-full">
                           <div className="self-start w-full bg-pink-100 border border-pink-200 rounded-md">
                             <div className="flex items-center space-x-3 px-3 py-2">
@@ -252,17 +207,17 @@ const HeaderSm: React.FC = () => {
 
                           <Link
                             to="/shop/account"
-                            className="flex items-center space-x-2 w-full"
+                            className="flex items-center space-x-2 self-start"
                           >
-                            <User2Icon className="h-4 w-4 text-muted-foreground" />
-                            <span>Account</span>
+                            <AiOutlineUser className="h-4 w-4 text-muted-foreground" />
+                            <span>Account DashBoard</span>
                           </Link>
                           <Link
                             to="/shop/settings"
-                            className="flex items-center space-x-2 w-full"
+                            className="flex items-center space-x-2 self-start"
                           >
-                            <UserCog2Icon className="h-4 w-4 text-muted-foreground" />
-                            <span>Settings</span>
+                            <HiOutlineClipboardList className="h-4 w-4 text-muted-foreground" />
+                            <span>My Bookings</span>
                           </Link>
 
                           <div

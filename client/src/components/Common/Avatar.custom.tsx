@@ -1,5 +1,4 @@
 import { HiOutlineClipboardList } from "react-icons/hi"; 
-import { FaClipboardList } from "react-icons/fa"; 
 import { AiOutlineUser } from "react-icons/ai"; 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
@@ -70,7 +69,7 @@ user: User
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-64 bg-background shadow-lg rounded-md border border-border m-4">
-        {/* User Info Section */}
+
         <DropdownMenuLabel className="flex items-center space-x-3 px-3 py-2">
           <Avatar className="h-12 w-12 xl:h-14 xl:w-14 border-2 border-primary">
             <AvatarImage src={user?.image || "/SnowDev (1).png"} alt="user avatar" />
@@ -89,7 +88,7 @@ user: User
 
         <DropdownMenuSeparator />
 
-        {/* Profile Link */}
+
         <DropdownMenuItem asChild className="cursor-pointer hover:bg-accent">
           <Link to="/shop/account" className="flex items-center space-x-2">
             <AiOutlineUser className="h-4 w-4 text-muted-foreground" />
@@ -97,7 +96,7 @@ user: User
           </Link>
         </DropdownMenuItem>
 
-        {/* Settings Link */}
+
         <DropdownMenuItem asChild className="cursor-pointer hover:bg-accent">
           <Link to="/shop/settings" className="flex items-center space-x-2">
             <HiOutlineClipboardList className="h-4 w-4 text-muted-foreground" />
@@ -107,7 +106,7 @@ user: User
 
         <DropdownMenuSeparator />
 
-        {/* Logout Button */}
+
         <DropdownMenuItem
           onSelect={handleLogOut}
           className="cursor-pointer hover:bg-red-500 hover:text-white"

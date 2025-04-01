@@ -85,7 +85,6 @@ model Product {
   updatedAt   DateTime  @updatedAt
   averageReview Float?
 
-  productComments ProductComment[]
   reviews         ProductReview[]
 
   cartItems       CartItem[]
@@ -119,7 +118,6 @@ model User {
 
   addresses       Address[]
   orders          Order[]
-  productComments ProductComment[]
   blogComments    BlogComment[]
   articles        Article[]
   quoteRequests   QuoteRequest[]
@@ -128,16 +126,6 @@ model User {
   blogReviews     BlogReview[]
 }
 
-model ProductComment {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  userId    String
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  productId String
-  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
-  content   String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-}
 
 model BlogComment {
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
