@@ -140,7 +140,6 @@ const ShoppingProductDetail: React.FC = () => {
       : ["/flowerGen5.jpg", "/flower1.jpg", "/flower12.webp"],
   };
 
-  // Handle quantity changes for product selection
   const handleQuantityChange = (increment: boolean) => {
     if (increment && productDetails && quantity < productDetails.stock) {
       setQuantity((prev) => prev + 1);
@@ -217,6 +216,9 @@ const ShoppingProductDetail: React.FC = () => {
             type: "success",
             duration: 2000,
           });
+          setRating(0);
+          setReviewContent("");
+          dispatch(getProductReview(productDetails.id));
         }
       })
       .catch((error) => {
@@ -234,11 +236,8 @@ const ShoppingProductDetail: React.FC = () => {
       dispatch(getProductReview(productDetails.id));
     }
   }, [productDetails, dispatch]);
-  // console.log(productReviews, "productReviews");
   const handleRatingChange = (getRating: number) => {
-    // console.log(getRating);
     setRating(getRating);
-    // console.log(rating, "rating");
   };
 
   const totalPrice = productDetails
@@ -261,7 +260,7 @@ const ShoppingProductDetail: React.FC = () => {
       });
     }
   };
-
+  const averageReview = productReviews && productReviews.length > 0 ?  productReviews.reduce((sum, review) => sum + review.rating, 0) / productReviews.length : 0;
   if (isLoading) {
     return <ChezFloraLoader />;
   }
@@ -299,6 +298,11 @@ const ShoppingProductDetail: React.FC = () => {
             </CardHeader>
             <CardContent>
               <h1 className="text-2xl font-bold mb-3">{productDetails.name}</h1>
+              <div className="flex items-center gap-1">
+              {/* <Star className="fill-yellow-400 text-yellow-400"/> */}
+              <StarRating rating={averageReview} />
+              <h1>{averageReview}({productReviews.length})</h1>
+              </div>
               <div className="flex items-center space-x-3 px-3 py-2">
                 <Avatar className="h-12 w-12 xl:h-14 xl:w-14 border-2 border-primary">
                   <AvatarImage
@@ -357,7 +361,7 @@ const ShoppingProductDetail: React.FC = () => {
           </Card>
 
           {/* Reviews Section */}
-          <Card className="w-full  lg:w-[75%] shadow-lg rounded-lg p-4">
+          <Card className="w-full lg:w-[90%] shadow-lg rounded-lg p-4">
             <CardHeader>
               <CardTitle className="space-y-4">
                 <Label className="text-2xl font-bold text-gray-800">

@@ -1,8 +1,7 @@
 import { Button } from "../ui/button";
 import { Star } from "lucide-react";
 
-const StarRating = ({ rating, handleRatingChange }: { rating: number, handleRatingChange: (rating: number) => void }) => {
-  console.log(rating,'inside star rating')
+const StarRating = ({ rating, handleRatingChange }: { rating: number, handleRatingChange?: (rating: number) => void }) => {
   return (
     <div className="flex">
       {[1,2,3,4,5].map((star, index) => (
