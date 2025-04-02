@@ -11,7 +11,7 @@ const QuoteRequestForm = () => {
   const [formData, setFormData] = useState<Record<string, string>>({
     eventType: "",
     estimatedBudget: "",
-    dateOfEvent: "",
+    eventDate: "",
     description: "",
   });
 

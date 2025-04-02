@@ -187,7 +187,7 @@ export const QuoteRequestformControls: FormControlItem[] = [
     type: "number",
   },
   {
-    name: "dateOfEvent",
+    name: "eventDate",
     label: "Date of Event",
     placeholder: "dd/mm/yy",
     component: "input",

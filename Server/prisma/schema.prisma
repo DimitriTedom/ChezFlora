@@ -30,6 +30,14 @@ enum Status {
   REJECTED
 }
 
+enum QuoteStatus {
+  PENDING
+  PROCESSING
+  CANCELLED
+  APPROVED
+  REJECTED
+}
+
 enum ArticleCategory {
   TIPS
   DECOR_TRENDS
@@ -72,22 +80,22 @@ type AddressInfo {
 
 // Models
 model Product {
-  id          String    @id @default(auto()) @map("_id") @db.ObjectId
-  name        String
-  description String?
-  price       Float
-  saleprice   Float?
-  stock       Int
-  category    Category
-  event       EventType
-  image       String
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
+  id            String    @id @default(auto()) @map("_id") @db.ObjectId
+  name          String
+  description   String?
+  price         Float
+  saleprice     Float?
+  stock         Int
+  category      Category
+  event         EventType
+  image         String
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
   averageReview Float?
 
-  reviews         ProductReview[]
+  reviews ProductReview[]
 
-  cartItems       CartItem[]
+  cartItems CartItem[]
 }
 
 model Article {
@@ -106,15 +114,14 @@ model Article {
 }
 
 model PendingUser {
-  id          String          @id @default(auto()) @map("_id") @db.ObjectId
+  id           String   @id @default(auto()) @map("_id") @db.ObjectId
   name         String
-  email        String    @unique
+  email        String   @unique
   password     String
   otp          String
   otpExpiresAt DateTime
-  createdAt    DateTime  @default(now())
+  createdAt    DateTime @default(now())
 }
-
 
 model User {
   id           String    @id @default(auto()) @map("_id") @db.ObjectId
@@ -127,16 +134,15 @@ model User {
   createdAt    DateTime  @default(now())
   updatedAt    DateTime  @updatedAt
 
-  addresses       Address[]
-  orders          Order[]
-  blogComments    BlogComment[]
-  articles        Article[]
-  quoteRequests   QuoteRequest[]
-  carts           Cart[]
-  productReviews  ProductReview[]
-  blogReviews     BlogReview[]
+  addresses      Address[]
+  orders         Order[]
+  blogComments   BlogComment[]
+  articles       Article[]
+  quoteRequests  QuoteRequest[]
+  carts          Cart[]
+  productReviews ProductReview[]
+  blogReviews    BlogReview[]
 }
-
 
 model BlogComment {
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
@@ -231,9 +237,10 @@ model QuoteRequest {
   userId      String
   user        User      @relation(fields: [userId], references: [id])
   eventDate   DateTime
+  estimatedBudget Float
   eventType   EventType
   description String
-  status      Status    @default(PENDING)
+  status      QuoteStatus    @default(PENDING)
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
 }
