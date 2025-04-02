@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>New Contact Inquiry - ChezFlora</title>
+    <style>
+        body {
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: #3A5E54;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #F9F7F3;
+        }
+        .header {
+            text-align: center;
+            padding: 20px 0;
+            border-bottom: 2px solid #8CAF93;
+            margin-bottom: 30px;
+        }
+        .logo {
+            color: #8CAF93;
+            font-size: 28px;
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+        .content {
+            background-color: white;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
+        .divider {
+            height: 1px;
+            background: linear-gradient(to right, transparent, #8CAF93, transparent);
+            margin: 25px 0;
+        }
+        .detail-row {
+            display: flex;
+            margin-bottom: 15px;
+        }
+        .detail-label {
+            font-weight: bold;
+            width: 120px;
+            color: #6D8B74;
+        }
+        .message-box {
+            background-color: #F4F9F4;
+            padding: 15px;
+            border-radius: 6px;
+            border-left: 4px solid #8CAF93;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            color: #888;
+            font-size: 14px;
+        }
+        .floral-icon {
+            color: #F4C2C2;
+            font-size: 24px;
+            vertical-align: middle;
+            margin: 0 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="logo">ChezFlora <span class="floral-icon">✿</span></div>
+        <h2>New Contact Inquiry</h2>
+    </div>
+
+    <div class="content">
+        <div class="detail-row">
+            <div class="detail-label">From:</div>
+            <div>{{name}}</div>
+        </div>
+        
+        <div class="detail-row">
+            <div class="detail-label">Email:</div>
+            <div>{{email}}</div>
+        </div>
+        
+        <div class="detail-row">
+            <div class="detail-label">Phone:</div>
+            <div>{{phone}}</div>
+        </div>
+        
+        <div class="detail-row">
+            <div class="detail-label">Address:</div>
+            <div>{{address}}</div>
+        </div>
+        
+        <div class="detail-row">
+            <div class="detail-label">Subject:</div>
+            <div style="color: #F4C2C2; font-weight: bold;">{{subject}}</div>
+        </div>
+
+        <div class="divider"></div>
+
+        <h3 style="color: #6D8B74; margin-top: 0;">Message:</h3>
+        <div class="message-box">
+            {{message}}
+        </div>
+    </div>
+
+    <div class="footer">
+        <p>Please respond to this inquiry within 24 hours.</p>
+        <p>✉️ <a href="mailto:{{email}}" style="color: #8CAF93;">Reply to {{name}}</a></p>
+        <p>ChezFlora Customer Support</p>
+    </div>
+</body>
+</html>

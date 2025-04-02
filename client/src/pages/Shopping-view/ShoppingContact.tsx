@@ -10,6 +10,10 @@ import { Helmet } from "react-helmet-async";
 import { useState } from "react";
 import JoinNewsLetterComponent from "@/components/Shopping-view/contact/JoinNewsLetter";
 import { contactFormControls } from "@/config";
+import { useDispatch } from "react-redux";
+import { AppDispatch, RootState } from "@/store/store";
+import { ContactFormData, sendContactIssue } from "@/store/shop/ContactSlice";
+import { useCustomToast } from "@/hooks/useCustomToast";
 
 // Configuration objects
 const contactInfo = [
@@ -67,7 +71,7 @@ const socialLinks = [
 ];
 
 const ShoppingContact = () => {
-  const [formData, setFormData] = useState<Record<string, string>>({
+  const [formData, setFormData] = useState<ContactFormData>({
     name: "",
     email: "",
     phone: "",
@@ -76,15 +80,25 @@ const ShoppingContact = () => {
     message: "",
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
-
+  const dispatch = useDispatch<AppDispatch>();
+  const {showToast} = useCustomToast()
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     console.log(formData);
     setIsSubmitting(true);
 
     try {
+      dispatch(sendContactIssue(formData)).unwrap().then((data) => {
+        console.log(data);
+        if (data.success) {
+          showToast({
+            type: "success",
+            message: data.message,
+            duration:2000,
+          })
+        }
+      });
       setFormData({
-        // Reset form after submission
         name: "",
         email: "",
         phone: "",
@@ -92,9 +106,12 @@ const ShoppingContact = () => {
         subject: "",
         message: "",
       });
-      // Show success notification
-    } catch (error) {
-      // Handle error
+    } catch (error:any) {
+      showToast({
+        type: "error",
+        message: error.message,
+        duration:2000,
+      })
     } finally {
       setIsSubmitting(false);
     }

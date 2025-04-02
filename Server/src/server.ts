@@ -17,6 +17,7 @@ import shopOrderRouter from './routes/shop/Order.routes'
 import AdminOrderRouter from './routes/admin/Orders.routes'
 import SearchProductsRouter from './routes/shop/search.routes'
 import shopProductsReviewRouter from './routes/shop/productReview.routes'
+import shopContactRouter from './routes/shop/contact.routes'
 
 import cookieParser from 'cookie-parser';
 import helmet from 'helmet';
@@ -53,6 +54,7 @@ app.use('/api/shop/order',shopOrderRouter);
 app.use('/api/admin/orders',AdminOrderRouter);
 app.use('/api/shop/search',SearchProductsRouter)
 app.use('/api/shop/review',shopProductsReviewRouter)
+app.use('/api/shop/contact',shopContactRouter)
 app.use(morgan('combined'));
 
 setupSwagger(app);
