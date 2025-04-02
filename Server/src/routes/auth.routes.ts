@@ -1,12 +1,14 @@
 import { Router } from 'express';
-import { register, login,logout, checkUser, updatePassword, verifyOtp } from '../controllers/auth.controller';
+import { initiateRegistration,completeRegistration, login,logout, checkUser, updatePassword, verifyOtp,checkPendingUser } from '../controllers/auth.controller';
 import { HttpCode } from '../core/constants';
 import { authenticateUser } from '../middlewares/auth.middleware';
 const router = Router();
 
-router.post('/register', register);
+router.post('/register/initiate', initiateRegistration);
+router.post('/register/complete', completeRegistration);
 router.post('/login', login);
 router.post("/check-user",checkUser);
+router.post("/check-pending-user",checkPendingUser);
 router.post("/update-password",updatePassword);
 router.post('/logout', logout);
 router.post('/verify-otp',verifyOtp)

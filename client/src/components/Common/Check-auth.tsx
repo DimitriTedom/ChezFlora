@@ -44,6 +44,7 @@ const  CheckAuth = ({ isAuthenticated, user, children }: CheckAuthProps) => {
       location.pathname.includes("/register") ||
       location.pathname.includes("/forgot-password") ||
       location.pathname.includes("/verify-otp") ||
+      location.pathname.includes("/complete") ||
       location.pathname.includes("/enter-new-password")
     )
   ) {

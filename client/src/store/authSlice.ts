@@ -36,21 +36,40 @@ const initialState: AuthState = {
   otpVerified:false,
 };
 
-export const registerUser = createAsyncThunk<
+export const initiateRegistrationUser = createAsyncThunk<
   RegisterResponse,
   { name: string; email: string; password: string },
   { rejectValue: string }
->("auth/registerUser", async (userData, { rejectWithValue }) => {
+>("auth/initiateRegistrationUser", async (userData, { rejectWithValue }) => {
   try {
     const response = await axios.post(
-      "http://localhost:5000/api/auth/register",
+      "http://localhost:5000/api/auth/register/initiate",
       userData,
       { withCredentials: true }
     );
     return response.data;
   } catch (error: any) {
     return rejectWithValue(
-      error.response?.data?.message || "Registration failed"
+      error.response?.data?.message || "Registration initaition failed"
+    );
+  }
+});
+
+export const completeRegistration = createAsyncThunk<
+  ApiResponse,
+  { email: string; otp: string },
+  { rejectValue: string }
+>("auth/completeRegistration", async ({ email, otp }, { rejectWithValue }) => {
+  try {
+    const response = await axios.post(
+      "http://localhost:5000/api/auth/register/complete",
+      { email, otp },
+      { withCredentials: true }
+    );
+    return response.data;
+  } catch (error: any) {
+    return rejectWithValue(
+      error.response?.data?.message || "An error occurred while completing registration."
     );
   }
 });
@@ -110,6 +129,25 @@ export const checkUser = createAsyncThunk<
   }
 });
 
+export const checkPendingUser = createAsyncThunk<
+  ApiResponse,
+  string,
+  { rejectValue: string }
+>("auth/checkPendingUser", async (email, { rejectWithValue }) => {
+  try {
+    const response = await axios.post(
+      "http://localhost:5000/api/auth/check-pending-user",
+      { email }
+    );
+    return response.data;
+  } catch (error: any) {
+    return rejectWithValue(
+      error.response?.data?.message || "Erreur lors de la vérification"
+    );
+  }
+});
+
+
 export const logoutUser = createAsyncThunk("/auth/logout", async () => {
   const response = await axios.post(
     "http://localhost:5000/api/auth/logout",
@@ -158,17 +196,30 @@ const authSlice = createSlice({
   extraReducers: (builder) => {
     builder
       // --- REGISTER ---
-      .addCase(registerUser.pending, (state) => {
+      .addCase(initiateRegistrationUser.pending, (state) => {
         state.isLoading = true;
         state.error = null;
       })
-      .addCase(registerUser.fulfilled, (state) => {
+      .addCase(initiateRegistrationUser.fulfilled, (state) => {
+        state.isLoading = false;
+        state.error = null;
+      })
+      .addCase(initiateRegistrationUser.rejected, (state) => {
+        state.isLoading = false;
+        state.error = null;
+        state.isAuthenticated = false;
+      })
+      .addCase(completeRegistration.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(completeRegistration.fulfilled, (state) => {
         state.isLoading = false;
         state.user = null;
         state.isAuthenticated = false;
         state.error = null;
       })
-      .addCase(registerUser.rejected, (state) => {
+      .addCase(completeRegistration.rejected, (state) => {
         state.isLoading = false;
         state.error = null;
         state.isAuthenticated = false;
@@ -204,7 +255,6 @@ const authSlice = createSlice({
         (state, action: PayloadAction<LoginResponse>) => {
           if (action.payload.success) {
             state.user = action.payload.user;
-        console.log("checkauth fulfilled")
 
             state.isAuthenticated = true;
             localStorage.setItem("user", JSON.stringify(action.payload.user));
@@ -238,6 +288,19 @@ const authSlice = createSlice({
         state.userExists = true;
       })
       .addCase(checkUser.rejected, (state, action) => {
+        state.isLoading = false;
+        state.userExists = false;
+        state.error = action.payload as string;
+      })
+      .addCase(checkPendingUser.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(checkPendingUser.fulfilled, (state) => {
+        state.isLoading = false;
+        state.userExists = true;
+      })
+      .addCase(checkPendingUser.rejected, (state, action) => {
         state.isLoading = false;
         state.userExists = false;
         state.error = action.payload as string;

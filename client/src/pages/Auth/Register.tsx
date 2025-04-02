@@ -7,7 +7,7 @@ import { FcGoogle } from "react-icons/fc";
 import FormTitle from "@/components/Common/FormTitle";
 import { registerFormControls } from "@/config";
 import { useDispatch } from "react-redux";
-import { registerUser } from "@/store/authSlice";
+import { initiateRegistrationUser, registerUser } from "@/store/authSlice";
 import type { AppDispatch } from "@/store/store";
 import { useCustomToast } from "@/hooks/useCustomToast";
 import { Helmet } from "react-helmet-async";
@@ -44,22 +44,19 @@ const AuthRegister: React.FC = () => {
       return;
     }
 
-    dispatch(registerUser(formData))
+    dispatch(initiateRegistrationUser(formData))
       .unwrap()
       .then((response) => {
         // this response contains a json of succes boolean and succes message
-        console.log("API Response:", response);
         if (response?.success) {
-          console.log("sucess before toast");
           showToast({
             message: response.message,
             type: "success",
-            subtitle: "Redirecting to login page...",
+            subtitle: "Redirecting to Verify OTP page...",
             duration: 3000,
           });
-          console.log("Client Response from Server: ", response);
           setTimeout(() => {
-            navigate("/auth/login");
+            navigate(`/auth/complete/${formData.email}`);
           }, 3000);
         } else {
           console.log("Registration failed: ", response.message);

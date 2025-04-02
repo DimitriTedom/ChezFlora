@@ -35,6 +35,7 @@ import ShoppingProductDetail from "./pages/Shopping-view/ShoppingProductDetail";
 import PaypalReturnPage from "./pages/Shopping-view/Order/PaypalReturn";
 import PaymentSuccessPage from "./pages/Shopping-view/Order/PaymentSuccess";
 import SearchPage from "./pages/Shopping-view/Product/SearchPage";
+import CompleteRegistrationOTP from "./pages/Auth/CompleteRegistrationOTP";
 export default function Home() {
   const { user, isAuthenticated, isLoading } = useSelector(
     (state: RootState) => state.auth
@@ -88,6 +89,7 @@ export default function Home() {
           <Route path="login" element={<AuthLogin />} />
           <Route path="register" element={<AuthRegister />} />
           <Route path="forgot-password" element={<ForgotPassword />} />
+          <Route path="complete/:email" element={<CompleteRegistrationOTP/>}/>
           <Route path="verify-otp/:email" element={<AuthEnterOtp />} />
           <Route
             path="enter-new-password/:email"
