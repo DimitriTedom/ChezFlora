@@ -23,7 +23,13 @@ export const sendContactIssue = async (req: Request, res: Response) => {
                 message: 'Email does not have an account'
             });
         }
-
+        const adminEmail = await prisma.user.findFirst({ where: { role: 'ADMIN' } });
+        if (!adminEmail) {
+            return res.status(HttpCode.BAD_REQUEST).json({
+                success: false,
+                message: 'No admin email found'
+            });
+        }
         // Create the transporter
         const transporter = nodemailer.createTransport({
             host: process.env.EMAIL_HOST,
@@ -50,7 +56,7 @@ export const sendContactIssue = async (req: Request, res: Response) => {
 
         const mailOptions = {
             from: '"ChezFlora Support" <support@chezflora.com>',
-            to: process.env.ADMIN_EMAIL,
+            to: adminEmail.email,
             subject: `New Contact: ${subject} (From: ${name})`,
             template: 'contact',
             context: { name, email, phone, address, subject, message }

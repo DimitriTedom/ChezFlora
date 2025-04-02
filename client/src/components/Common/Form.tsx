@@ -183,7 +183,7 @@ const CommonForm: React.FC<CommonFormProps> = ({
         disabled={isBnDisabled}
         className="mt-4 w-full p-6 font-semibold text-white bg-pink-300 hover:bg-pink-400 rounded-full text-[1.3rem]"
       >
-        {isBnDisabled ? "waiting..." : buttonText}
+        {isBnDisabled ? "waiting form Data..." : buttonText}
       </Button>
     </form>
   );

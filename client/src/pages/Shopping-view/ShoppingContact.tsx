@@ -10,7 +10,7 @@ import { Helmet } from "react-helmet-async";
 import { useState } from "react";
 import JoinNewsLetterComponent from "@/components/Shopping-view/contact/JoinNewsLetter";
 import { contactFormControls } from "@/config";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/store/store";
 import { ContactFormData, sendContactIssue } from "@/store/shop/ContactSlice";
 import { useCustomToast } from "@/hooks/useCustomToast";
@@ -79,14 +79,12 @@ const ShoppingContact = () => {
     subject: "",
     message: "",
   });
-  const [isSubmitting, setIsSubmitting] = useState(false);
   const dispatch = useDispatch<AppDispatch>();
+  const { isLoading} = useSelector((state: RootState) => state.shopContact);
   const {showToast} = useCustomToast()
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     console.log(formData);
-    setIsSubmitting(true);
-
     try {
       dispatch(sendContactIssue(formData)).unwrap().then((data) => {
         console.log(data);
@@ -112,11 +110,21 @@ const ShoppingContact = () => {
         message: error.message,
         duration:2000,
       })
-    } finally {
-      setIsSubmitting(false);
     }
   };
-
+  const validateEmail = (email: string) => {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  };
+  
+  const validateFormData = (data: ContactFormData) => {
+    return (
+      Boolean(data.name) &&
+      Boolean(data.email) && validateEmail(data.email) &&
+      Boolean(data.phone) && data.phone.length >= 8 &&
+      Boolean(data.subject) &&
+      Boolean(data.message)
+    );
+  };
   return (
     <div className="mt-32 overflow-x-hidden">
       <Helmet>
@@ -212,8 +220,8 @@ const ShoppingContact = () => {
               formData={formData}
               setFormData={setFormData}
               onSubmit={handleSubmit}
-              buttonText="Send Message"
-              isBnDisabled={isSubmitting}
+              buttonText={isLoading ? "Sending..." : "Send Message"}
+              isBnDisabled={isLoading || !validateFormData(formData)}
             />
 
             <p className="mt-4 text-sm text-gray-500 text-center">
