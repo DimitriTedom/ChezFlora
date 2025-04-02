@@ -62,7 +62,7 @@ const Footer = () => {
       </div>
       <div className="border-t-2 border-t-black flex items-center justify-center py-5">
         <h1 className="text-[1rem] font-semibold lg:text-xl text-center">
-          © All copyrights reserved. Designed, coded and deployed by{" "}
+          © All copyrights reserved. Designed, coded and deployed by
           <SnowDevCard />
         </h1>
       </div>

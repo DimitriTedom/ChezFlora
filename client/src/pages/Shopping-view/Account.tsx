@@ -40,7 +40,24 @@ const ShoppingAccount = () => {
 
               <TabsContent value="address">
                 <Address/>
-                </TabsContent>
+              </TabsContent>
+
+              <TabsContent value="profile">
+                <div className="flex flex-col items-center justify-center space-y-4">
+                  <div className="flex flex-col items-center justify-center space-y-4">
+                    <h1 className="text-3xl font-semibold text-primary">Profile</h1>
+                    <p className="text-sm text-gray-600">
+                      Update your profile information
+                    </p>
+                  </div>
+                  <div className="flex flex-col items-center justify-center space-y-4">
+                    <h1 className="text-3xl font-semibold text-primary">Profile</h1>
+                    <p className="text-sm text-gray-600">
+                      Update your profile information
+                    </p>
+                  </div>
+                </div>
+              </TabsContent>
             </Tabs>
           </div>
         </div>

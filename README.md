@@ -14,7 +14,7 @@ ChezFlora is a web application designed to modernize floral decoration and event
 
 ### Client-Side Features
 - **E-Commerce Experience**  
-  - Dynamic product catalog with categories (fresh flowers, bouquets, plants, decor items)  
+  - Dynamic product catalog with5000 categories (fresh flowers, bouquets, plants, decor items)  
   - Customizable cart with real-time updates  
   - Secure checkout with payment integration (to be added)  
 
@@ -100,15 +100,24 @@ ChezFlora’s design reflects nature, elegance, and simplicity.
    ```
 3. Create a `.env` file in the root directory and configure the following environment variables:
    ```env
-   NODE_ENV=development
-   PORT=5000
-   JWT_SECRET=your-secret-key
-   DATABASE_URL=postgresql://user:password@localhost:5432/chezflora
-   SMTP_HOST=smtp.example.com
-   SMTP_PORT=587
-   SMTP_USER=your-email@example.com
-   SMTP_PASS=your-password
+        DATABASE_URL="your_database_connection_string"
+        PORT=3000
+        JWT_SECRET="your_jwt_secret"
+        PAYPAL_CLIENT_ID="your_paypal_client_id"
+        PAYPAL_CLIENT_SECRET="your_paypal_client_secret"
+        CLOUDINARY_CLOUD_NAME="your_cloudinary_cloud_name"
+        CLOUDINARY_API_KEY="your_cloudinary_api_key"
+        CLOUDINARY_API_SECRET="your_cloudinary_api_secret"
+        SMTP_HOST="your_smtp_host"
+        SMTP_PORT=your_smtp_port
+        SMTP_USER="your_smtp_user"
+        SMTP_PASS="your_smtp_password"
+        CLIENT_URL="http://localhost:5173"
    ```
+ Some of these variables are used for:
+- **JWT_SECRET**: Signing JSON Web Tokens.
+- **DATABASE_URL**: Connecting to your PostgreSQL database.
+- **SMTP_HOST, SMTP_PORT, SMTP_USER, SMTP_PASS**: Configuring your SMTP server for sending emails (OTP).
 4. Run the development server:
    ```bash
    npm run dev
@@ -172,7 +181,7 @@ ChezFlora’s authentication system provides secure endpoints for user registrat
 New users can sign up by providing their name, email, and password.  
 **Example Request:**
 ```bash
-curl -X POST http://localhost:5000/api/auth/register \
+curl -X POST http://localhost:PORT/api/auth/register \
 -H "Content-Type: application/json" \
 -d '{"name": "John Doe", "email": "john.doe@example.com", "password": "yourPassword"}'
 ```
@@ -180,7 +189,7 @@ curl -X POST http://localhost:5000/api/auth/register \
 Registered users can log in by providing their email and password.  
 **Example Request:**
 ```bash
-curl -X POST http://localhost:5000/api/auth/login \
+curl -X POST http://localhost:PORT/api/auth/login \
 -H "Content-Type: application/json" \
 -d '{"email": "john.doe@example.com", "password": "yourPassword"}'
 ```
@@ -194,7 +203,7 @@ If the user exists, the server:
 
 **Example Request:**
 ```bash
-curl -X POST http://localhost:5000/api/auth/check-user \
+curl -X POST http://localhost:PORT/api/auth/check-user \
 -H "Content-Type: application/json" \
 -d '{"email": "john.doe@example.com"}'
 ```
@@ -203,7 +212,7 @@ curl -X POST http://localhost:5000/api/auth/check-user \
 After receiving the OTP, the user verifies it by calling the `/api/auth/verify-otp` endpoint with their email and OTP.  
 **Example Request:**
 ```bash
-curl -X POST http://localhost:5000/api/auth/verify-otp \
+curl -X POST http://localhost:PORT/api/auth/verify-otp \
 -H "Content-Type: application/json" \
 -d '{"email": "john.doe@example.com", "otp": "123456"}'
 ```
@@ -214,30 +223,11 @@ On successful verification, the user is redirected to the password update page.
 Once the OTP is validated, the user can update their password via the `/api/auth/update-password` endpoint.  
 **Example Request:**
 ```bash
-curl -X POST http://localhost:5000/api/auth/update-password \
+curl -X POST http://localhost:PORT/api/auth/update-password \
 -H "Content-Type: application/json" \
 -d '{"email": "john.doe@example.com", "password": "newSecurePassword"}'
 ```
 
-### Environment Variables Configuration
-
-Ensure you have a `.env` file at the root of your project with these critical values (adjust according to your setup):
-
-```env
-NODE_ENV=development
-PORT=5000
-JWT_SECRET=your-secret-key
-DATABASE_URL=postgresql://user:password@localhost:5432/chezflora
-SMTP_HOST=smtp.gmail.com
-SMTP_PORT=465
-SMTP_USER=your-email@gmail.com
-SMTP_PASS="your-email-app-password"
-```
-
-These variables are used for:
-- **JWT_SECRET**: Signing JSON Web Tokens.
-- **DATABASE_URL**: Connecting to your PostgreSQL database.
-- **SMTP_HOST, SMTP_PORT, SMTP_USER, SMTP_PASS**: Configuring your SMTP server for sending emails (OTP).
 
 ### Workflow Example
 
@@ -256,6 +246,54 @@ These variables are used for:
 5. **Password Update**:  
    Finally, the user updates their password via `/api/auth/update-password`.
 
+## Project Structure
+
+```
+ChezFlora/
+├── client/
+│   ├── .dockerignore
+│   ├── .env
+│   ├── .gitignore
+│   ├── components.json
+│   ├── Dockerfile
+│   ├── eslint.config.js
+│   ├── index.html
+│   ├── package-lock.json
+│   ├── package.json
+│   ├── postcss.config.js
+│   ├── README.md
+│   ├── tailwind.config.js
+│   ├── tsconfig.app.json
+│   ├── tsconfig.json
+│   ├── tsconfig.node.json
+│   ├── vite.config.ts
+│   ├── yarn.lock
+│   ├── public/
+│   ├── src/
+│   └── ...
+├── Server/
+│   ├── .dockerignore
+│   ├── .env
+│   ├── .eslintignore
+│   ├── .eslintrc.json
+│   ├── .gitignore
+│   ├── .nvmrc
+│   ├── .prettierignore
+│   ├── .prettierrc
+│   ├── DATAFLOW.md
+│   ├── docker-compose.yaml
+│   ├── Dockerfile
+│   ├── eslint.config.mjs
+│   ├── package.json
+│   ├── README.md
+│   ├── tsconfig.json
+│   ├── yarn.lock
+│   ├── prisma/
+│   ├── src/
+│   └── ...
+├── README.md
+└── ...
+```
 
 ## Contributing  
 Contributions are welcome! Please read the [contributing guidelines](CONTRIBUTING.md) before submitting a pull request. Ensure adherence to design and coding standards.

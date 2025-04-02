@@ -32,94 +32,105 @@ const ShoppingOrders = () => {
     (state: RootState) => state.shopOrder
   );
   const handleFetchOrderDetails = async (orderId: string) => {
-   await dispatch(getOrderDetails(orderId));
-   setSelectedOrderId(orderId);
-   console.log(orderId, "selectedOrderId (before state updates)");
+    await dispatch(getOrderDetails(orderId));
+    setSelectedOrderId(orderId);
+    console.log(orderId, "selectedOrderId (before state updates)");
     setOpenDetailsDialog(true);
   };
   useEffect(() => {
     dispatch(getAllOrdersByUser(user?.id));
   }, [dispatch, user]);
 
-
-  const handleCloseDialog = () =>{
+  const handleCloseDialog = () => {
     setOpenDetailsDialog(false);
     dispatch(resetOrderDetails());
     setSelectedOrderId(null);
-  }
+  };
   return (
     <Card>
       <CardHeader>
         <CardTitle>Order History</CardTitle>
       </CardHeader>
       <CardContent>
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead>Order ID</TableHead>
-              <TableHead>Order Status</TableHead>
-              <TableHead>Order Date</TableHead>
-              <TableHead>Order Price</TableHead>
-              <TableHead>
-                <span className="sr-only">Details</span>
-              </TableHead>
-            </TableRow>
-          </TableHeader>
-          <Dialog
-            open={openDetailsDialog}
-            onOpenChange={handleCloseDialog}
-          >
-            <DialogContent>
-              {orderDetails && selectedOrderId && orderDetails.id === selectedOrderId ? (
-                <ShoppingOrderDetail orderDetails={orderDetails} />
-              ) : (
-                <p>Loading...</p>
-              )}
-            </DialogContent>
-          </Dialog>
-          <TableBody>
-            {orderList &&
-              orderList.length > 0 &&
-              orderList.map((orderItem: Order) => (
-                <TableRow key={orderItem.id}>
-                  <TableCell>#{orderItem.id}</TableCell>
-                  <TableCell>
-                    <Badge
-                      className={`py-0 px-3 ${
-                        orderItem.orderStatus === "DELIVERED"
-                          ? "bg-green-500"
-                          : orderItem.orderStatus === "PENDING"
-                          ? "bg-yellow-300"
-                          : orderItem.orderStatus === "PROCESSING"
-                          ? "bg-blue-500"
-                          : orderItem.orderStatus === "SHIPPING"
-                          ? "bg-purple-500"
-                          : orderItem.orderStatus === "CANCELLED"
-                          ? "bg-gray-500"
-                          : orderItem.orderStatus === "APPROVED"
-                          ? "bg-teal-500"
-                          : orderItem.orderStatus === "REJECTED"
-                          ? "bg-red-600"
-                          : "bg-red-500"
-                      }`}
-                    >
-                      {orderItem.orderStatus}
-                    </Badge>
-                  </TableCell>
-                  <TableCell>{orderItem.orderDate.split("T")[0]}</TableCell>
-                  <TableCell>${orderItem.totalAmount}</TableCell>
-                  <TableCell>
-                    <Button
-                      onClick={() => handleFetchOrderDetails(orderItem.id)}
-                      disabled={isLoading}
-                    >
-                      View Details
-                    </Button>
-                  </TableCell>
-                </TableRow>
-              ))}
-          </TableBody>
-        </Table>
+        {orderList && orderList.length > 0 ? (
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Order ID</TableHead>
+                <TableHead>Order Status</TableHead>
+                <TableHead>Order Date</TableHead>
+                <TableHead>Order Price</TableHead>
+                <TableHead>
+                  <span className="sr-only">Details</span>
+                </TableHead>
+              </TableRow>
+            </TableHeader>
+            <Dialog open={openDetailsDialog} onOpenChange={handleCloseDialog}>
+              <DialogContent>
+                {orderDetails &&
+                selectedOrderId &&
+                orderDetails.id === selectedOrderId ? (
+                  <ShoppingOrderDetail orderDetails={orderDetails} />
+                ) : (
+                  <p>Loading...</p>
+                )}
+              </DialogContent>
+            </Dialog>
+            <TableBody>
+              {orderList &&
+                orderList.length > 0 &&
+                orderList.map((orderItem: Order) => (
+                  <TableRow key={orderItem.id}>
+                    <TableCell>#{orderItem.id}</TableCell>
+                    <TableCell>
+                      <Badge
+                        className={`py-0 px-3 ${
+                          orderItem.orderStatus === "DELIVERED"
+                            ? "bg-green-500"
+                            : orderItem.orderStatus === "PENDING"
+                            ? "bg-yellow-300"
+                            : orderItem.orderStatus === "PROCESSING"
+                            ? "bg-blue-500"
+                            : orderItem.orderStatus === "SHIPPING"
+                            ? "bg-purple-500"
+                            : orderItem.orderStatus === "CANCELLED"
+                            ? "bg-gray-500"
+                            : orderItem.orderStatus === "APPROVED"
+                            ? "bg-teal-500"
+                            : orderItem.orderStatus === "REJECTED"
+                            ? "bg-red-600"
+                            : "bg-red-500"
+                        }`}
+                      >
+                        {orderItem.orderStatus}
+                      </Badge>
+                    </TableCell>
+                    <TableCell>{orderItem.orderDate.split("T")[0]}</TableCell>
+                    <TableCell>${orderItem.totalAmount}</TableCell>
+                    <TableCell>
+                      <Button
+                        onClick={() => handleFetchOrderDetails(orderItem.id)}
+                        disabled={isLoading}
+                      >
+                        View Details
+                      </Button>
+                    </TableCell>
+                  </TableRow>
+                ))}
+            </TableBody>
+          </Table>
+        ) : (
+          <div className="flex justify-center flex-col items-center h-[300px] self-center">
+          <img
+            src="/OrderEmpty.svg"
+            alt="OrderEmpty.svg"
+            className="w-[200px]"
+          />
+          <p className="text-gray-500 text-2xl font-bold text-center">
+            No Orders Found, Purchase a product first.
+          </p>
+        </div>
+        )}
       </CardContent>
     </Card>
   );
