@@ -12,7 +12,7 @@ export interface FormControlItem {
   label: string;
   placeholder: string;
   component: "input" | "textarea" | "select";
-  type?: "email" | "text" | "password" | "date" | "number"; // Added date type
+  type?: "email" | "text" | "password" | "date" | "number" | "tel"; // Added date type
   options?: { id: string; label: string }[];
 }
 

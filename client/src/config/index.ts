@@ -298,3 +298,53 @@ export const addressFormControls:FormControlItem[] = [
     placeholder: "Enter any additional notes",
   },
 ];
+
+export  const contactFormControls: FormControlItem[] = [
+    {
+      name: "name",
+      label: "Full Name",
+      placeholder: "John Doe",
+      component: "input",
+      type: "text",
+    },
+    {
+      name: "email",
+      label: "Email Address",
+      placeholder: "john@example.com",
+      component: "input",
+      type: "email",
+    },
+    {
+      name: "phone",
+      label: "Phone Number",
+      placeholder: "+1 234 567 890",
+      component: "input",
+      type: "tel",
+    },
+    {
+      name: "address",
+      label: "Physical Address (Optional)",
+      placeholder: "123 Flower Street",
+      component: "input",
+      type: "text",
+    },
+    {
+      name: "subject",
+      label: "Subject",
+      placeholder: "Select a topic",
+      component: "select",
+      options: [
+        { id: "product", label: "Product Question" },
+        { id: "delivery", label: "Delivery Issue" },
+        { id: "blog", label: "Blog Feedback" },
+        { id: "business", label: "Business Collaboration" },
+        { id: "other", label: "Other" },
+      ],
+    },
+    {
+      name: "message",
+      label: "Your Message",
+      placeholder: "Type your message here...",
+      component: "textarea",
+    },
+  ];
