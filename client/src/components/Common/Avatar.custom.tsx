@@ -58,7 +58,7 @@ user: User
       <DropdownMenuTrigger asChild>
         <Button variant="ghost" className="relative h-10 w-10 rounded-full focus-visible:ring-2 focus-visible:ring-primary">
           <Avatar className="h-10 xl:h-14 xl:w-14 w-10 border-2 border-primary">
-            <AvatarImage src={user?.image || "/SnowDev (1).png"} alt="user avatar" />
+            <AvatarImage src={user?.image || "/BestAvatar.jpeg"} alt="user avatar" />
             <AvatarFallback className="bg-primary text-white font-bold">
               {user?.name
                 .split(" ")
@@ -72,7 +72,7 @@ user: User
 
         <DropdownMenuLabel className="flex items-center space-x-3 px-3 py-2">
           <Avatar className="h-12 w-12 xl:h-14 xl:w-14 border-2 border-primary">
-            <AvatarImage src={user?.image || "/SnowDev (1).png"} alt="user avatar" />
+            <AvatarImage src={user?.image || "/BestAvatar.jpeg"} alt="user avatar" />
             <AvatarFallback className="bg-primary text-white font-bold">
               {user?.name
                 .split(" ")
@@ -98,7 +98,7 @@ user: User
 
 
         <DropdownMenuItem asChild className="cursor-pointer hover:bg-accent">
-          <Link to="/shop/settings" className="flex items-center space-x-2">
+          <Link to="/shop/my-bookings" className="flex items-center space-x-2">
             <HiOutlineClipboardList className="h-4 w-4 text-muted-foreground" />
             <span>My Bookings</span>
           </Link>

@@ -11,17 +11,17 @@ interface SocialLink {
 
 const socialLinks: SocialLink[] = [
   {
-    href: 'https://t.me/chezflora',
+    href: 'https://t.me/SnowDev5',
     ariaLabel: 'Telegram',
     Icon: FaTelegramPlane,
   },
   {
-    href: 'https://wa.me/+6957237832',
+    href: 'https://wa.me/695760594',
     ariaLabel: 'WhatsApp',
     Icon: BsWhatsapp,
   },
   {
-    href: 'https://www.linkedin.com/in/chezflora/',
+    href: 'https://www.linkedin.com/in/tedom-tafotsi-dimitri-wilfried-b70502298/',
     ariaLabel: 'LinkedIn',
     Icon: FaLinkedinIn,
   },

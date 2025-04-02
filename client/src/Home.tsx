@@ -36,6 +36,7 @@ import PaypalReturnPage from "./pages/Shopping-view/Order/PaypalReturn";
 import PaymentSuccessPage from "./pages/Shopping-view/Order/PaymentSuccess";
 import SearchPage from "./pages/Shopping-view/Product/SearchPage";
 import CompleteRegistrationOTP from "./pages/Auth/CompleteRegistrationOTP";
+import MyBookings from "./pages/Shopping-view/MyBookings";
 export default function Home() {
   const { user, isAuthenticated, isLoading } = useSelector(
     (state: RootState) => state.auth
@@ -129,6 +130,7 @@ export default function Home() {
           <Route path="blog" element={<ShoppingBlog />} />
           <Route path="blog/:id" element={<BlogPostPage />} />
           <Route path="contact" element={<ShoppingContact />} />
+          <Route path="my-bookings" element={<MyBookings />} />
           <Route path="paypal-return" element={<PaypalReturnPage />} />
           <Route path="payment-success" element={<PaymentSuccessPage />} />
         </Route>

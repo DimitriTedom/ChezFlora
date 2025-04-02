@@ -37,7 +37,7 @@ const socialLinks = [
   {
     id: 2,
     platform: 'Twitter',
-    url: 'https://twitter.com/chezflora',
+    url: 'https://x.com/DimitriTedom',
     icon: <AiOutlineTwitter size={24} />,
   },
   {
@@ -55,7 +55,7 @@ const socialLinks = [
   {
     id:5,
     platform: 'Linkedin',
-    url: 'https://linkedin.com/chezflora',
+    url: 'https://www.linkedin.com/in/tedom-tafotsi-dimitri-wilfried-b70502298/',
     icon: <BsLinkedin size={24}/>,
   },
 ];

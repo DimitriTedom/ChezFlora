@@ -184,7 +184,7 @@ const HeaderSm: React.FC = () => {
                             <div className="flex items-center space-x-3 px-3 py-2">
                               <Avatar className="h-16 w-16 xl:h-14 xl:w-14 border-2 border-primary">
                                 <AvatarImage
-                                  src={user?.image || "/SnowDev (1).png"}
+                                  src={user?.image || "/BestAvatar.jpeg"}
                                   alt="user avatar"
                                 />
                                 <AvatarFallback className="bg-primary text-white font-bold">
@@ -213,7 +213,7 @@ const HeaderSm: React.FC = () => {
                             <span>Account DashBoard</span>
                           </Link>
                           <Link
-                            to="/shop/settings"
+                            to="/shop/my-bookings"
                             className="flex items-center space-x-2 self-start"
                           >
                             <HiOutlineClipboardList className="h-4 w-4 text-muted-foreground" />

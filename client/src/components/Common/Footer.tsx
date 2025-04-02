@@ -31,7 +31,7 @@ const Footer = () => {
             title5="Contact"
             to1="/shop/home"
             to2="/shop/store"
-            to3="/shop/services"
+            to3="#"
             to4="/shop/blog"
             to5="/shop/contact"
           />
