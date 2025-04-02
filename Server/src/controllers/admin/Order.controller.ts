@@ -12,7 +12,6 @@ export const getAllOrdersofAllUsers = async (req: Request, res: Response) => {
                 message: "No Orders found",
             });
         }
-        console.log(orders);
         res.status(HttpCode.OK).json({
             success: true,
             message: "Orders fetched successfully",
