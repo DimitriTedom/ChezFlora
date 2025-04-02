@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
+import { API_URL } from "../authSlice";
 
 const initialState = {
     isLoading:false,
@@ -16,7 +17,7 @@ export const fetchAllFilteredProducts = createAsyncThunk(
       }).toString();
   
       const result = await axios.get(
-        `http://localhost:5000/api/shop/products/get?${query}`
+        `${API_URL}shop/products/get?${query}`
       );
       return result.data;
     }
@@ -27,7 +28,7 @@ export const fetchAllFilteredProducts = createAsyncThunk(
     async (id) => {
   
       const result = await axios.get(
-        `http://localhost:5000/api/shop/products/get/${id}`
+        `${API_URL}shop/products/get/${id}`
       );
       return result.data;
     }

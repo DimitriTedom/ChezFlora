@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import axios from "axios";
+export const API_URL = import.meta.env.VITE_SERVER_URL;
 
 interface ApiResponse {
   success: boolean;
@@ -43,7 +44,7 @@ export const initiateRegistrationUser = createAsyncThunk<
 >("auth/initiateRegistrationUser", async (userData, { rejectWithValue }) => {
   try {
     const response = await axios.post(
-      "http://localhost:5000/api/auth/register/initiate",
+      `${API_URL}auth/register/initiate`,
       userData,
       { withCredentials: true }
     );
@@ -62,7 +63,7 @@ export const completeRegistration = createAsyncThunk<
 >("auth/completeRegistration", async ({ email, otp }, { rejectWithValue }) => {
   try {
     const response = await axios.post(
-      "http://localhost:5000/api/auth/register/complete",
+      `${API_URL}auth/register/complete`,
       { email, otp },
       { withCredentials: true }
     );
@@ -81,7 +82,7 @@ export const loginUser = createAsyncThunk<
 >("auth/login", async (userData, { rejectWithValue }) => {
   try {
     const response = await axios.post(
-      "http://localhost:5000/api/auth/login",
+      `${API_URL}auth/login`,
       userData,
       { withCredentials: true }
     );
@@ -98,7 +99,7 @@ export const updatePassword = createAsyncThunk<
 >("auth/updatePassword", async ({ email, password }, { rejectWithValue }) => {
   try {
     const response = await axios.post(
-      "http://localhost:5000/api/auth/update-password",
+      `${API_URL}auth/update-password`,
       { email, password },
       { withCredentials: true }
     );
@@ -118,7 +119,7 @@ export const checkUser = createAsyncThunk<
 >("auth/checkUser", async (email, { rejectWithValue }) => {
   try {
     const response = await axios.post(
-      "http://localhost:5000/api/auth/check-user",
+      `${API_URL}auth/check-user`,
       { email }
     );
     return response.data;
@@ -136,7 +137,7 @@ export const checkPendingUser = createAsyncThunk<
 >("auth/checkPendingUser", async (email, { rejectWithValue }) => {
   try {
     const response = await axios.post(
-      "http://localhost:5000/api/auth/check-pending-user",
+      `${API_URL}auth/check-pending-user`,
       { email }
     );
     return response.data;
@@ -150,7 +151,7 @@ export const checkPendingUser = createAsyncThunk<
 
 export const logoutUser = createAsyncThunk("/auth/logout", async () => {
   const response = await axios.post(
-    "http://localhost:5000/api/auth/logout",
+    `${API_URL}auth/logout`,
     {},
     { withCredentials: true }
   );
@@ -158,7 +159,7 @@ export const logoutUser = createAsyncThunk("/auth/logout", async () => {
 });
 
 export const checkAuth = createAsyncThunk("/auth/checkauth", async () => {
-  const response = await axios.get("http://localhost:5000/api/auth/checkauth", {
+  const response = await axios.get(`${API_URL}auth/checkauth`, {
     withCredentials: true,
     headers: {
       "Cache-Control": "no-store,no cache, must-revalidate, proxy-revalidate",
@@ -173,7 +174,7 @@ export const verifyOtp = createAsyncThunk<
 >("auth/verifyOtp", async ({ email, otp }, { rejectWithValue }) => {
   try {
     const response = await axios.post(
-      "http://localhost:5000/api/auth/verify-otp",
+      `${API_URL}auth/verify-otp`,
       { email, otp },
       { withCredentials: true }
     );

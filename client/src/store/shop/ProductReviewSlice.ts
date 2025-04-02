@@ -1,11 +1,12 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
+import { API_URL } from "../authSlice";
 
 export const getProductReview = createAsyncThunk(
     "/productReview/getProductReview",
     async (productId:string) => {
       const result = await axios.get(
-        `http://localhost:5000/api/shop/review/get/${productId}`
+        `${API_URL}shop/review/get/${productId}`
       );
       return result.data;
     }
@@ -14,7 +15,7 @@ export const getProductReview = createAsyncThunk(
     "/productReview/addProductReview",
     async ({productId,userId,content,rating,userName}) => {
       const result = await axios.post(
-        "http://localhost:5000/api/shop/review/add",{productId,userId,content,rating,userName}
+        `${API_URL}shop/review/add`,{productId,userId,content,rating,userName}
       );
       return result.data;
     }

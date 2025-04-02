@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import axios, { AxiosError } from "axios";
+import { API_URL } from "../authSlice";
 
 // ---------------------
 // Type Definitions
@@ -70,7 +71,7 @@ export const addAddress = createAsyncThunk<
   async (formData, { rejectWithValue }) => {
     try {
       const response = await axios.post<AddressApiResponse<Address>>(
-        "http://localhost:5000/api/shop/address/add",
+        `${API_URL}shop/address/add`,
         formData,
         { headers: { "Content-Type": "application/json" } }
       );
@@ -91,7 +92,7 @@ export const fetchAllAddress = createAsyncThunk<
   async (userId, { rejectWithValue }) => {
     try {
       const response = await axios.get<AddressApiResponse<Address[]>>(
-        `http://localhost:5000/api/shop/address/get/${userId}`
+        `${API_URL}shop/address/get/${userId}`
       );
       return response.data;
     } catch (error) {
@@ -110,7 +111,7 @@ export const editAddress = createAsyncThunk<
   async ({ userId, addressId, formData }, { rejectWithValue }) => {
     try {
       const response = await axios.put<AddressApiResponse<Address>>(
-        `http://localhost:5000/api/shop/address/update/${userId}/${addressId}`,
+        `${API_URL}shop/address/update/${userId}/${addressId}`,
         formData,
         { headers: { "Content-Type": "application/json" } }
       );
@@ -131,7 +132,7 @@ export const deleteAddress = createAsyncThunk<
   async ({ userId, addressId }, { rejectWithValue }) => {
     try {
       const response = await axios.delete<AddressApiResponse>(
-        `http://localhost:5000/api/shop/address/delete/${userId}/${addressId}`
+        `${API_URL}shop/address/delete/${userId}/${addressId}`
       );
       return response.data;
     } catch (error) {

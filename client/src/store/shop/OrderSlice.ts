@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
+import { API_URL } from "../authSlice";
 
 interface CartItemDetails {
   productId: string;
@@ -87,7 +88,7 @@ export const createNewOrder = createAsyncThunk(
   "/order/createNewOrder",
   async (orderData) => {
     const result = await axios.post(
-      "http://localhost:5000/api/shop/order/create",
+      `${API_URL}shop/order/create`,
       orderData
     );
     return result.data;
@@ -97,7 +98,7 @@ export const capturePayment = createAsyncThunk(
   "/order/createNewOrder",
   async ({ paymentId, payerId, orderId }) => {
     const result = await axios.post(
-      "http://localhost:5000/api/shop/order/capture",
+      `${API_URL}shop/order/capture`,
       { paymentId, payerId, orderId }
     );
     return result.data;
@@ -107,7 +108,7 @@ export const getOrderDetails = createAsyncThunk(
   "/order/getOrderDetails",
   async (id) => {
     const result = await axios.get(
-      `http://localhost:5000/api/shop/order/details/${id}`
+      `${API_URL}shop/order/details/${id}`
     );
     return result.data;
   }
@@ -117,7 +118,7 @@ export const getAllOrdersByUser = createAsyncThunk(
   "/order/getAllOrdersByUser",
   async (userId) => {
     const result = await axios.get(
-      `http://localhost:5000/api/shop/order/list/${userId}`
+      `${API_URL}shop/order/list/${userId}`
     );
     return result.data;
   }

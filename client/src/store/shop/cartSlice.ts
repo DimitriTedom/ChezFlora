@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import axios, { AxiosError } from "axios";
+import { API_URL } from "../authSlice";
 
 // -----------------
 // Define Interfaces
@@ -74,7 +75,7 @@ export const addToCart = createAsyncThunk<
   async ({ userId, productId, quantity }, { rejectWithValue }) => {
     try {
       const response = await axios.post<CartApiResponse>(
-        "http://localhost:5000/api/shop/cart/addtocart",
+        `${API_URL}shop/cart/addtocart`,
         { userId, productId, quantity }
       );
       return response.data;
@@ -94,7 +95,7 @@ export const fetchCartItems = createAsyncThunk<
   async (userId, { rejectWithValue }) => {
     try {
       const response = await axios.get<CartApiResponse>(
-        `http://localhost:5000/api/shop/cart/get/${userId}`
+        `${API_URL}shop/cart/get/${userId}`
       );
       return response.data;
     } catch (error) {
@@ -113,7 +114,7 @@ export const updateCartIemQty = createAsyncThunk<
   async ({ userId, productId, quantity }, { rejectWithValue }) => {
     try {
       const response = await axios.put<CartApiResponse>(
-        "http://localhost:5000/api/shop/cart/update-cart",
+        `${API_URL}shop/cart/update-cart`,
         { userId, productId, quantity }
       );
       return response.data;
@@ -135,7 +136,7 @@ export const deleteCartITems = createAsyncThunk<
   async ({ userId, productId }, { rejectWithValue }) => {
     try {
       const response = await axios.delete<CartApiResponse>(
-        `http://localhost:5000/api/shop/cart/${userId}/${productId}`
+        `${API_URL}shop/cart/${userId}/${productId}`
       );
       return response.data;
     } catch (error) {

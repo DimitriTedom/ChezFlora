@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
+import { API_URL } from "../authSlice";
 
 interface CartItemDetails {
   productId: string;
@@ -89,7 +90,7 @@ export const getOrderDetailsForAdmin = createAsyncThunk(
   "/orders/getOrderDetailsForAdmin",
   async (id) => {
     const result = await axios.get(
-      `http://localhost:5000/api/admin/orders/details/${id}`
+      `${API_URL}admin/orders/details/${id}`
     );
     return result.data;
   }
@@ -99,7 +100,7 @@ export const getAllOrdersofAllUsers = createAsyncThunk(
   "/orders/getAllOrdersofAllUsers",
   async () => {
     const result = await axios.get(
-      'http://localhost:5000/api/admin/orders/get/'
+      `${API_URL}admin/orders/get/`
     );
     return result.data;
   }
@@ -109,7 +110,7 @@ export const updateOrderStatus = createAsyncThunk(
   "/orders/updateOrderStatus",
   async ({id,orderStatus}) => {
     const result = await axios.put(
-      `http://localhost:5000/api/admin/orders/update/${id}`,{orderStatus}
+      `${API_URL}admin/orders/update/${id}`,{orderStatus}
     );
     return result.data;
   }

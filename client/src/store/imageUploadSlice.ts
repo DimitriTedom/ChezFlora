@@ -1,6 +1,7 @@
 // src/redux/features/imageUploadSlice.ts
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
+import { API_URL } from './authSlice';
 
 interface ImageUploadState {
   imageUrl: string;
@@ -21,7 +22,7 @@ export const uploadImage = createAsyncThunk(
     formData.append('my_file', file);
     
     const response = await axios.post(
-      'http://localhost:5000/api/admin/products/upload-image',
+      `${API_URL}admin/products/upload-image`,
       formData,
       {
         headers: { 'Content-Type': 'multipart/form-data' },

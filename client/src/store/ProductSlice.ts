@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
+import { API_URL } from "./authSlice";
 
 const initialState = {
   isLoading: false,
@@ -9,7 +10,7 @@ const initialState = {
    async (formData,{rejectWithValue}) => {
     try{
       const result = await axios.post(
-        "http://localhost:5000/api/admin/products/add",
+        `${API_URL}admin/products/add`,
         formData,{
             headers:{
                 'Content-Type' :'application/json'
@@ -25,7 +26,7 @@ const initialState = {
 export const fetchAllProducts = createAsyncThunk("/products/fetchAllProducts", 
     async () => {
    const result = await axios.get(
-     "http://localhost:5000/api/admin/products/get",
+     `${API_URL}admin/products/get`,
    );
    return result?.data
  });
@@ -33,7 +34,7 @@ export const fetchAllProducts = createAsyncThunk("/products/fetchAllProducts",
 export const editProduct = createAsyncThunk("/products/editProduct", 
     async ({id,formData}) => {
    const result = await axios.put(
-     `http://localhost:5000/api/admin/products/edit/${id}`,
+     `${API_URL}admin/products/edit/${id}`,
      formData,{
          headers:{
              'Content-Type' :'application/json'
@@ -46,7 +47,7 @@ export const editProduct = createAsyncThunk("/products/editProduct",
  export const deleteProduct = createAsyncThunk("/products/deleteProduct", 
     async (id) => {
    const result = await axios.delete(
-     `http://localhost:5000/api/admin/products/delete/${id}`,
+     `${API_URL}admin/products/delete/${id}`,
 
    );
    return result?.data
