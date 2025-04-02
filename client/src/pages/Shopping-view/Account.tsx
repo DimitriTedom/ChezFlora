@@ -1,5 +1,6 @@
 import Address from "@/components/Shopping-view/Address";
 import ShoppingOrders from "@/components/Shopping-view/Orders";
+import ShoppingQuotes from "@/components/Shopping-view/ShoppingQuotes";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Helmet } from "react-helmet-async";
 
@@ -33,6 +34,7 @@ const ShoppingAccount = () => {
                 <TabsTrigger value="profile">Profile</TabsTrigger>
                 <TabsTrigger value="orders">Orders</TabsTrigger>
                 <TabsTrigger value="address">Address</TabsTrigger>
+                <TabsTrigger value="quotes">Quotes</TabsTrigger>
               </TabsList>
               <TabsContent value="orders">
                 <ShoppingOrders/>
@@ -44,6 +46,10 @@ const ShoppingAccount = () => {
 
               <TabsContent value="profile">
                   <h1>To be implemented later, the idea is to enable user to update it's password here without having to logout, and even update it's image</h1>
+              </TabsContent>
+
+              <TabsContent value="quotes">
+                <ShoppingQuotes/>
               </TabsContent>
             </Tabs>
           </div>

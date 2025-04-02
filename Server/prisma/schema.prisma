@@ -233,14 +233,15 @@ model CartItem {
 }
 
 model QuoteRequest {
-  id          String    @id @default(auto()) @map("_id") @db.ObjectId
-  userId      String
-  user        User      @relation(fields: [userId], references: [id])
-  eventDate   DateTime
+  id              String      @id @default(auto()) @map("_id") @db.ObjectId
+  userId          String
+  user            User        @relation(fields: [userId], references: [id])
+  eventDate       DateTime
   estimatedBudget Float
-  eventType   EventType
-  description String
-  status      QuoteStatus    @default(PENDING)
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
+  adminResponse   String?
+  eventType       EventType
+  description     String
+  status          QuoteStatus @default(PENDING)
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
 }

@@ -26,11 +26,13 @@ interface createQuoteRequestResponse {
   message: string;
 }
 
-interface QuoteRequest {
+export interface QuoteRequest {
   id: string;
   userId: string | undefined;
   eventDate: string;
   eventType: EventType;
+  adminResponse?:string;
+  estimatedBudget: number;
   description: string;
   status: QuoteStatus;
   createdAt: string;
