@@ -6,7 +6,7 @@ import { API_URL } from "../authSlice";
 // Define Interfaces
 // -----------------
 
-enum EventType {
+export enum EventType {
   WEDDING = "WEDDING",
   BIRTHDAY = "BIRTHDAY",
   FUNERAL = "FUNERAL",
@@ -14,7 +14,7 @@ enum EventType {
   VALENTINES = "VALENTINES",
   WOMENDAY = "WOMENDAY",
 }
-enum QuoteStatus {
+export enum QuoteStatus {
   PENDING = "PENDING",
   PROCESSING = "PROCESSING",
   CANCELLED = "CANCELLED",
@@ -25,6 +25,7 @@ interface createQuoteRequestResponse {
   success: boolean;
   message: string;
 }
+
 interface QuoteRequest {
   id: string;
   userId: string | undefined;
@@ -35,24 +36,31 @@ interface QuoteRequest {
   createdAt: string;
   updatedAt: string;
 }
-interface QuoteRequestFormData {
-  userId: string;
+
+export interface clientQuoteRequestFormData extends QuoteRequestFormData {
+  userId: string | undefined;
+}
+
+export interface QuoteRequestFormData {
   eventDate: string;
-  eventType: EventType;
+  eventType: EventType | string;
   estimatedBudget: number;
   description: string;
 }
+
 interface QuoteState {
   isLoading: boolean;
   quoteRequestList: QuoteRequest[] | null;
   quoteRequestDetails: QuoteRequest;
   error?: string;
 }
+
 export interface getQuoteApiResponse {
   success: boolean;
   message: string;
   data: QuoteState["quoteRequestList"];
 }
+
 export interface getQuoteDetailApiResponse {
   success: boolean;
   message: string;
@@ -75,7 +83,7 @@ const initialState: QuoteState = {
 
 export const createQuoteRequest = createAsyncThunk<
   createQuoteRequestResponse,
-  QuoteRequestFormData,
+  clientQuoteRequestFormData,
   { rejectValue: string }
 >("quote/createQuoteRequest", async (formData, { rejectWithValue }) => {
   try {
@@ -140,29 +148,35 @@ const ShoppingQuoteSlice = createSlice({
         state.isLoading = false;
         state.error = action.payload as string;
       })
-        .addCase(fetchAllQuoteRequests.pending, (state) => {
-            state.isLoading = true;
-        })
-        .addCase(fetchAllQuoteRequests.fulfilled, (state, action:PayloadAction<getQuoteApiResponse>) => {
-            state.isLoading = false;
-            state.quoteRequestList = action.payload.data;
-        })
-        .addCase(fetchAllQuoteRequests.rejected, (state, action) => {
-            state.isLoading = false;
-            state.error = action.payload as string;
-        })
-        .addCase(getQuoteRequestDetail.pending, (state) => {
-            state.isLoading = true;
-        })
-        .addCase(getQuoteRequestDetail.fulfilled, (state, action:PayloadAction<getQuoteDetailApiResponse>) => {
-            state.isLoading = false;
-            state.quoteRequestDetails = action.payload.data;
-        })
-        .addCase(getQuoteRequestDetail.rejected, (state, action) => {
-            state.isLoading = false;
-            state.error = action.payload as string;
-        });
+      .addCase(fetchAllQuoteRequests.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(
+        fetchAllQuoteRequests.fulfilled,
+        (state, action: PayloadAction<getQuoteApiResponse>) => {
+          state.isLoading = false;
+          state.quoteRequestList = action.payload.data;
+        }
+      )
+      .addCase(fetchAllQuoteRequests.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload as string;
+      })
+      .addCase(getQuoteRequestDetail.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(
+        getQuoteRequestDetail.fulfilled,
+        (state, action: PayloadAction<getQuoteDetailApiResponse>) => {
+          state.isLoading = false;
+          state.quoteRequestDetails = action.payload.data;
+        }
+      )
+      .addCase(getQuoteRequestDetail.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload as string;
+      });
   },
 });
 export default ShoppingQuoteSlice.reducer;
-export const {resetQuoteRequestDetails} = ShoppingQuoteSlice.actions;
+export const { resetQuoteRequestDetails } = ShoppingQuoteSlice.actions;

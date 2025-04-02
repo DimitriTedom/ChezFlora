@@ -7,7 +7,7 @@ interface quoteRequestInput{
     userId: string;
     eventDate: Date | string;
     eventType: EventType;
-    estimatedBudget: number;
+    estimatedBudget: string;
     description: string;
 }
 export const addQuoteRequest = async (req: Request, res: Response) => {
@@ -19,6 +19,7 @@ export const addQuoteRequest = async (req: Request, res: Response) => {
                 message:  "All fields (userId, eventDate, eventType, description,estimatedBudget) are required",
             });
         }
+        const parsedEstimatedBudget = parseFloat(estimatedBudget);
         if (!Object.values(EventType).includes(eventType)) {
             return res.status(HttpCode.BAD_REQUEST).json({
                 success: false,
@@ -48,11 +49,11 @@ export const addQuoteRequest = async (req: Request, res: Response) => {
             });
         }
 
-        const newQuoteRequest = await prisma.quoteRequest.create({
+         await prisma.quoteRequest.create({
             data:{
                 userId,
                 eventDate:parsedEventDate,
-                estimatedBudget,
+                estimatedBudget:parsedEstimatedBudget,
                 eventType,
                 description,
                 status:QuoteStatus.PENDING,
@@ -61,7 +62,6 @@ export const addQuoteRequest = async (req: Request, res: Response) => {
         res.status(HttpCode.CREATED).json({
             success: true,
             message: "Quote request created successfully!",
-            // data: newQuoteRequest,
         })
         
     } catch (error: unknown) {

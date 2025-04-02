@@ -18,7 +18,7 @@ export interface FormControlItem {
 
 export interface CommonFormProps {
   formControls: FormControlItem[];
-  formData: Record<string, string>;
+  formData: Record<string, string> ;
   setFormData: (formData: Record<string, string>) => void;
   onSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
   onClick?: (e: React.MouseEvent) => void;
