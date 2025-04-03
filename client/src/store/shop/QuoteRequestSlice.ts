@@ -21,9 +21,10 @@ export enum QuoteStatus {
   APPROVED = "APPROVED",
   REJECTED = "REJECTED",
 }
-interface createQuoteRequestResponse {
+export interface createQuoteRequestResponse {
   success: boolean;
   message: string;
+  error?:string
 }
 
 export interface QuoteRequest {
@@ -50,7 +51,7 @@ export interface QuoteRequestFormData {
   description: string;
 }
 
-interface QuoteState {
+export interface QuoteState {
   isLoading: boolean;
   quoteRequestList: QuoteRequest[] | null;
   quoteRequestDetails: QuoteRequest;

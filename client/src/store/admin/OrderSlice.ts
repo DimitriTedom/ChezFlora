@@ -85,7 +85,7 @@ const initialState:AdminOrderState = {
   isLoading: false,
   error: null,
   status: 'idle',
-};
+}; 
 export const getOrderDetailsForAdmin = createAsyncThunk(
   "/orders/getOrderDetailsForAdmin",
   async (id) => {
