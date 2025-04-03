@@ -14,11 +14,15 @@ interface updateQuotesRequestStatusProp {
   status: QuoteStatus;
   adminResponse: string;
 }
-const initialState: QuoteState = {
+interface adminQuoteState extends QuoteState {
+  status: string;
+}
+const initialState: adminQuoteState = {
   isLoading: false,
   quoteRequestList: [] as QuoteRequest[],
   quoteRequestDetails: {} as QuoteRequest,
   error: undefined,
+  status: "idle",
 };
 
 export const getAllQuotesofAllUsers = createAsyncThunk(
@@ -112,8 +116,25 @@ const AdminQuoteRequestSlice = createSlice({
           state.error = action.payload.error;
           state.quoteRequestDetails = {} as QuoteRequest;
         }
+      )
+      .addCase(updateQuotesRequestStatus.pending, (state) => {
+        state.isLoading = true;
+        state.status = "loading";
+      })
+      .addCase(updateQuotesRequestStatus.fulfilled, (state) => {
+        state.isLoading = false;
+        state.status = "succeeded";
+      })
+      .addCase(
+        updateQuotesRequestStatus.rejected,
+        (state, action: PayloadAction<createQuoteRequestResponse>) => {
+          state.isLoading = false;
+          state.status = "failed";
+          state.error = action.payload.error;
+          state.quoteRequestDetails = {} as QuoteRequest;
+        }
       );
   },
 });
-export const {resetQuoteRequestDetails} = AdminQuoteRequestSlice.actions
-export default AdminQuoteRequestSlice.reducer
+export const { resetQuoteRequestDetails } = AdminQuoteRequestSlice.actions;
+export default AdminQuoteRequestSlice.reducer;

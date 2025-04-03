@@ -12,6 +12,7 @@ import searchProductSlice from "./shop/SearchProductsSlice"
 import ProductReviewSlice from "./shop/ProductReviewSlice"
 import contactSlice from "./shop/ContactSlice"
 import ShoppingQuoteSlice from "./shop/QuoteRequestSlice"
+import AdminQuoteRequestSlice from './admin/QuoteRequestSlice'
 export const store = configureStore({
   reducer: {
     auth: authReducer,
@@ -25,7 +26,8 @@ export const store = configureStore({
     searchPrdouct:searchProductSlice,
     shopProductReview:ProductReviewSlice,
     shopContact:contactSlice,
-    shopQuoteRequest:ShoppingQuoteSlice
+    shopQuoteRequest:ShoppingQuoteSlice,
+    adminQuoteRequest:AdminQuoteRequestSlice
   },
 });
 
