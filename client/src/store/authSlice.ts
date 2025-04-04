@@ -9,11 +9,14 @@ interface ApiResponse {
 
 export interface User {
   id: string;
-  role: string;
+  role: Role|string;
   name: string;
   email: string;
 }
-
+export enum Role{
+  ADMIN="ADMIN",
+  USER="USER"
+}
 interface RegisterResponse extends ApiResponse {}
 interface LoginResponse extends ApiResponse {
   user: User;
@@ -190,7 +193,12 @@ const authSlice = createSlice({
   initialState,
   reducers: {
     logout: (state) => {
-      state.user = null;
+      state.user = {
+        id:'',
+        name:'',
+        email:'',
+        role:'',
+      };
       state.isAuthenticated = false;
     },
   },
@@ -216,7 +224,12 @@ const authSlice = createSlice({
       })
       .addCase(completeRegistration.fulfilled, (state) => {
         state.isLoading = false;
-        state.user = null;
+        state.user = {
+          id:'',
+          name:'',
+          email:'',
+          role:'',
+        };
         state.isAuthenticated = false;
         state.error = null;
       })
@@ -235,13 +248,23 @@ const authSlice = createSlice({
         loginUser.fulfilled,
         (state, action: PayloadAction<LoginResponse>) => {
           state.isLoading = false;
-          state.user = action.payload.success ? action.payload.user : null;
+          state.user = action.payload.success ? action.payload.user : {
+            id:'',
+            name:'',
+            email:'',
+            role:'',
+          };
           state.isAuthenticated = action.payload.success;
         }
       )
       .addCase(loginUser.rejected, (state) => {
         state.isLoading = false;
-        state.user = null;
+        state.user = {
+          id:'',
+          name:'',
+          email:'',
+          role:'',
+        };
         state.isAuthenticated = false;
       })
 
@@ -268,13 +291,23 @@ const authSlice = createSlice({
         state.isLoading = false;
         console.log("checkauth rejectetd")
 
-        state.user = null;
+        state.user = {
+          id:'',
+          name:'',
+          email:'',
+          role:'',
+        };
         state.isAuthenticated = false;
       })
 
       // --- LOGOUT ---
       .addCase(logoutUser.fulfilled, (state) => {
-        state.user = null;
+        state.user = {
+          id:'',
+          name:'',
+          email:'',
+          role:'',
+        };
         state.isAuthenticated = false;
         state.isLoading = false;
       })
@@ -314,7 +347,7 @@ const authSlice = createSlice({
       })
       .addCase(
         updatePassword.fulfilled,
-        (state, action: PayloadAction<ApiResponse>) => {
+        (state) => {
           state.isLoading = false;
         }
       )
@@ -328,7 +361,7 @@ const authSlice = createSlice({
       })
       .addCase(
         verifyOtp.fulfilled,
-        (state, action: PayloadAction<ApiResponse>) => {
+        (state) => {
           state.isLoading = false;
           state.otpVerified = true;
         }
