@@ -2,6 +2,7 @@ import { Router } from 'express';
 import { initiateRegistration,completeRegistration, login,logout, checkUser, updatePassword, verifyOtp,checkPendingUser } from '../controllers/auth.controller';
 import { HttpCode } from '../core/constants';
 import { authenticateUser } from '../middlewares/auth.middleware';
+import { create } from 'domain';
 const router = Router();
 
 router.post('/register/initiate', initiateRegistration);
@@ -13,7 +14,7 @@ router.post("/update-password",updatePassword);
 router.post('/logout', logout);
 router.post('/verify-otp',verifyOtp)
 router.get('/checkauth', authenticateUser, (req, res)=>{
-    const user = (req as any).user; 
+    const user = req.user; 
     res.status(HttpCode.OK).json({
         success:true,
         message:'User is authenticated',
@@ -21,7 +22,9 @@ router.get('/checkauth', authenticateUser, (req, res)=>{
             id:user.id,
             email:user.email,
             role:user.role,
-            name:user.name
+            name:user.name,
+            createdAt:user.createdAt,
+            updatedAt:user.updatedAt
         }
     })
 });

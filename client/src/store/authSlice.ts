@@ -9,13 +9,20 @@ interface ApiResponse {
 
 export interface User {
   id: string;
-  role: Role|string;
+  role: UsersRole | string;
   name: string;
   email: string;
+  createdAt: Date | string;
+  updatedAt: Date | string;
 }
-export enum Role{
-  ADMIN="ADMIN",
-  USER="USER"
+export enum Role {
+  ADMIN = "ADMIN",
+  USER = "USER",
+}
+export enum UsersRole {
+  ALL= " ",
+  ADMIN = "ADMIN",
+  USER = "USER",
 }
 interface RegisterResponse extends ApiResponse {}
 interface LoginResponse extends ApiResponse {
@@ -23,7 +30,7 @@ interface LoginResponse extends ApiResponse {
 }
 
 interface AuthState {
-  user: User ;
+  user: User;
   isLoading: boolean;
   error: string | null;
   isAuthenticated: boolean;
@@ -35,9 +42,11 @@ const initialState: AuthState = {
   user: JSON.parse(localStorage.getItem("user") || "null"),
   isLoading: false,
   error: null,
-  isAuthenticated: JSON.parse(localStorage.getItem("isAuthenticated") || "false"),
+  isAuthenticated: JSON.parse(
+    localStorage.getItem("isAuthenticated") || "false"
+  ),
   userExists: false,
-  otpVerified:false,
+  otpVerified: false,
 };
 
 export const initiateRegistrationUser = createAsyncThunk<
@@ -73,7 +82,8 @@ export const completeRegistration = createAsyncThunk<
     return response.data;
   } catch (error: any) {
     return rejectWithValue(
-      error.response?.data?.message || "An error occurred while completing registration."
+      error.response?.data?.message ||
+        "An error occurred while completing registration."
     );
   }
 });
@@ -84,11 +94,9 @@ export const loginUser = createAsyncThunk<
   { rejectValue: string }
 >("auth/login", async (userData, { rejectWithValue }) => {
   try {
-    const response = await axios.post(
-      `${API_URL}auth/login`,
-      userData,
-      { withCredentials: true }
-    );
+    const response = await axios.post(`${API_URL}auth/login`, userData, {
+      withCredentials: true,
+    });
     return response.data;
   } catch (error: any) {
     return rejectWithValue(error.response?.data?.message || "Login failed");
@@ -121,10 +129,7 @@ export const checkUser = createAsyncThunk<
   { rejectValue: string }
 >("auth/checkUser", async (email, { rejectWithValue }) => {
   try {
-    const response = await axios.post(
-      `${API_URL}auth/check-user`,
-      { email }
-    );
+    const response = await axios.post(`${API_URL}auth/check-user`, { email });
     return response.data;
   } catch (error: any) {
     return rejectWithValue(
@@ -139,10 +144,9 @@ export const checkPendingUser = createAsyncThunk<
   { rejectValue: string }
 >("auth/checkPendingUser", async (email, { rejectWithValue }) => {
   try {
-    const response = await axios.post(
-      `${API_URL}auth/check-pending-user`,
-      { email }
-    );
+    const response = await axios.post(`${API_URL}auth/check-pending-user`, {
+      email,
+    });
     return response.data;
   } catch (error: any) {
     return rejectWithValue(
@@ -150,7 +154,6 @@ export const checkPendingUser = createAsyncThunk<
     );
   }
 });
-
 
 export const logoutUser = createAsyncThunk("/auth/logout", async () => {
   const response = await axios.post(
@@ -194,10 +197,12 @@ const authSlice = createSlice({
   reducers: {
     logout: (state) => {
       state.user = {
-        id:'',
-        name:'',
-        email:'',
-        role:'',
+        id: "",
+        name: "",
+        email: "",
+        role: "",
+        createdAt: "",
+        updatedAt: "",
       };
       state.isAuthenticated = false;
     },
@@ -225,10 +230,12 @@ const authSlice = createSlice({
       .addCase(completeRegistration.fulfilled, (state) => {
         state.isLoading = false;
         state.user = {
-          id:'',
-          name:'',
-          email:'',
-          role:'',
+          id: "",
+          name: "",
+          email: "",
+          role: "",
+          createdAt: "",
+          updatedAt: "",
         };
         state.isAuthenticated = false;
         state.error = null;
@@ -248,22 +255,28 @@ const authSlice = createSlice({
         loginUser.fulfilled,
         (state, action: PayloadAction<LoginResponse>) => {
           state.isLoading = false;
-          state.user = action.payload.success ? action.payload.user : {
-            id:'',
-            name:'',
-            email:'',
-            role:'',
-          };
+          state.user = action.payload.success
+            ? action.payload.user
+            : {
+                id: "",
+                name: "",
+                email: "",
+                role: "",
+                createdAt: "",
+                updatedAt: "",
+              };
           state.isAuthenticated = action.payload.success;
         }
       )
       .addCase(loginUser.rejected, (state) => {
         state.isLoading = false;
         state.user = {
-          id:'',
-          name:'',
-          email:'',
-          role:'',
+          id: "",
+          name: "",
+          email: "",
+          role: "",
+          createdAt: "",
+          updatedAt: "",
         };
         state.isAuthenticated = false;
       })
@@ -272,7 +285,7 @@ const authSlice = createSlice({
       .addCase(checkAuth.pending, (state) => {
         state.isLoading = true;
         state.error = null;
-        console.log("checkauth pending")
+        console.log("checkauth pending");
       })
       .addCase(
         checkAuth.fulfilled,
@@ -289,13 +302,15 @@ const authSlice = createSlice({
       )
       .addCase(checkAuth.rejected, (state) => {
         state.isLoading = false;
-        console.log("checkauth rejectetd")
+        console.log("checkauth rejectetd");
 
         state.user = {
-          id:'',
-          name:'',
-          email:'',
-          role:'',
+          id: "",
+          name: "",
+          email: "",
+          role: "",
+          createdAt: "",
+          updatedAt: "",
         };
         state.isAuthenticated = false;
       })
@@ -303,10 +318,12 @@ const authSlice = createSlice({
       // --- LOGOUT ---
       .addCase(logoutUser.fulfilled, (state) => {
         state.user = {
-          id:'',
-          name:'',
-          email:'',
-          role:'',
+          id: "",
+          name: "",
+          email: "",
+          role: "",
+          createdAt: "",
+          updatedAt: "",
         };
         state.isAuthenticated = false;
         state.isLoading = false;
@@ -345,12 +362,9 @@ const authSlice = createSlice({
         state.isLoading = true;
         state.error = null;
       })
-      .addCase(
-        updatePassword.fulfilled,
-        (state) => {
-          state.isLoading = false;
-        }
-      )
+      .addCase(updatePassword.fulfilled, (state) => {
+        state.isLoading = false;
+      })
       .addCase(updatePassword.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.payload as string;
@@ -359,13 +373,10 @@ const authSlice = createSlice({
         state.isLoading = true;
         state.error = null;
       })
-      .addCase(
-        verifyOtp.fulfilled,
-        (state) => {
-          state.isLoading = false;
-          state.otpVerified = true;
-        }
-      )
+      .addCase(verifyOtp.fulfilled, (state) => {
+        state.isLoading = false;
+        state.otpVerified = true;
+      })
       .addCase(verifyOtp.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.payload as string;

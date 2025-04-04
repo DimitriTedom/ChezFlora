@@ -169,7 +169,7 @@ model BlogReview {
   updatedAt DateTime @updatedAt
 }
 
-// Other models remain unchanged
+
 model Order {
   id              String            @id @default(auto()) @map("_id") @db.ObjectId
   userId          String

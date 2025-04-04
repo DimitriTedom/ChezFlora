@@ -6,7 +6,7 @@ interface CheckAuthProps {
   user: { role?: string } | null;
   children?: React.ReactNode;
 }
-
+ 
 const  CheckAuth = ({ isAuthenticated, user, children }: CheckAuthProps) => {
   const location = useLocation();
   const [authState, setAuthState] = useState({

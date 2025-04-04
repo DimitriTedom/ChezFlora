@@ -5,11 +5,13 @@ import { Request, Response, NextFunction } from "express";
 
 declare module "express-serve-static-core" {
   interface Request {
-    user?: {
+    user: {
       id: string;
       email: string;
       role: string;
       name: string;
+      createdAt: Date | string;
+      updatedAt: Date |string;
     };
   }
 }
@@ -32,7 +34,9 @@ export const authenticateUser = async (req: Request, res: Response, next: NextFu
       id: decoded.id,
       email: decoded.email,
       role: decoded.role,
-      name: decoded.name
+      name: decoded.name,
+      createdAt: decoded.createdAt,
+      updatedAt: decoded.updatedAt
     };
     
     next();

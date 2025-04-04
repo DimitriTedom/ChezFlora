@@ -8,6 +8,7 @@ import { errorHandler } from '../middlewares/auth.middleware';
 import nodemailer from 'nodemailer';
 import hbs from 'nodemailer-express-handlebars';
 import path from 'path';
+import { create } from 'domain';
 export const prisma = new PrismaClient();
 
 export const initiateRegistration = async (req: Request, res: Response) => {
@@ -160,7 +161,9 @@ export const login = async (req: Request, res: Response) => {
 				id: user.id,
 				email: user.email,
 				role: user.role.toUpperCase(),
-				name: user.name
+				name: user.name,
+				createdAt: user.createdAt,
+				updatedAt: user.updatedAt
 			}
 		});
 	} catch (error) {

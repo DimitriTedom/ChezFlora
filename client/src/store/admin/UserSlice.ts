@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
-import { API_URL, Role, User } from "../authSlice";
+import { API_URL, Role, User, UsersRole } from "../authSlice";
 import { RootState } from "../store";
 
 interface AdminUserState {
@@ -18,7 +18,7 @@ interface AdminUserState {
 interface FetchUsersParams{
     page?: number;
     limit?: number;
-    role?: Role | '';
+    role?: UsersRole | ' ';
     search?: string;
 }
 interface UpdateUserRolesPayload {
@@ -45,7 +45,7 @@ interface updateAndDeleteApiResponse{
     message: string;
 }
 const initialState: AdminUserState = {
-    users: [],
+    users: [] as User[],
     isLoading: false,
     isUpdating:false,
     error:null,
@@ -166,6 +166,6 @@ const adminUserSlice = createSlice({
             });
     }
 });
-export const selectAdminUsers = (state:RootState)=> state.adminUsers;
+// export const selectAdminUsers = (state:RootState)=> state.adminUsers;
 export const { resetUserState } = adminUserSlice.actions;
 export default  adminUserSlice.reducer;

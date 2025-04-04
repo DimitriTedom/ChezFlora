@@ -1,7 +1,7 @@
 import { HttpCode } from '../../core/constants';
 import { Request, Response } from 'express';
 import { prisma } from '../auth.controller';
-import { Role } from '@prisma/client';
+import { Prisma, Role } from '@prisma/client'; // Import Prisma namespace for types
 interface BulkOperation {
 	userIds: string[];
 }
@@ -9,7 +9,7 @@ interface BulkOperation {
 interface RoleUpdate extends BulkOperation {
 	role: Role;
 }
-
+// Removed incorrect local UsersRole enum
 const handleAdminError = (res: Response, error: unknown, defaultMsg: string) => {
 	console.error('[Admin User Error]', error);
 
@@ -32,16 +32,25 @@ export const getAllUsers = async (req: Request, res: Response) => {
 		const limit = parseInt(req.query.limit as string) || 10;
 		const skip = (page - 1) * limit;
 
-		//Filters definition
-		const role = req.query.role as Role | undefined;
+		// Filters definition
+		// Use the imported Role enum and check if the value is valid
+		const roleQuery = req.query.role as string | undefined;
+		const role = roleQuery && Object.values(Role).includes(roleQuery as Role) ? (roleQuery as Role) : undefined;
 		const search = req.query.search as string | undefined;
 
-		const whereClause = {
-			...(role && { role }),
-			...(search && {
-				OR: [{ name: { contains: search, mode: insensitive } }, { email: { contains: search, mode:insensitive } }]
-			})
-		};
+		// Build the where clause conditionally with a proper type
+		const whereClause: Prisma.UserWhereInput = {}; 
+
+		if (role) {
+			whereClause.role = role;
+		}
+
+		if (search) {
+			whereClause.OR = [
+				{ name: { contains: search, mode: 'insensitive' } }, // Corrected spelling
+				{ email: { contains: search, mode: 'insensitive' } } // Corrected spelling
+			];
+		}
 		const [users, totalUsers] = await Promise.all([
 			prisma.user.findMany({
 				where: whereClause,
@@ -163,15 +172,29 @@ export const deleteUsers = async (req: Request, res: Response) => {
 					});
 				}
 			}
-			return tx.user.updateMany({
+			// Ensure the updateMany operation is returned
+			const updateResult = await tx.user.deleteMany({ // Changed to deleteMany as per function name intent
 				where: { id: { in: userIds } },
-				data: { updatedAt: new Date() }
 			});
+			return updateResult; // Return the BatchPayload
 		});
-		res.status(HttpCode.OK).json({
-			success: true,
-			message: `${result.count} users deleted successfully`
-		});
+
+		// Check if the result is BatchPayload before accessing count
+		if (result && typeof result === 'object' && 'count' in result) {
+			res.status(HttpCode.OK).json({
+				success: true,
+				message: `${result.count} users deleted successfully`
+			});
+		} else {
+			// If result is not BatchPayload, it might be the Response from the early return
+			// The response would have already been sent in that case, so maybe just log or do nothing.
+			// Or handle the case where the transaction didn't return the expected payload.
+			console.warn("Delete users transaction did not return expected BatchPayload.");
+			// Avoid sending another response if one was already sent inside the transaction.
+			if (!res.headersSent) {
+				handleAdminError(res, new Error("Transaction completed unexpectedly"), 'Failed to delete users');
+			}
+		}
 	} catch (error: unknown) {
 		handleAdminError(res, error, 'Failed to update user roles');
 	}
