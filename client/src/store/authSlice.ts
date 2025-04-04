@@ -20,7 +20,7 @@ interface LoginResponse extends ApiResponse {
 }
 
 interface AuthState {
-  user: User | null;
+  user: User ;
   isLoading: boolean;
   error: string | null;
   isAuthenticated: boolean;

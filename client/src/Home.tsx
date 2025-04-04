@@ -37,6 +37,7 @@ import PaymentSuccessPage from "./pages/Shopping-view/Order/PaymentSuccess";
 import SearchPage from "./pages/Shopping-view/Product/SearchPage";
 import CompleteRegistrationOTP from "./pages/Auth/CompleteRegistrationOTP";
 import MyBookings from "./pages/Shopping-view/MyBookings";
+import AdminAccount from "./pages/admin-view/AdminAccount";
 export default function Home() {
   const { user, isAuthenticated, isLoading } = useSelector(
     (state: RootState) => state.auth
@@ -107,6 +108,7 @@ export default function Home() {
         >
           <Route index path="dashboard" element={<AdminDashboard />} />
           <Route path="products" element={<AdminProducts />} />
+          <Route path="account" element={<AdminAccount />} />
           <Route path="orders" element={<AdminOrders />} />
           <Route path="quotes" element={<AdminQuotes />} />
           <Route path="blogs" element={<AdminBlogs />} />

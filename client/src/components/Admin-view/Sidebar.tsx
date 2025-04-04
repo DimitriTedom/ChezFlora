@@ -1,3 +1,4 @@
+import { HiOutlineUsers } from "react-icons/hi"; 
 // src/components/AdminSidebar.tsx
 import { 
   Sidebar,
@@ -14,7 +15,6 @@ import {
   Package,
   ShoppingCart,
   FileText,
-  Users,
   Settings,
   CalendarDays,
   BookOpen,
@@ -30,10 +30,10 @@ const AdminSidebar = () => {
   const menuItems = [
     { title: "Dashboard", icon: Home, path: "/admin/dashboard" },
     { title: "Products", icon: Package, path: "/admin/products" },
-    { title: "Orders", icon: ShoppingCart, path: "/admin/orders" }, //commandes
+    { title: "Orders", icon: ShoppingCart, path: "/admin/orders" },
     { title: "Quotes", icon: FileText, path: "/admin/quotes" },
     { title: "Blogs", icon: BookOpen, path: "/admin/blog" },
-    { title: "Customers", icon: Users, path: "/admin/users" },
+    { title: "Customers", icon: HiOutlineUsers, path: "/admin/users" },
     { title: "Agenda", icon: CalendarDays, path: "/admin/calendar" },
     { title: "Customer Reviews", icon: MessageCircle, path: "/admin/reviews" },
     { title: "Parameters", icon: Settings, path: "/admin/settings" }
