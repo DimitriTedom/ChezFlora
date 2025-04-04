@@ -14,6 +14,7 @@ import { getAllUsers, updateUserRoles } from "@/store/admin/UserSlice";
 // Removed unused User import
 import { Role, UsersRole } from "@/store/authSlice"; 
 import { useCustomToast } from "@/hooks/useCustomToast";
+import ChezFloraLoader from "@/components/Common/ChezFloraLoader";
 // import { getAllUsers, updateUserRoles, deleteUsers, selectAdminUsers } from "@/store/admin/adminUserSlice";
 
 // Removed unused initialGetAllUsersParams constant
@@ -51,13 +52,20 @@ const AdminCustomers = () => {
       await dispatch(updateUserRoles({
         userIds: [userId],
         role: newRole
-      })).unwrap();
-    } catch (error: unknown) { // Changed type from any to unknown
+      })).unwrap().then((data)=>{
+        if(data.success){
+          showToast({
+            message: `Role updated successfully to ${newRole}`,
+            type: "success",
+          })
+        }
+      });
+    } catch (error: unknown) { 
       console.error("Role update failed:", error);
-      // Basic error message, could add type checking for more specific messages
+
       const errorMessage = error instanceof Error ? error.message : 'An unknown error occurred';
-      showToast({ // Added toast on role update failure
-        message: `Role update failed: ${errorMessage}`, // Removed duplicate message property
+      showToast({ 
+        message: `Role update failed: ${errorMessage}`, 
         type: "error",
       })
     }
@@ -72,7 +80,13 @@ const AdminCustomers = () => {
       type: "info",
     })
   };
-
+  if (isLoading || isUpdating) {
+    return (
+      <div>
+        <ChezFloraLoader />
+      </div>
+    );
+  }
   console.log(users,"users") // Keep console log for debugging if needed
   return (
     <>
@@ -137,7 +151,7 @@ const AdminCustomers = () => {
                   <TableCell>
                     <Select 
                       value={user.role}
-                      onValueChange={(value) => handleRoleChange(user.id, value as Role)}
+                      onValueChange={(value:Role) => handleRoleChange(user.id, value)}
                       disabled={isUpdating}
                     >
                       <SelectTrigger>
