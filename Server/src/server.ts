@@ -20,6 +20,7 @@ import shopProductsReviewRouter from './routes/shop/productReview.routes'
 import shopContactRouter from './routes/shop/contact.routes'
 import shopQuoteRequestRouter from './routes/shop/QuoteRequest.routes'
 import adminQuoteRequestRouter from './routes/admin/QuoteRequest.routes'
+import adminUserRouter from './routes/admin/user.routes';
 import cookieParser from 'cookie-parser';
 import helmet from 'helmet';
 dotenv.config();
@@ -57,7 +58,8 @@ app.use('/api/shop/search',SearchProductsRouter)
 app.use('/api/shop/review',shopProductsReviewRouter)
 app.use('/api/shop/contact',shopContactRouter)
 app.use('/api/shop/quote',shopQuoteRequestRouter)
-app.use('/api/admin/quotes',adminQuoteRequestRouter)
+app.use('/api/admin/quotes',adminQuoteRequestRouter);
+app.use('/api/admin/users', adminUserRouter);
 app.use(morgan('combined'));
 
 setupSwagger(app);
