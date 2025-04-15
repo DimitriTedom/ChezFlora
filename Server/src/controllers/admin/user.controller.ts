@@ -2,29 +2,11 @@ import { HttpCode } from '../../core/constants';
 import { Request, Response } from 'express';
 import { prisma } from '../auth.controller';
 import { Prisma, Role } from '@prisma/client'; // Import Prisma namespace for types
+import { registerSchema } from '../../schemas/auth.schema';
+import { hashPassword } from '../../utils/bcrypt';
 interface BulkOperation {
 	userIds: string[];
 }
-
-interface RoleUpdate extends BulkOperation {
-	role: Role;
-}
-// Removed incorrect local UsersRole enum
-const handleAdminError = (res: Response, error: unknown, defaultMsg: string) => {
-	console.error('[Admin User Error]', error);
-
-	if (error instanceof Error) {
-		return res.status(HttpCode.INTERNAL_SERVER_ERROR).json({
-			success: false,
-			message: error.message.includes('prisma') ? 'Database operation failed' : error.message || defaultMsg
-		});
-	}
-
-	res.status(HttpCode.INTERNAL_SERVER_ERROR).json({
-		success: false,
-		message: defaultMsg
-	});
-};
 
 export const getAllUsers = async (req: Request, res: Response) => {
 	try {
@@ -38,7 +20,7 @@ export const getAllUsers = async (req: Request, res: Response) => {
 		const role = roleQuery && Object.values(Role).includes(roleQuery as Role) ? (roleQuery as Role) : undefined;
 		const search = req.query.search as string | undefined;
 
-		// Build the where clause conditionally with a proper type
+		// lets Build the where clause conditionally with a proper type
 		const whereClause: Prisma.UserWhereInput = {}; 
 
 		if (role) {
@@ -90,6 +72,53 @@ export const getAllUsers = async (req: Request, res: Response) => {
 	}
 };
 
+const handleAdminError = (res: Response, error: unknown, defaultMsg: string) => {
+	console.error('[Admin User Error]', error);
+
+	if (error instanceof Error) {
+		return res.status(HttpCode.INTERNAL_SERVER_ERROR).json({
+			success: false,
+			message: error.message.includes('prisma') ? 'Database operation failed' : error.message || defaultMsg
+		});
+	}
+
+	res.status(HttpCode.INTERNAL_SERVER_ERROR).json({
+		success: false,
+		message: defaultMsg
+	});
+};
+
+export const createUser = async (req: Request, res: Response) => {
+	try {
+		const validateData = registerSchema.parse(req.body);
+		const { name, email, password } = validateData;
+		const existingUser = await prisma.user.findUnique({ where: { email } });
+		const existingPending = await prisma.pendingUser.findUnique({ where: { email } });
+		if (existingUser || existingPending) {
+			return res.status(HttpCode.BAD_REQUEST).json({
+				success: false,
+				message: 'Email already in use or pending verification'
+			});
+		}
+				const hashedPassword = await hashPassword(password);
+				await prisma.user.create({
+					data: {
+						name,
+						email,
+						password: hashedPassword,
+					}
+				});
+
+				res.status(HttpCode.OK).json({
+					success: true,
+					message: "Registration complete. User created with success"
+				  });
+	} catch (error: unknown) {
+		handleAdminError(res, error, 'Failed to update user roles');
+	}
+};
+
+
 export const updateUserRoles = async (req: Request, res: Response) => {
 	try {
 		const { userIds, role }: RoleUpdate = req.body;
@@ -135,6 +164,7 @@ export const updateUserRoles = async (req: Request, res: Response) => {
 		handleAdminError(res, error, 'Failed to update user roles');
 	}
 };
+
 
 export const deleteUsers = async (req: Request, res: Response) => {
 	try {

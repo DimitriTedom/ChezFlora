@@ -93,18 +93,6 @@ const AuthRegister: React.FC = () => {
 
   return (
     <div className="flex items-center justify-center mt-32">
-      {/* <button
-        onClick={() =>
-          showToast({
-            message: "Test toast",
-            type: "success",
-            subtitle: "Ceci est un test",
-            // duration:3000,
-          })
-        }
-      >
-        Teste du toast
-      </button> */}
       <Helmet>
         {/* Primary SEO Tags */}
         <title>Inscription - Créez votre compte ChezFlora</title>

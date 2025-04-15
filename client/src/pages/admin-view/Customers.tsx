@@ -5,27 +5,121 @@ import { Eye, Edit, Trash2, SearchIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
-import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter, DialogClose } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogTrigger,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogFooter,
+  DialogClose,
+} from "@/components/ui/dialog";
 import { formatDate } from "@/lib/utils";
 import FormTitle from "@/components/Common/FormTitle";
 import { AppDispatch, RootState } from "@/store/store";
-import { getAllUsers, updateUserRoles, deleteUsers } from "@/store/admin/UserSlice";
-import { Role, UsersRole } from "@/store/authSlice"; 
+import {
+  getAllUsers,
+  updateUserRoles,
+  deleteUsers,
+  adminCreateUser,
+} from "@/store/admin/UserSlice";
+import { Role, UsersRole } from "@/store/authSlice";
 import { useCustomToast } from "@/hooks/useCustomToast";
 import ChezFloraLoader from "@/components/Common/ChezFloraLoader";
-
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+} from "@/components/ui/sheet";
+import { registerFormControls } from "@/config";
+import CommonForm from "@/components/Common/Form";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
+import { AddressData } from "@/components/Shopping-view/AddressCard";
+import { fetchAllAddress } from "@/store/shop/addressSlice";
+const initialFormData = {
+  name: "",
+  email: "",
+  password: "",
+};
 const AdminCustomers = () => {
   const dispatch = useDispatch<AppDispatch>();
-  const { users, isLoading, isUpdating, error, pagination } = useSelector((state: RootState) => state.adminUsers);
+  const { users, isLoading, isUpdating, pagination } = useSelector(
+    (state: RootState) => state.adminUsers
+  );
+    const { addressList } = useSelector((state: RootState) => state.address);
+  
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedRole, setSelectedRole] = useState<UsersRole>(UsersRole.ALL);
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const { showToast } = useCustomToast();
-
+  const [openCreateUserDialog, setOpenCreateUserDialog] =
+    useState<boolean>(false);
+  const [formData, setFormData] = useState(initialFormData);
+  const handleCreateUser = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    try {
+      if (!formData.name || !formData.email || !formData.password) {
+        showToast({
+          message: `All form Fields are required`,
+          type: "error",
+        });
+        return;
+      }
+      await dispatch(adminCreateUser(formData))
+        .unwrap()
+        .then((data) => {
+          if (data.success) {
+            showToast({
+              message: data.message,
+              type: "success",
+            });
+          }
+        });
+    } catch (error: unknown) {
+      console.error("Role update failed:", error);
+      const errorMessage =
+        error instanceof Error ? error.message : "An unknown error occurred";
+      showToast({
+        message: `Registration failed: ${errorMessage}`,
+        type: "error",
+      });
+    } finally {
+      setFormData(initialFormData);
+      await dispatch(
+        getAllUsers({
+          page: pagination.page,
+          limit: pagination.limit,
+          search: searchTerm,
+          role: selectedRole,
+        })
+      ).unwrap();
+    }
+  };
   // Fetch users when component mounts or when filters change
   useEffect(() => {
     const fetchUsers = async () => {
@@ -67,7 +161,8 @@ const AdminCustomers = () => {
         });
     } catch (error: unknown) {
       console.error("Role update failed:", error);
-      const errorMessage = error instanceof Error ? error.message : "An unknown error occurred";
+      const errorMessage =
+        error instanceof Error ? error.message : "An unknown error occurred";
       showToast({
         message: `Role update failed: ${errorMessage}`,
         type: "error",
@@ -92,7 +187,8 @@ const AdminCustomers = () => {
       });
       setSelectedIds([]);
     } catch (error: unknown) {
-      const errorMessage = error instanceof Error ? error.message : "An unknown error occurred";
+      const errorMessage =
+        error instanceof Error ? error.message : "An unknown error occurred";
       showToast({
         message: `Delete failed: ${errorMessage}`,
         type: "error",
@@ -103,7 +199,9 @@ const AdminCustomers = () => {
   // Toggle selection for a single user
   const toggleSelectUser = (userId: string) => {
     setSelectedIds((prev) =>
-      prev.includes(userId) ? prev.filter((id) => id !== userId) : [...prev, userId]
+      prev.includes(userId)
+        ? prev.filter((id) => id !== userId)
+        : [...prev, userId]
     );
   };
 
@@ -115,7 +213,9 @@ const AdminCustomers = () => {
       setSelectedIds(users.map((user) => user.id));
     }
   };
-
+  const fetchAllUserAddress = (id: string) => {
+    dispatch(fetchAllAddress(id));
+  };
   if (isLoading || isUpdating) {
     return (
       <div>
@@ -126,16 +226,34 @@ const AdminCustomers = () => {
 
   return (
     <>
-      <FormTitle title="Customer Management 👤️" comment="Super Admin have these authorizations on CUSTOMERS" />
+      <FormTitle
+        title="Customer Management 👤️"
+        comment="Super Admin have these authorizations on CUSTOMERS"
+      />
       <Card>
         <Helmet>
           <title>Customer Management | ChezFlora Admin</title>
-          <meta name="description" content="Manage customer accounts, view order history, and handle user permissions." />
-          <meta property="og:title" content="Customer Management | ChezFlora Admin" />
-          <meta property="og:description" content="Administer ChezFlora customer accounts and access." />
+          <meta
+            name="description"
+            content="Manage customer accounts, view order history, and handle user permissions."
+          />
+          <meta
+            property="og:title"
+            content="Customer Management | ChezFlora Admin"
+          />
+          <meta
+            property="og:description"
+            content="Administer ChezFlora customer accounts and access."
+          />
           <meta property="og:type" content="website" />
-          <meta property="og:url" content="https://www.chezflora.com/admin/customers" />
-          <meta property="og:image" content="https://www.chezflora.com/images/admin-customers-preview.jpg" />
+          <meta
+            property="og:url"
+            content="https://www.chezflora.com/admin/customers"
+          />
+          <meta
+            property="og:image"
+            content="https://www.chezflora.com/images/admin-customers-preview.jpg"
+          />
         </Helmet>
 
         <div className="p-6">
@@ -150,14 +268,40 @@ const AdminCustomers = () => {
                 className="pl-10 pr-4 py-2 border-gray-300 rounded-md w-full"
               />
             </div>
-            <Button variant="default">
+            <Button
+              variant="default"
+              onClick={() => {
+                setOpenCreateUserDialog(true);
+                setFormData(initialFormData);
+              }}
+            >
               Add Customer
             </Button>
           </div>
-
+          <Sheet
+            open={openCreateUserDialog}
+            onOpenChange={() => setOpenCreateUserDialog(false)}
+          >
+            <SheetContent>
+              <SheetHeader>
+                <SheetTitle>Add New Product</SheetTitle>
+              </SheetHeader>
+              <CommonForm
+                formControls={registerFormControls}
+                formData={formData}
+                setFormData={setFormData}
+                onSubmit={handleCreateUser}
+                isBnDisabled={isLoading}
+                buttonText="continue"
+              />
+            </SheetContent>
+          </Sheet>
           {/* Filters */}
           <div className="mb-4 flex gap-4 items-center">
-            <Select value={selectedRole} onValueChange={(value: UsersRole) => setSelectedRole(value)}>
+            <Select
+              value={selectedRole}
+              onValueChange={(value: UsersRole) => setSelectedRole(value)}
+            >
               <SelectTrigger className="w-[180px]">
                 <SelectValue placeholder="Filter by role" />
               </SelectTrigger>
@@ -175,7 +319,9 @@ const AdminCustomers = () => {
               <TableRow>
                 <TableHead>
                   <Checkbox
-                    checked={selectedIds.length === users.length && users.length > 0}
+                    checked={
+                      selectedIds.length === users.length && users.length > 0
+                    }
                     onCheckedChange={handleSelectAll}
                   />
                 </TableHead>
@@ -205,12 +351,16 @@ const AdminCustomers = () => {
                       <div className="text-sm text-gray-500">{user.email}</div>
                     </div>
                   </TableCell>
-                  <TableCell>{user._count?.orders ? user._count.orders : 0}</TableCell>
+                  <TableCell>
+                    {user._count?.orders ? user._count.orders : 0}
+                  </TableCell>
                   <TableCell>{formatDate(user.createdAt)}</TableCell>
                   <TableCell>
                     <Select
                       value={user.role}
-                      onValueChange={(value: Role) => handleRoleChange(user.id, value)}
+                      onValueChange={(value: Role) =>
+                        handleRoleChange(user.id, value)
+                      }
                       disabled={isUpdating}
                     >
                       <SelectTrigger className="w-24">
@@ -226,27 +376,157 @@ const AdminCustomers = () => {
                     {/* View Details Dialog */}
                     <Dialog>
                       <DialogTrigger asChild>
-                        <Button variant="ghost" size="icon">
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          // onClick={fetchAllUserAddress(user.id)}
+                        >
                           <Eye className="w-4 h-4" />
                         </Button>
                       </DialogTrigger>
-                      <DialogContent>
+                      <DialogContent className="max-w-lg">
                         <DialogHeader>
                           <DialogTitle>Customer Details</DialogTitle>
                           <DialogDescription>
                             Details for {user.name}
                           </DialogDescription>
                         </DialogHeader>
-                        <DialogFooter>
+
+                        {/* Profile Overview */}
+                        <Card className="mb-4 p-4 flex items-center space-x-4">
+                          <Avatar className="w-16 h-16">
+                            <AvatarImage src="" alt={user.name} />
+                            <AvatarFallback>
+                              {user.name.charAt(0)}
+                            </AvatarFallback>
+                          </Avatar>
+                          <div>
+                            <h3 className="text-xl font-semibold">
+                              {user.name}
+                            </h3>
+                            <p className="text-sm text-gray-500">
+                              {user.email}
+                            </p>
+                            <p className="mt-1 text-sm">
+                              Role:{" "}
+                              <span className="font-medium">{user.role}</span>
+                            </p>
+                            <p className="text-xs text-gray-400">
+                              Joined: {formatDate(user.createdAt)}
+                            </p>
+                          </div>
+                        </Card>
+
+                        {/* Tabbed Details */}
+                        <Tabs defaultValue="profile">
+                          <TabsList>
+                            <TabsTrigger value="profile">Profile</TabsTrigger>
+                            <TabsTrigger value="addresses">
+                              Addresses
+                            </TabsTrigger>
+                            <TabsTrigger value="orders">Orders</TabsTrigger>
+                          </TabsList>
+
+                          <TabsContent value="profile" className="pt-4">
+                            <dl className="grid grid-cols-2 gap-x-4 gap-y-2">
+                              <dt className="text-sm font-medium text-gray-600">
+                                User ID
+                              </dt>
+                              <dd className="text-sm text-gray-800 break-all">
+                                {user.id}
+                              </dd>
+
+                              <dt className="text-sm font-medium text-gray-600">
+                                Last Updated
+                              </dt>
+                              <dd className="text-sm text-gray-800">
+                                {formatDate(user.updatedAt)}
+                              </dd>
+                            </dl>
+                          </TabsContent>
+
+                          {/* ADDRESSES TAB */}
+                          <TabsContent value="addresses" className="pt-4">
+                            {addressList && addressList.length > 0 ? (
+                              <Accordion type="single" collapsible>
+                                {addressList.map((addr: AddressData) => (
+                                  <AccordionItem value={addr.id} key={addr.id}>
+                                    <AccordionTrigger>
+                                      {addr.isDefault
+                                        ? "🏠 Primary Address"
+                                        : addr.city}
+                                      , {addr.postalCode}
+                                    </AccordionTrigger>
+                                    <AccordionContent>
+                                      <p className="text-sm">
+                                        <strong>Address:</strong> {addr.address}
+                                      </p>
+                                      <p className="text-sm">
+                                        <strong>Phone:</strong> {addr.phone}
+                                      </p>
+                                      {addr.notes && (
+                                        <p className="text-sm">
+                                          <strong>Notes:</strong> {addr.notes}
+                                        </p>
+                                      )}
+                                    </AccordionContent>
+                                  </AccordionItem>
+                                ))}
+                              </Accordion>
+                            ) : (
+                              <p className="text-sm text-gray-500">
+                                No addresses for this User.
+                              </p>
+                            )}
+                          </TabsContent>
+
+                          {/* ORDERS TAB */}
+                          {/* <TabsContent
+                            value="orders"
+                            className="pt-4 space-y-2"
+                          >
+                            {user.orders.length > 0 ? (
+                              user.orders.map((order) => (
+                                <Card key={order.id} className="p-3">
+                                  <div className="flex justify-between items-center">
+                                    <div>
+                                      <p className="text-sm font-medium">
+                                        Order #{order.id.slice(-6)}
+                                      </p>
+                                      <p className="text-xs text-gray-500">
+                                        {formatDate(order.orderDate)}
+                                      </p>
+                                    </div>
+                                    <div className="text-sm font-semibold">
+                                      ${order.totalAmount.toFixed(2)}
+                                    </div>
+                                  </div>
+                                  <p className="mt-1 text-xs">
+                                    Status:{" "}
+                                    <span className="capitalize">
+                                      {order.orderStatus}
+                                    </span>
+                                  </p>
+                                </Card>
+                              ))
+                            ) : (
+                              <p className="text-sm text-gray-500">
+                                No orders placed yet.
+                              </p>
+                            )}
+                          </TabsContent> */}
+                        </Tabs>
+
+                        <DialogFooter className="mt-6">
                           <DialogClose asChild>
-                            <Button>Close</Button>
+                            <Button variant="secondary">Close</Button>
                           </DialogClose>
                         </DialogFooter>
                       </DialogContent>
                     </Dialog>
 
                     {/* Edit Customer Dialog */}
-                    <Dialog>
+                    {/* <Dialog>
                       <DialogTrigger asChild>
                         <Button variant="ghost" size="icon">
                           <Edit className="w-4 h-4" />
@@ -265,7 +545,7 @@ const AdminCustomers = () => {
                           </DialogClose>
                         </DialogFooter>
                       </DialogContent>
-                    </Dialog>
+                    </Dialog> */}
 
                     {/* Delete Customer */}
                     <Button
@@ -273,14 +553,18 @@ const AdminCustomers = () => {
                       size="icon"
                       onClick={async () => {
                         try {
-                          await dispatch(deleteUsers({ userIds: [user.id] })).unwrap();
+                          await dispatch(
+                            deleteUsers({ userIds: [user.id] })
+                          ).unwrap();
                           showToast({
                             message: "Customer deleted successfully",
                             type: "success",
                           });
                         } catch (error: unknown) {
                           const errorMessage =
-                            error instanceof Error ? error.message : "An unknown error occurred";
+                            error instanceof Error
+                              ? error.message
+                              : "An unknown error occurred";
                           showToast({
                             message: `Delete failed: ${errorMessage}`,
                             type: "error",
@@ -307,7 +591,8 @@ const AdminCustomers = () => {
           {/* Pagination Controls */}
           <div className="mt-4 flex justify-between items-center">
             <div>
-              Page {pagination.page} of {Math.ceil(pagination.total / pagination.limit)}
+              Page {pagination.page} of{" "}
+              {Math.ceil(pagination.total / pagination.limit)}
             </div>
             <div className="flex gap-2">
               <Button
@@ -348,7 +633,11 @@ const AdminCustomers = () => {
           {/* Bulk Actions */}
           <div className="mt-4 flex justify-end gap-2">
             <Button variant="outline">Export CSV</Button>
-            <Button variant="destructive" onClick={handleBulkDelete} disabled={isUpdating}>
+            <Button
+              variant="destructive"
+              onClick={handleBulkDelete}
+              disabled={isUpdating}
+            >
               Delete Selected
             </Button>
           </div>
