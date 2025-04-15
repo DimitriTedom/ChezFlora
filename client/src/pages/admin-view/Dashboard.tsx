@@ -1,135 +1,114 @@
-// src/pages/DashboardPage.tsx
-import {
-  Card,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-  CardContent,
-} from "@/components/ui/card";
-import { Progress } from "@/components/ui/progress";
-import {
-  Table,
-  TableHeader,
-  TableRow,
-  TableHead,
-  TableBody,
-  TableCell,
-} from "@/components/ui/table";
+import React, { useEffect, useState } from "react";
 import { Helmet } from "react-helmet-async";
-// import { CalendarDateRangePicker } from "@/components/DateRangePicker"
-// import { OverviewChart } from "@/components/OverviewChart"
+import { useDispatch, useSelector } from "react-redux";
+import { Card, CardHeader, CardContent, CardTitle } from "@/components/ui/card";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import { Grid } from "@/components/ui/grid";
+import { Button } from "@/components/ui/button";
+import AdminQuotes from "./Quotes";
+import { AppDispatch, RootState } from "@/store/store";
+import { getAllUsers } from "@/store/admin/UserSlice";
+import { getAllOrdersofAllUsers } from "@/store/admin/OrderSlice";
+import { fetchAllProducts } from "@/store/ProductSlice";
+import { getAllQuotesofAllUsers } from "@/store/admin/QuoteRequestSlice";
+import { UsersRole } from "@/store/authSlice";
+import AdminCustomers from "./Customers";
+import AdminOrders from "./Orders";
+import AdminProducts from "./Products";
 
-const AdminDashboard = () => {
-  const stats = [
-    { title: "Commandes", value: "145", change: "+25%" },
-    { title: "CA", value: "25 400 €", change: "+12%" },
-    { title: "Nouveaux clients", value: "32", change: "+8%" },
-    { title: "Stock alerte", value: "5", change: "-4%" },
-  ];
+const AdminDashboard: React.FC = () => {
+  const dispatch = useDispatch<AppDispatch>();
+  const [tab, setTab] = useState<string>("customers");
 
-  const recentOrders = [
-    {
-      id: "CMD001",
-      client: "Julie Martin",
-      date: "2024-03-15",
-      total: "250 €",
-    },
-    { id: "CMD002", client: "Paul Dubois", date: "2024-03-14", total: "180 €" },
-    {
-      id: "CMD003",
-      client: "Sophie Lefèvre",
-      date: "2024-03-13",
-      total: "420 €",
-    },
-  ];
+  // Selectors
+  const { pagination } = useSelector((state: RootState) => state.adminUsers);
+  const { orderList } = useSelector((state: RootState) => state.adminOrder);
+  const { productList } = useSelector((state: RootState) => state.adminProducts);
+  const { quoteRequestList } = useSelector((state: RootState) => state.adminQuoteRequest);
+
+  useEffect(() => {
+    // Fetch summary data
+    dispatch(getAllUsers({ page: 1, limit: 5, search: "", role: UsersRole.ALL }));
+    dispatch(getAllOrdersofAllUsers());
+    dispatch(fetchAllProducts());
+    dispatch(getAllQuotesofAllUsers());
+  }, [dispatch]);
 
   return (
-    <div className="space-y-6">
+    <>
       <Helmet>
-        <title>Admin Dashboard | ChezFlora</title>
-        <meta
-          name="description"
-          content="Manage your ChezFlora store operations, view analytics, and monitor recent activities."
-        />
-        <meta property="og:title" content="Admin Dashboard | ChezFlora" />
-        <meta
-          property="og:description"
-          content="Manage your ChezFlora store operations and monitor activities."
-        />
-        <meta property="og:type" content="website" />
-        <meta
-          property="og:url"
-          content="https://www.chezflora.com/admin/dashboard"
-        />
-        <meta
-          property="og:image"
-          content="https://www.chezflora.com/images/admin-dashboard-preview.jpg"
-        />
+        <title>Admin Dashboard | ChezFlora Admin</title>
+        <meta name="description" content="Overview of users, orders, products, and quotes." />
       </Helmet>
-      {/* Section header */}
-      <div className="flex justify-between items-center">
-        <h2 className="text-2xl font-bold">Tableau de bord</h2>
-        {/* <CalendarDateRangePicker /> */}
-      </div>
 
-      {/* Statistiques clés */}
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-        {stats.map((stat) => (
-          <Card key={stat.title}>
-            <CardHeader className="pb-2">
-              <CardDescription>{stat.title}</CardDescription>
-              <CardTitle className="text-2xl">{stat.value}</CardTitle>
+      <div className="space-y-6 p-6">
+        {/* Summary Cards */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          <Card className="cursor-pointer hover:shadow-lg transition" onClick={() => setTab("customers") }>
+            <CardHeader>
+              <CardTitle>Customers</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="flex items-center">
-                <span className="text-sm text-muted-foreground">
-                  {stat.change}
-                </span>
-                <Progress value={75} className="w-full h-2 bg-primary/20" />
-              </div>
+              <p className="text-3xl font-bold">{pagination.total}</p>
+              <p className="text-sm text-gray-500">Total Users</p>
             </CardContent>
           </Card>
-        ))}
-      </div>
 
-      {/* Graphique et commandes récentes */}
-      <div className="grid gap-4 md:grid-cols-2">
-        <Card>
-          <CardHeader>
-            <CardTitle>Vue d'ensemble</CardTitle>
-          </CardHeader>
-          <CardContent>{/* <OverviewChart /> */}</CardContent>
-        </Card>
+          <Card className="cursor-pointer hover:shadow-lg transition" onClick={() => setTab("orders") }>
+            <CardHeader>
+              <CardTitle>Orders</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="text-3xl font-bold">{orderList.length}</p>
+              <p className="text-sm text-gray-500">Total Orders</p>
+            </CardContent>
+          </Card>
 
-        <Card>
-          <CardHeader>
-            <CardTitle>Dernières commandes</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>ID</TableHead>
-                  <TableHead>Client</TableHead>
-                  <TableHead>Date</TableHead>
-                  <TableHead>Total</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {recentOrders.map((order) => (
-                  <TableRow key={order.id}>
-                    <TableCell>{order.id}</TableCell>
-                    <TableCell>{order.client}</TableCell>
-                    <TableCell>{order.date}</TableCell>
-                    <TableCell>{order.total}</TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </CardContent>
-        </Card>
+          <Card className="cursor-pointer hover:shadow-lg transition" onClick={() => setTab("products") }>
+            <CardHeader>
+              <CardTitle>Products</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="text-3xl font-bold">{productList.length}</p>
+              <p className="text-sm text-gray-500">Total Products</p>
+            </CardContent>
+          </Card>
+
+          <Card className="cursor-pointer hover:shadow-lg transition" onClick={() => setTab("quotes") }>
+            <CardHeader>
+              <CardTitle>Quotes</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="text-3xl font-bold">{quoteRequestList.length}</p>
+              <p className="text-sm text-gray-500">Total Quote Requests</p>
+            </CardContent>
+          </Card>
+        </div>
+
+        {/* Tabs for Detail Views */}
+        <Tabs value={tab} onValueChange={setTab} className="space-y-4">
+          <TabsList className="grid grid-cols-4 w-full">
+            <TabsTrigger value="customers">Customers</TabsTrigger>
+            <TabsTrigger value="orders">Orders</TabsTrigger>
+            <TabsTrigger value="products">Products</TabsTrigger>
+            <TabsTrigger value="quotes">Quotes</TabsTrigger>
+          </TabsList>
+
+          <TabsContent value="customers">
+            <AdminCustomers />
+          </TabsContent>
+          <TabsContent value="orders">
+            <AdminOrders />
+          </TabsContent>
+          <TabsContent value="products">
+            <AdminProducts />
+          </TabsContent>
+          <TabsContent value="quotes">
+            <AdminQuotes />
+          </TabsContent>
+        </Tabs>
       </div>
-    </div>
+    </>
   );
 };
 

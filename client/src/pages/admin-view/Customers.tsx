@@ -61,6 +61,7 @@ import {
 } from "@/components/ui/accordion";
 import { AddressData } from "@/components/Shopping-view/AddressCard";
 import { fetchAllAddress } from "@/store/shop/addressSlice";
+import { AiOutlinePlus } from "react-icons/ai";
 const initialFormData = {
   name: "",
   email: "",
@@ -71,8 +72,8 @@ const AdminCustomers = () => {
   const { users, isLoading, isUpdating, pagination } = useSelector(
     (state: RootState) => state.adminUsers
   );
-    const { addressList } = useSelector((state: RootState) => state.address);
-  
+  const { addressList } = useSelector((state: RootState) => state.address);
+
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedRole, setSelectedRole] = useState<UsersRole>(UsersRole.ALL);
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
@@ -265,17 +266,18 @@ const AdminCustomers = () => {
                 placeholder="Search by name/email..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="pl-10 pr-4 py-2 border-gray-300 rounded-md w-full"
+                className="pl-10 pr-4 py-2 border-gray-300 rounded-full w-full"
               />
             </div>
             <Button
               variant="default"
+              className="bg-pink-200 hover:bg-pink-300"
               onClick={() => {
                 setOpenCreateUserDialog(true);
                 setFormData(initialFormData);
               }}
             >
-              Add Customer
+              <AiOutlinePlus /> Add Customer
             </Button>
           </div>
           <Sheet
