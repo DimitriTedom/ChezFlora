@@ -20,7 +20,7 @@ interface Props {
   quoteRequestDetails: QuoteRequest;
 }
 
-interface StatusFormData {
+export interface StatusFormData {
   status: QuoteStatus;
   adminResponse: string;
 }
@@ -78,9 +78,10 @@ const AdminQuoteDetails = ({ quoteRequestDetails }: Props) => {
       // Refresh the quote details
       await dispatch(getQuotesDetailsForAdmin(quoteRequestDetails.id));
       await dispatch(getAllQuotesofAllUsers());
-    } catch (error: any) {
+    } catch (error) {
+      console.log(error)
       showToast({
-        message: error.message || "Failed to update quote status",
+        message: "Failed to update quote status",
         subtitle: "An unexpected error occurred while updating the quote.",
         type: "error",
         duration: 2000,

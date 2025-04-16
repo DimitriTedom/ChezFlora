@@ -7,7 +7,7 @@ import { FcGoogle } from "react-icons/fc";
 import FormTitle from "@/components/Common/FormTitle";
 import { registerFormControls } from "@/config";
 import { useDispatch } from "react-redux";
-import { initiateRegistrationUser, registerUser } from "@/store/authSlice";
+import { initiateRegistrationUser } from "@/store/authSlice";
 import type { AppDispatch } from "@/store/store";
 import { useCustomToast } from "@/hooks/useCustomToast";
 import { Helmet } from "react-helmet-async";
@@ -62,7 +62,7 @@ const AuthRegister: React.FC = () => {
           console.log("Registration failed: ", response.message);
         }
       })
-      .catch((err: any) => {
+      .catch((err) => {
         showToast({
           message: err,
           type: "error",

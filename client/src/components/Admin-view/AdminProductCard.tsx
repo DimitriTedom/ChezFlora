@@ -2,14 +2,12 @@ import { BsPencil, BsTrash } from "react-icons/bs";
 import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { useCustomToast } from "@/hooks/useCustomToast";
-import { ProductFormData } from "@/pages/admin-view/Products";
 import { Product } from "@/pages/Shopping-view/Carts/ProductCart";
 import { Card } from "../ui/card";
 
 export interface AdminProductCardProps {
   product: Product;
-  onEdit: (product: ProductFormData) => void;
+  onEdit: (product: Product) => void;
   setCurrentEditedId:(e:string)=>void; 
   setOpenCreateProductDialog: React.Dispatch<React.SetStateAction<boolean>>
   onDelete: (id: string) => void;
@@ -22,7 +20,6 @@ const AdminProductCard: React.FC<AdminProductCardProps> = ({
   setCurrentEditedId,
   onDelete
 }) => {
-  const { toast } = useCustomToast();
   const discountPercentage = product.saleprice 
     ? Math.round(((product.price - product.saleprice) / product.price) * 100)
     : null;

@@ -9,6 +9,7 @@ interface ApiResponse {
 
 export interface User {
   id: string;
+  image?: string;
   role: UsersRole | string;
   name: string;
   email: string;
@@ -20,11 +21,10 @@ export enum Role {
   USER = "USER",
 }
 export enum UsersRole {
-  ALL= " ",
+  ALL = " ",
   ADMIN = "ADMIN",
   USER = "USER",
 }
-interface RegisterResponse extends ApiResponse {}
 interface LoginResponse extends ApiResponse {
   user: User;
 }
@@ -50,7 +50,7 @@ const initialState: AuthState = {
 };
 
 export const initiateRegistrationUser = createAsyncThunk<
-  RegisterResponse,
+  ApiResponse,
   { name: string; email: string; password: string },
   { rejectValue: string }
 >("auth/initiateRegistrationUser", async (userData, { rejectWithValue }) => {
@@ -61,10 +61,13 @@ export const initiateRegistrationUser = createAsyncThunk<
       { withCredentials: true }
     );
     return response.data;
-  } catch (error: any) {
-    return rejectWithValue(
-      error.response?.data?.message || "Registration initaition failed"
-    );
+  } catch (error: unknown) {
+    if (axios.isAxiosError(error)) {
+      return rejectWithValue(
+        error.response?.data?.message || "Registration initiation failed"
+      );
+    }
+    return rejectWithValue("An unexpected error occurred");
   }
 });
 
@@ -80,11 +83,13 @@ export const completeRegistration = createAsyncThunk<
       { withCredentials: true }
     );
     return response.data;
-  } catch (error: any) {
-    return rejectWithValue(
-      error.response?.data?.message ||
-        "An error occurred while completing registration."
-    );
+  } catch (error: unknown) {
+    if (axios.isAxiosError(error)) {
+      return rejectWithValue(
+        error.response?.data?.message ||
+          "An error occurred while completing registration."
+      );
+    }
   }
 });
 
@@ -98,8 +103,10 @@ export const loginUser = createAsyncThunk<
       withCredentials: true,
     });
     return response.data;
-  } catch (error: any) {
-    return rejectWithValue(error.response?.data?.message || "Login failed");
+  } catch (error: unknown) {
+    if (axios.isAxiosError(error)) {
+      return rejectWithValue(error.response?.data?.message || "Login failed");
+    }
   }
 });
 
@@ -115,11 +122,13 @@ export const updatePassword = createAsyncThunk<
       { withCredentials: true }
     );
     return response.data;
-  } catch (error: any) {
-    return rejectWithValue(
-      error.response?.data?.message ||
-        "Erreur lors de la mise à jour du mot de passe"
-    );
+  } catch (error: unknown) {
+    if (axios.isAxiosError(error)) {
+      return rejectWithValue(
+        error.response?.data?.message ||
+          "Erreur lors de la mise à jour du mot de passe"
+      );
+    }
   }
 });
 
@@ -131,10 +140,12 @@ export const checkUser = createAsyncThunk<
   try {
     const response = await axios.post(`${API_URL}auth/check-user`, { email });
     return response.data;
-  } catch (error: any) {
-    return rejectWithValue(
-      error.response?.data?.message || "Erreur lors de la vérification"
-    );
+  } catch (error: unknown) {
+    if (axios.isAxiosError(error)) {
+      return rejectWithValue(
+        error.response?.data?.message || "Erreur lors de la vérification"
+      );
+    }
   }
 });
 
@@ -148,10 +159,12 @@ export const checkPendingUser = createAsyncThunk<
       email,
     });
     return response.data;
-  } catch (error: any) {
-    return rejectWithValue(
-      error.response?.data?.message || "Erreur lors de la vérification"
-    );
+  } catch (error: unknown) {
+    if (axios.isAxiosError(error)) {
+      return rejectWithValue(
+        error.response?.data?.message || "Erreur lors de la vérification"
+      );
+    }
   }
 });
 
@@ -185,10 +198,12 @@ export const verifyOtp = createAsyncThunk<
       { withCredentials: true }
     );
     return response.data;
-  } catch (error: any) {
-    return rejectWithValue(
-      error.response?.data?.message || "OTP verification failed"
-    );
+  } catch (error: unknown) {
+    if (axios.isAxiosError(error)) {
+      return rejectWithValue(
+        error.response?.data?.message || "OTP verification failed"
+      );
+    }
   }
 });
 const authSlice = createSlice({

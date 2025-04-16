@@ -56,9 +56,10 @@ const AuthLogin: React.FC = () => {
           duration: 5000,
         });
       }
-    } catch (error: any) {
+    } catch (error) {
+      console.log(error)
       showToast({
-        message: error.message, //normally suposed to Captures messages from rejected thunk
+        message: "An error Occured", //normally suposed to Captures messages from rejected thunk
         type: "error",
         subtitle: "Failed to login...",
         duration: 5000,

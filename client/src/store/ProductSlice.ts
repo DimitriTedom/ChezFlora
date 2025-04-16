@@ -18,8 +18,10 @@ const initialState = {
         }
       );
       return result?.data
-    }catch (error:any) {
-      return rejectWithValue(error.response.data);
+    }catch (error:unknown) {
+      if(axios.isAxiosError(error)){
+        return rejectWithValue(error?.response?.data || "Addintion of product failed");
+      }
     }
 });
 
@@ -60,12 +62,10 @@ const AdminProductSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder      
-    // Fetch all products
     .addCase(fetchAllProducts.pending, (state) => {
       state.isLoading = true;
     })
     .addCase(fetchAllProducts.fulfilled, (state, action) => {
-      // console.log(action.payload.data)
       state.isLoading = false;
       state.productList = action.payload.data;
     })
