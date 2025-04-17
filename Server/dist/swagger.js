@@ -11,7 +11,7 @@ const env_1 = require("./core/config/env");
 const swaggerDefinition = {
     openapi: '3.0.0',
     info: {
-        title: 'Projet Worketyamo',
+        title: 'Chez Flora API',
         version: '1.0.0',
         description: 'Documentation '
     },
@@ -19,7 +19,17 @@ const swaggerDefinition = {
         {
             url: `http://localhost:${env_1.envs.PORT}` // Change this to the URL of your API
         }
-    ]
+    ],
+    components: {
+        securitySchemes: {
+            bearerAuth: {
+                type: 'http',
+                scheme: 'bearer',
+                bearerFormat: 'JWT'
+            },
+        },
+    },
+    security: [{ bearerAuth: [] }],
 };
 const options = {
     swaggerDefinition,

@@ -11,6 +11,7 @@ import { AppDispatch } from '@/store/store'
 import { getAllOrdersofAllUsers, getOrderDetailsForAdmin, updateOrderStatus } from '@/store/admin/OrderSlice'
 import { useCustomToast } from '@/hooks/useCustomToast'
 import { RootState } from '@/store/store'
+import axios from 'axios'
 
 interface Props {
     orderDetails: Order;
@@ -60,14 +61,15 @@ const AdminOrderDetail = ({ orderDetails }: Props) => {
             }
           })
         } catch (error) {
-          
-          showToast({
-            message:error.message,
-            subtitle:"An unexpected error occurred while updating the order.",
-            type:'error',
-            duration:2000
-          })
-          setIsUpdating(false);
+          if (axios.isAxiosError(error)) {
+            showToast({
+              message:error?.message,
+              subtitle:"An unexpected error occurred while updating the order.",
+              type:'error',
+              duration:2000
+            })
+            setIsUpdating(false);
+          }
         }  
     }
   return (

@@ -7,6 +7,7 @@ import { Label } from "../ui/label";
 import { Textarea } from "../ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
 import { StatusFormData } from "../Admin-view/AdminQuoteDetails";
+import { ProductFormData } from "@/pages/admin-view/Products";
 
 export interface FormControlItem {
   name: string;
@@ -19,7 +20,7 @@ export interface FormControlItem {
 
 export interface CommonFormProps {
   formControls: FormControlItem[];
-  formData: StatusFormData | { email: string; password: string; };
+  formData: StatusFormData | { email: string; password: string; } | ProductFormData | {status:string};
   setFormData: (formData: StatusFormData) => void;
   onSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
   onClick?: (e: React.MouseEvent) => void;

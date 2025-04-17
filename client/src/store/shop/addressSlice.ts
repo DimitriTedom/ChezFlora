@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import axios, { AxiosError } from "axios";
+import axios from "axios";
 import { API_URL } from "../authSlice";
 
 // ---------------------
@@ -46,7 +46,7 @@ export interface DeleteAddressPayload {
   addressId: string;
 }
 
-export interface AddressApiResponse<T = any> {
+export interface AddressApiResponse<T = Address | Address[]> {
   success: boolean;
   message: string;
   data: T;
@@ -66,41 +66,37 @@ export const addAddress = createAsyncThunk<
   AddressApiResponse<Address>,
   AddAddressPayload,
   { rejectValue: string }
->(
-  "address/addAddress",
-  async (formData, { rejectWithValue }) => {
-    try {
-      const response = await axios.post<AddressApiResponse<Address>>(
-        `${API_URL}shop/address/add`,
-        formData,
-        { headers: { "Content-Type": "application/json" } }
+>("address/addAddress", async (formData, { rejectWithValue }) => {
+  try {
+    const response = await axios.post(`${API_URL}shop/address/add`, formData, {
+      headers: { "Content-Type": "application/json" },
+    });
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      return rejectWithValue(
+        error.response?.data.message || "Error adding address"
       );
-      return response.data;
-    } catch (error) {
-      const err = error as AxiosError;
-      return rejectWithValue(err.response?.data || "Error adding address");
     }
   }
-);
+});
 
 export const fetchAllAddress = createAsyncThunk<
   AddressApiResponse<Address[]>,
   string,
   { rejectValue: string }
->(
-  "address/fetchAllAddress",
-  async (userId, { rejectWithValue }) => {
-    try {
-      const response = await axios.get<AddressApiResponse<Address[]>>(
-        `${API_URL}shop/address/get/${userId}`
+>("address/fetchAllAddress", async (userId, { rejectWithValue }) => {
+  try {
+    const response = await axios.get(`${API_URL}shop/address/get/${userId}`);
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      return rejectWithValue(
+        error.response?.data.message || "Error fetching address"
       );
-      return response.data;
-    } catch (error) {
-      const err = error as AxiosError;
-      return rejectWithValue(err.response?.data || "Error fetching address");
     }
   }
-);
+});
 
 export const editAddress = createAsyncThunk<
   AddressApiResponse<Address>,
@@ -110,15 +106,18 @@ export const editAddress = createAsyncThunk<
   "address/editAddress",
   async ({ userId, addressId, formData }, { rejectWithValue }) => {
     try {
-      const response = await axios.put<AddressApiResponse<Address>>(
+      const response = await axios.put(
         `${API_URL}shop/address/update/${userId}/${addressId}`,
         formData,
         { headers: { "Content-Type": "application/json" } }
       );
       return response.data;
     } catch (error) {
-      const err = error as AxiosError;
-      return rejectWithValue(err.response?.data || "Error editing address");
+      if (axios.isAxiosError(error)) {
+        return rejectWithValue(
+          error.response?.data.message || "Error editing address"
+        );
+      }
     }
   }
 );
@@ -131,13 +130,16 @@ export const deleteAddress = createAsyncThunk<
   "address/deleteAddress",
   async ({ userId, addressId }, { rejectWithValue }) => {
     try {
-      const response = await axios.delete<AddressApiResponse>(
+      const response = await axios.delete(
         `${API_URL}shop/address/delete/${userId}/${addressId}`
       );
       return response.data;
     } catch (error) {
-      const err = error as AxiosError;
-      return rejectWithValue(err.response?.data || "Error deleting address");
+      if (axios.isAxiosError(error)) {
+        return rejectWithValue(
+          error.response?.data.message || "Error deleting address"
+        );
+      }
     }
   }
 );
@@ -156,16 +158,18 @@ const ShoppingAddressSlice = createSlice({
     });
     builder.addCase(
       addAddress.fulfilled,
-      (state, action: PayloadAction<AddressApiResponse<Address>>) => {
+      (state) => {
         state.isLoading = false;
-        // state.addressList = [...state.addressList, action.payload.data];
         state.error = null;
       }
     );
-    builder.addCase(addAddress.rejected, (state, action: PayloadAction<string | undefined>) => {
-      state.isLoading = false;
-      state.error = action.payload || "Failed to add address";
-    });
+    builder.addCase(
+      addAddress.rejected,
+      (state, action: PayloadAction<string | undefined>) => {
+        state.isLoading = false;
+        state.error = action.payload || "Failed to add address";
+      }
+    );
     // fetchAllAddress
     builder.addCase(fetchAllAddress.pending, (state) => {
       state.isLoading = true;
@@ -179,11 +183,14 @@ const ShoppingAddressSlice = createSlice({
         state.error = null;
       }
     );
-    builder.addCase(fetchAllAddress.rejected, (state, action: PayloadAction<string | undefined>) => {
-      state.isLoading = false;
-      state.addressList = [];
-      state.error = action.payload || "Failed to fetch addresses";
-    });
+    builder.addCase(
+      fetchAllAddress.rejected,
+      (state, action: PayloadAction<string | undefined>) => {
+        state.isLoading = false;
+        state.addressList = [];
+        state.error = action.payload || "Failed to fetch addresses";
+      }
+    );
     // editAddress
     builder.addCase(editAddress.pending, (state) => {
       state.isLoading = true;
@@ -191,20 +198,18 @@ const ShoppingAddressSlice = createSlice({
     });
     builder.addCase(
       editAddress.fulfilled,
-      (state, action: PayloadAction<AddressApiResponse<Address>>) => {
+      (state) => {
         state.isLoading = false;
         state.error = null;
-        state.addressList = state.addressList.map((address) => {
-          if (address._id === action.payload.data._id) {
-            return action.payload.data;
-          }
-          return address;
-        })
-    });
-    builder.addCase(editAddress.rejected, (state, action: PayloadAction<string | undefined>) => {
-      state.isLoading = false;
-      state.error = action.payload || "Failed to edit address";
-    });
+      }
+    );
+    builder.addCase(
+      editAddress.rejected,
+      (state, action: PayloadAction<string | undefined>) => {
+        state.isLoading = false;
+        state.error = action.payload || "Failed to edit address";
+      }
+    );
     // deleteAddress
     builder.addCase(deleteAddress.pending, (state) => {
       state.isLoading = true;
@@ -212,11 +217,15 @@ const ShoppingAddressSlice = createSlice({
     });
     builder.addCase(deleteAddress.fulfilled, (state) => {
       state.isLoading = false;
-     state.error = null;  });
-    builder.addCase(deleteAddress.rejected, (state, action: PayloadAction<string | undefined>) => {
-      state.isLoading = false;
-      state.error = action.payload || "Failed to delete address";
+      state.error = null;
     });
+    builder.addCase(
+      deleteAddress.rejected,
+      (state, action: PayloadAction<string | undefined>) => {
+        state.isLoading = false;
+        state.error = action.payload || "Failed to delete address";
+      }
+    );
   },
 });
 

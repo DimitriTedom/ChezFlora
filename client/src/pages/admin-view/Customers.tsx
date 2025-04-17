@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { useDispatch, useSelector } from "react-redux";
-import { Eye, Edit, Trash2, SearchIcon } from "lucide-react";
+import { Eye, Trash2, SearchIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -60,7 +60,7 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { AddressData } from "@/components/Shopping-view/AddressCard";
-import { fetchAllAddress } from "@/store/shop/addressSlice";
+// import { fetchAllAddress } from "@/store/shop/addressSlice";
 import { AiOutlinePlus } from "react-icons/ai";
 const initialFormData = {
   name: "",
@@ -214,9 +214,9 @@ const AdminCustomers = () => {
       setSelectedIds(users.map((user) => user.id));
     }
   };
-  const fetchAllUserAddress = (id: string) => {
-    dispatch(fetchAllAddress(id));
-  };
+  // const fetchAllUserAddress = (id: string) => {
+  //   dispatch(fetchAllAddress(id));
+  // };
   if (isLoading || isUpdating) {
     return (
       <div>
@@ -353,9 +353,7 @@ const AdminCustomers = () => {
                       <div className="text-sm text-gray-500">{user.email}</div>
                     </div>
                   </TableCell>
-                  <TableCell>
-                    {user._count?.orders ? user._count.orders : 0}
-                  </TableCell>
+                  <TableCell>{0}</TableCell>
                   <TableCell>{formatDate(user.createdAt)}</TableCell>
                   <TableCell>
                     <Select

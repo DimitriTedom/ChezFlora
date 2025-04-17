@@ -93,9 +93,9 @@ const AdminQuoteRequestSlice = createSlice({
       )
       .addCase(
         getAllQuotesofAllUsers.rejected,
-        (state, action: PayloadAction<createQuoteRequestResponse>) => {
+        (state) => {
           state.isLoading = false;
-          state.error = action.payload.error;
+          state.error = "An Error Occured";
           state.quoteRequestList = [] as QuoteRequest[];
         }
       )
@@ -111,9 +111,9 @@ const AdminQuoteRequestSlice = createSlice({
       )
       .addCase(
         getQuotesDetailsForAdmin.rejected,
-        (state, action: PayloadAction<createQuoteRequestResponse>) => {
+        (state) => {
           state.isLoading = false;
-          state.error = action.payload.error;
+          state.error = "An Error Occured";
           state.quoteRequestDetails = {} as QuoteRequest;
         }
       )
@@ -127,10 +127,10 @@ const AdminQuoteRequestSlice = createSlice({
       })
       .addCase(
         updateQuotesRequestStatus.rejected,
-        (state, action: PayloadAction<createQuoteRequestResponse>) => {
+        (state) => {
           state.isLoading = false;
           state.status = "failed";
-          state.error = action.payload.error;
+          state.error = "An Error Occured";
           state.quoteRequestDetails = {} as QuoteRequest;
         }
       );

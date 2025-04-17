@@ -18,7 +18,17 @@ interface AddressInfo {
   phone: string;
   notes?: string;
 }
-
+interface ApiResponse{
+  success:boolean;
+  message:string;
+}
+interface getOrderDetailsForAdmin extends ApiResponse{
+  data: Order;
+}
+interface updateOrderStatusData{
+  id:string;
+  orderStatus:string;
+}
 enum OrderStatus {
   PENDING = "PENDING",
   PROCESSING = "PROCESSING",
@@ -86,7 +96,7 @@ const initialState:AdminOrderState = {
   error: null,
   status: 'idle',
 }; 
-export const getOrderDetailsForAdmin = createAsyncThunk(
+export const getOrderDetailsForAdmin = createAsyncThunk<getOrderDetailsForAdmin,string>(
   "/orders/getOrderDetailsForAdmin",
   async (id) => {
     const result = await axios.get(
@@ -106,7 +116,7 @@ export const getAllOrdersofAllUsers = createAsyncThunk(
   }
 );
 
-export const updateOrderStatus = createAsyncThunk(
+export const updateOrderStatus = createAsyncThunk<ApiResponse,updateOrderStatusData>(
   "/orders/updateOrderStatus",
   async ({id,orderStatus}) => {
     const result = await axios.put(

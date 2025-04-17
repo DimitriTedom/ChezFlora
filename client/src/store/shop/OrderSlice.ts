@@ -35,9 +35,20 @@ enum PaymentStatus {
   FAILED = "FAILED",
   REFUNDED = "REFUNDED",
 }
-
+interface ApiResponse {
+  success: boolean;
+  message: string;
+}
+interface capturePaymentApiResponse extends ApiResponse {
+  data: Order;
+}
+interface capturePaymentData {
+  paymentId: string;
+  payerId: string;
+  orderId: string;
+}
 interface Order {
-  id:string;
+  id: string;
   userId: string | undefined;
   cartId: string;
   cartItems: CartItemDetails[];
@@ -51,17 +62,37 @@ interface Order {
   paymentId?: string;
   payerId?: string;
 }
-
+interface getAllOrdersByUserApiResponse extends ApiResponse {
+  data: Order[];
+}
+interface createOrderApiResponse extends ApiResponse {
+  approvalURL: string;
+  orderId: string;
+}
+export interface orderData {
+  userId: string;
+  cartId: string;
+  cartItems: CartItemDetails[];
+  addressInfo: AddressInfo;
+  orderStatus: OrderStatus;
+  paymentMethod: string;
+  paymentStatus: PaymentStatus;
+  totalAmount: number;
+  orderDate: string;
+  orderUpdateDate: string;
+  paymentId?: string;
+  payerId?: string;
+}
 const initialState = {
-  approvalURL: null,
+  approvalURL: "",
   isLoading: false,
   orderId: "",
-  orderList: [] as Order[], 
+  orderList: [] as Order[],
   orderDetails: {
     id: "",
     userId: undefined,
     cartId: "",
-    cartItems: [] as CartItemDetails[], 
+    cartItems: [] as CartItemDetails[],
     addressInfo: {
       addressId: "",
       address: "",
@@ -72,67 +103,58 @@ const initialState = {
     } as AddressInfo,
     orderStatus: OrderStatus.PENDING,
     paymentMethod: "",
-    paymentStatus: PaymentStatus.PENDING, 
+    paymentStatus: PaymentStatus.PENDING,
     totalAmount: 0,
     orderDate: new Date().toISOString(),
-    orderUpdateDate: new Date().toISOString(), 
+    orderUpdateDate: new Date().toISOString(),
     paymentId: undefined,
     payerId: undefined,
   } as Order,
 };
 
+export const createNewOrder = createAsyncThunk<
+  createOrderApiResponse,
+  orderData
+>("/order/createNewOrder", async (orderData) => {
+  const result = await axios.post(`${API_URL}shop/order/create`, orderData);
+  return result.data;
+});
+export const capturePayment = createAsyncThunk<
+  capturePaymentApiResponse,
+  capturePaymentData
+>("/order/createNewOrder", async ({ paymentId, payerId, orderId }) => {
+  const result = await axios.post(`${API_URL}shop/order/capture`, {
+    paymentId,
+    payerId,
+    orderId,
+  });
+  return result.data;
+});
+export const getOrderDetails = createAsyncThunk<
+  capturePaymentApiResponse,
+  string
+>("/order/getOrderDetails", async (id) => {
+  const result = await axios.get(`${API_URL}shop/order/details/${id}`);
+  return result.data;
+});
 
-
-
-export const createNewOrder = createAsyncThunk(
-  "/order/createNewOrder",
-  async (orderData) => {
-    const result = await axios.post(
-      `${API_URL}shop/order/create`,
-      orderData
-    );
-    return result.data;
-  }
-);
-export const capturePayment = createAsyncThunk(
-  "/order/createNewOrder",
-  async ({ paymentId, payerId, orderId }) => {
-    const result = await axios.post(
-      `${API_URL}shop/order/capture`,
-      { paymentId, payerId, orderId }
-    );
-    return result.data;
-  }
-);
-export const getOrderDetails = createAsyncThunk(
-  "/order/getOrderDetails",
-  async (id) => {
-    const result = await axios.get(
-      `${API_URL}shop/order/details/${id}`
-    );
-    return result.data;
-  }
-);
- 
-export const getAllOrdersByUser = createAsyncThunk(
-  "/order/getAllOrdersByUser",
-  async (userId) => {
-    const result = await axios.get(
-      `${API_URL}shop/order/list/${userId}`
-    );
-    return result.data;
-  }
-);
+export const getAllOrdersByUser = createAsyncThunk<
+  getAllOrdersByUserApiResponse,
+  string
+>("/order/getAllOrdersByUser", async (userId) => {
+  const result = await axios.get(`${API_URL}shop/order/list/${userId}`);
+  return result.data;
+});
 const ShoppingORderSlice = createSlice({
   name: "ShoppingOrderSlice",
   initialState,
   reducers: {
-    resetOrderDetails:(state)=>{
+    resetOrderDetails: (state) => {
       state.orderDetails = {
         id: "",
         userId: undefined,
         cartId: "",
-        cartItems: [] as CartItemDetails[], 
+        cartItems: [] as CartItemDetails[],
         addressInfo: {
           addressId: "",
           address: "",
@@ -143,14 +165,14 @@ const ShoppingORderSlice = createSlice({
         } as AddressInfo,
         orderStatus: OrderStatus.PENDING,
         paymentMethod: "",
-        paymentStatus: PaymentStatus.PENDING, 
+        paymentStatus: PaymentStatus.PENDING,
         totalAmount: 0,
         orderDate: new Date().toISOString(),
-        orderUpdateDate: new Date().toISOString(), 
+        orderUpdateDate: new Date().toISOString(),
         paymentId: undefined,
         payerId: undefined,
-      } as Order
-    }
+      } as Order;
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -168,7 +190,7 @@ const ShoppingORderSlice = createSlice({
       })
       .addCase(createNewOrder.rejected, (state) => {
         state.isLoading = false;
-        state.approvalURL = null;
+        state.approvalURL = "";
         state.orderId = "";
       })
       .addCase(getOrderDetails.pending, (state) => {
@@ -184,7 +206,7 @@ const ShoppingORderSlice = createSlice({
           id: "",
           userId: undefined,
           cartId: "",
-          cartItems: [] as CartItemDetails[], 
+          cartItems: [] as CartItemDetails[],
           addressInfo: {
             addressId: "",
             address: "",
@@ -195,10 +217,10 @@ const ShoppingORderSlice = createSlice({
           } as AddressInfo,
           orderStatus: OrderStatus.PENDING,
           paymentMethod: "",
-          paymentStatus: PaymentStatus.PENDING, 
+          paymentStatus: PaymentStatus.PENDING,
           totalAmount: 0,
           orderDate: new Date().toISOString(),
-          orderUpdateDate: new Date().toISOString(), 
+          orderUpdateDate: new Date().toISOString(),
           paymentId: undefined,
           payerId: undefined,
         } as Order;
@@ -220,4 +242,4 @@ const ShoppingORderSlice = createSlice({
 export default ShoppingORderSlice.reducer;
 export type { CartItemDetails, AddressInfo, Order };
 export { OrderStatus, PaymentStatus };
-export const {resetOrderDetails} = ShoppingORderSlice.actions
+export const { resetOrderDetails } = ShoppingORderSlice.actions;

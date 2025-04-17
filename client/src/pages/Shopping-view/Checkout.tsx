@@ -4,11 +4,10 @@ import { Helmet } from "react-helmet-async";
 import { useDispatch, useSelector } from "react-redux";
 import CartItemComponent from "@/pages/Shopping-view/Carts/ShoopingCartItem";
 import { Button } from "@/components/ui/button";
-// import { useNavigate } from "react-router-dom";
 import { CartItem } from "@/store/shop/cartSlice";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { AddressData } from "@/components/Shopping-view/AddressCard";
-import { createNewOrder, Order, OrderStatus, PaymentStatus } from "@/store/shop/OrderSlice";
+import { createNewOrder, orderData, OrderStatus, PaymentStatus } from "@/store/shop/OrderSlice";
 import { useCustomToast } from "@/hooks/useCustomToast";
 
 const ShoppingCheckout = () => {
@@ -55,7 +54,7 @@ const ShoppingCheckout = () => {
       });
       return
     }
-    const orderData:Order = {
+    const orderData:orderData = {
       userId:user?.id,
       cartId: cartItems?.id,
       cartItems: cartItems.items.map((singleCartItem :CartItem)=>({
@@ -77,8 +76,8 @@ const ShoppingCheckout = () => {
       paymentMethod: 'paypal',
       paymentStatus : PaymentStatus.PENDING,
       totalAmount : totalCartAmount,
-      orderDate : new Date(),
-      orderUpdateDate : new Date(),
+      orderDate : new Date().toISOString(),
+      orderUpdateDate : new Date().toISOString(),
       paymentId : '',
       payerId: '',
     }
@@ -95,7 +94,7 @@ const ShoppingCheckout = () => {
         setIsPaymentStart(false)
       }
     }).catch((error)=>{
-
+      console.log(error)
       showToast({
         message:'An error Occcured',
         type:"error",

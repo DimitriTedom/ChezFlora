@@ -69,10 +69,12 @@ export const adminCreateUser = createAsyncThunk<
       { withCredentials: true }
     );
     return response.data;
-  } catch (error: any) {
-    return rejectWithValue(
-      error.response?.data?.message || "Registration  failed"
-    );
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      return rejectWithValue(
+        error.response?.data?.message || "Registration  failed"
+      );
+    }
   }
 });
 export const getAllUsers = createAsyncThunk<
@@ -93,8 +95,10 @@ export const getAllUsers = createAsyncThunk<
         withCredentials: true,
       });
       return response.data;
-    } catch (error: any) {
-      return rejectWithValue(error.response.data.message);
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        return rejectWithValue(error.response?.data.message);
+      }
     }
   }
 );
@@ -112,10 +116,12 @@ export const updateUserRoles = createAsyncThunk<
         { withCredentials: true }
       );
       return response.data.message;
-    } catch (error: any) {
-      return rejectWithValue(
-        error.response.data.message || "Failed to update user roles"
-      );
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        return rejectWithValue(
+          error.response?.data.message || "Failed to update user roles"
+        );
+      }
     }
   }
 );
@@ -132,10 +138,12 @@ export const deleteUsers = createAsyncThunk<
         withCredentials: true,
       });
       return response.data.message;
-    } catch (error: any) {
-      return rejectWithValue(
-        error.response.data.message || "Failed to delete users"
-      );
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        return rejectWithValue(
+          error.response?.data.message || "Failed to delete users"
+        );
+      }
     }
   }
 );

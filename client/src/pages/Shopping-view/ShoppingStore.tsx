@@ -26,7 +26,7 @@ import EventCarousel from "@/components/Shopping-view/ProductImageCarousel";
 import { addToCart, fetchCartItems } from "@/store/shop/cartSlice";
 import { useCustomToast } from "@/hooks/useCustomToast";
 
-interface Filters {
+export interface Filters {
   [key: string]: string[];
 }
 
@@ -130,7 +130,7 @@ const ShoppingStore = () => {
       }
     } catch (error) {
       console.error("Add to Cart Error:", error);
-      showToast({ message: "An error occurred while adding to cart", type: "error", duration: 5000 });
+      showToast({ message: "An error occurred while adding to cart", type: "error", duration: 2000 });
     }
   };
   return (

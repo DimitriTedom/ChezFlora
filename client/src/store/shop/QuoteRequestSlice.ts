@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import axios, { AxiosError } from "axios";
+import axios from "axios";
 import { API_URL } from "../authSlice";
 
 // -----------------
@@ -24,7 +24,7 @@ export enum QuoteStatus {
 export interface createQuoteRequestResponse {
   success: boolean;
   message: string;
-  error?:string
+  error?: string;
 }
 
 export interface QuoteRequest {
@@ -32,7 +32,7 @@ export interface QuoteRequest {
   userId: string | undefined;
   eventDate: string;
   eventType: EventType;
-  adminResponse?:string;
+  adminResponse?: string;
   estimatedBudget: number;
   description: string;
   status: QuoteStatus;
@@ -90,34 +90,33 @@ export const createQuoteRequest = createAsyncThunk<
   { rejectValue: string }
 >("quote/createQuoteRequest", async (formData, { rejectWithValue }) => {
   try {
-    const response = await axios.post<createQuoteRequestResponse>(
-      `${API_URL}shop/quote/add`,
-      formData,
-      {
-        withCredentials: true,
-      }
-    );
+    const response = await axios.post(`${API_URL}shop/quote/add`, formData, {
+      withCredentials: true,
+    });
     return response.data;
-  } catch (error: any) {
-    return rejectWithValue(
-      error.response?.data?.message || error.message || "Failed to send issue"
-    );
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      return rejectWithValue(
+        error.response?.data?.message || error.message || "Failed to send issue"
+      );
+    }
   }
 });
 
 export const fetchAllQuoteRequests = createAsyncThunk<
   getQuoteApiResponse,
-  string, // userId
+  string,
   { rejectValue: string }
 >("quote/fetchAllQuoteRequests", async (userId, { rejectWithValue }) => {
   try {
-    const response = await axios.get<getQuoteApiResponse>(
-      `${API_URL}shop/quote/get/${userId}`
-    );
+    const response = await axios.get(`${API_URL}shop/quote/get/${userId}`);
     return response.data;
   } catch (error) {
-    const err = error as AxiosError;
-    return rejectWithValue(err.response?.data || "Error fetching cart items");
+    if (axios.isAxiosError(error)) {
+      return rejectWithValue(
+        error.response?.data || "Error fetching cart items"
+      );
+    }
   }
 });
 

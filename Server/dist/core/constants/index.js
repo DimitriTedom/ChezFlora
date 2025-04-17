@@ -14,6 +14,8 @@ var HttpCode;
     HttpCode[HttpCode["UNAUTHORIZED"] = 401] = "UNAUTHORIZED";
     HttpCode[HttpCode["FORBIDDEN"] = 403] = "FORBIDDEN";
     HttpCode[HttpCode["NOT_FOUND"] = 404] = "NOT_FOUND";
+    HttpCode[HttpCode["REQUEST_TIMEOUT"] = 408] = "REQUEST_TIMEOUT";
+    HttpCode[HttpCode["CONFLICT"] = 409] = "CONFLICT";
     HttpCode[HttpCode["INTERNAL_SERVER_ERROR"] = 500] = "INTERNAL_SERVER_ERROR";
 })(HttpCode || (exports.HttpCode = HttpCode = {}));
 //# sourceMappingURL=index.js.map

@@ -51,7 +51,7 @@ export const createOrder = async (req: Request, res: Response) => {
 export const capturePayment = async (req: Request, res: Response) => {
     try {
                 // we nedd to get the payemtId,payerId and orderID
-        const { paymentId, payerId, orderId } = req.body;
+        const { paymentId, payerId,  } = req.body;
 
         const order = await prisma.order.findUnique({ where: { id: orderId } });
         if (!order) {

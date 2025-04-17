@@ -157,7 +157,7 @@ const AdminOrders = () => {
                           onClick={() => handleFetchOrderDetails(orderItem.id)}
                           disabled={isLoading}
                         >
-                          View Detail
+                          View Details
                         </Button>
                       </TableCell>
                     </TableRow>

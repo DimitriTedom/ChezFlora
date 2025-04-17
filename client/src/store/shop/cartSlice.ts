@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import axios, { AxiosError } from "axios";
+import axios from "axios";
 import { API_URL } from "../authSlice";
 
 // -----------------
@@ -74,14 +74,15 @@ export const addToCart = createAsyncThunk<
   "cart/addToCart",
   async ({ userId, productId, quantity }, { rejectWithValue }) => {
     try {
-      const response = await axios.post<CartApiResponse>(
+      const response = await axios.post(
         `${API_URL}shop/cart/addtocart`,
         { userId, productId, quantity }
       );
       return response.data;
     } catch (error) {
-      const err = error as AxiosError;
-      return rejectWithValue(err.response?.data || "Error adding to cart");
+      if (axios.isAxiosError(error)) {
+        return rejectWithValue(error.response?.data || "Error adding to cart");
+      }
     }
   }
 );
@@ -94,13 +95,14 @@ export const fetchCartItems = createAsyncThunk<
   "cart/fetchCartItems",
   async (userId, { rejectWithValue }) => {
     try {
-      const response = await axios.get<CartApiResponse>(
+      const response = await axios.get(
         `${API_URL}shop/cart/get/${userId}`
       );
       return response.data;
     } catch (error) {
-      const err = error as AxiosError;
-      return rejectWithValue(err.response?.data || "Error fetching cart items");
+      if (axios.isAxiosError(error)) {
+        return rejectWithValue(error.response?.data || "Error fetching cart items");
+      }
     }
   }
 );
@@ -113,16 +115,15 @@ export const updateCartIemQty = createAsyncThunk<
   "cart/updateCartIemQty",
   async ({ userId, productId, quantity }, { rejectWithValue }) => {
     try {
-      const response = await axios.put<CartApiResponse>(
+      const response = await axios.put(
         `${API_URL}shop/cart/update-cart`,
         { userId, productId, quantity }
       );
       return response.data;
     } catch (error) {
-      const err = error as AxiosError;
-      return rejectWithValue(
-        err.response?.data || "Error updating cart item quantity"
-      );
+      if (axios.isAxiosError(error)) {
+        return rejectWithValue(error.response?.data || "Error updating cart item quantity");
+      }
     }
   }
 );
@@ -135,13 +136,14 @@ export const deleteCartITems = createAsyncThunk<
   "cart/deleteCartITems",
   async ({ userId, productId }, { rejectWithValue }) => {
     try {
-      const response = await axios.delete<CartApiResponse>(
+      const response = await axios.delete(
         `${API_URL}shop/cart/${userId}/${productId}`
       );
       return response.data;
     } catch (error) {
-      const err = error as AxiosError;
-      return rejectWithValue(err.response?.data || "Error deleting cart item");
+      if (axios.isAxiosError(error)) {
+        return rejectWithValue(error.response?.data || "Error deleting cart item");
+      }
     }
   }
 );

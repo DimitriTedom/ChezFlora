@@ -1,12 +1,30 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 import { API_URL } from "./authSlice";
+import { ProductFormData } from "@/pages/admin-view/Products";
 
 const initialState = {
   isLoading: false,
   productList: [],
 };
- export const addNewProduct = createAsyncThunk("/products/addNewProduct", 
+
+interface AddNewProductApiResponse{
+  success: boolean;
+  data:ProductFormData;
+}
+interface EditProductData{
+  id:string;
+  formData:ProductFormData;
+}
+interface ApiResponse{
+  success:boolean;
+  message:string;
+}
+interface EditProductApiResponse extends ApiResponse{
+  data:ProductFormData;
+}
+
+ export const addNewProduct = createAsyncThunk<AddNewProductApiResponse,ProductFormData>("/products/addNewProduct", 
    async (formData,{rejectWithValue}) => {
     try{
       const result = await axios.post(
@@ -33,7 +51,7 @@ export const fetchAllProducts = createAsyncThunk("/products/fetchAllProducts",
    return result?.data
  });
 
-export const editProduct = createAsyncThunk("/products/editProduct", 
+export const editProduct = createAsyncThunk<EditProductApiResponse,EditProductData>("/products/editProduct", 
     async ({id,formData}) => {
    const result = await axios.put(
      `${API_URL}admin/products/edit/${id}`,
@@ -46,7 +64,7 @@ export const editProduct = createAsyncThunk("/products/editProduct",
    return result?.data
  });
 
- export const deleteProduct = createAsyncThunk("/products/deleteProduct", 
+ export const deleteProduct = createAsyncThunk<ApiResponse,string>("/products/deleteProduct", 
     async (id) => {
    const result = await axios.delete(
      `${API_URL}admin/products/delete/${id}`,

@@ -1,11 +1,7 @@
 import { GrValidate } from "react-icons/gr";
-import { MdSystemUpdateAlt } from "react-icons/md";
 import { MdEmojiEvents } from "react-icons/md";
 import { BiCategoryAlt } from "react-icons/bi";
-import { MdCategory } from "react-icons/md";
 import { AiOutlineStock } from "react-icons/ai";
-("use client");
-
 import React, { useEffect, useState } from "react";
 import {
   Card,
@@ -25,13 +21,13 @@ import { Share2Icon, HeartIcon, ArrowRightIcon, Star } from "lucide-react";
 import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/store/store";
-import { fetchProductDetails } from "@/store/shop/ShopProductSlice";
+import { fetchProductDetails, initalProductDetails } from "@/store/shop/ShopProductSlice";
 import ChezFloraGallery, {
   ChezFloraGalleryProps,
 } from "@/components/Shopping-view/ChezFloraGallery";
 import ChezFloraLoader from "@/components/Common/ChezFloraLoader";
 import { useCustomToast } from "@/hooks/useCustomToast";
-import { fetchCartItems, addToCart } from "@/store/shop/cartSlice";
+import { fetchCartItems, addToCart, CartItem } from "@/store/shop/cartSlice";
 import { MdProductionQuantityLimits } from "react-icons/md";
 import StarRating from "@/components/Common/StarRating";
 import {
@@ -42,21 +38,17 @@ import { formatDate } from "@/lib/utils";
 import { Label } from "@/components/ui/label";
 import { Helmet } from "react-helmet-async";
 
-interface Review {
+export interface Review {
   user: string;
   rating: number;
   content: string;
   createdAt: string;
 }
-interface CartItem {
-  productId: number;
-  quantity: number;
-}
 
 interface Cart {
   items: CartItem[];
 }
-interface ProductDetails {
+export interface ProductDetails {
   id: string;
   name: string;
   description: string;
@@ -68,12 +60,13 @@ interface ProductDetails {
   updatedAt: string;
   event: string;
   category: string;
+  averageReview?:number;
   reviews?: Review[];
 }
 
 const ShoppingProductDetail: React.FC = () => {
-  const [productDetails, setProductDetails] = useState<ProductDetails | null>(
-    null
+  const [productDetails, setProductDetails] = useState<ProductDetails>(
+    initalProductDetails
   );
   const [quantity, setQuantity] = useState<number>(1);
   const [reviewContent, setReviewContent] = useState<string>("");
@@ -177,10 +170,10 @@ const ShoppingProductDetail: React.FC = () => {
     }
     try {
       const data = await dispatch(
-        addToCart({ userId: user?.id!, productId: id, quantity })
+        addToCart({ userId: user.id, productId: id, quantity })
       ).unwrap();
       if (data?.success) {
-        dispatch(fetchCartItems(user!.id));
+        dispatch(fetchCartItems(user.id));
         showToast({
           message: "Product added to cart",
           type: "success",
@@ -200,7 +193,7 @@ const ShoppingProductDetail: React.FC = () => {
   const handleReviewSubmit = () => {
     dispatch(
       addProductReview({
-        productId: productDetails?.id,
+        productId: productDetails.id,
         userId: user?.id,
         content: reviewContent,
         rating: rating,
@@ -253,8 +246,9 @@ const ShoppingProductDetail: React.FC = () => {
         type: "success",
       });
     } catch (error) {
+      const errorMessage =  error instanceof Error ? error.message : "An unknown error occurred";
       showToast({
-        message: "Error",
+        message: errorMessage,
         subtitle: "Failed to copy link",
         type: "error",
       });
@@ -265,7 +259,7 @@ const ShoppingProductDetail: React.FC = () => {
       ? productReviews.reduce((sum, review) => sum + review.rating, 0) /
         productReviews.length
       : 0;
-  if (isLoading) {
+  if (isLoading||isProductReviewLoading) {
     return <ChezFloraLoader />;
   }
   if (!productDetails) {
@@ -440,7 +434,7 @@ const ShoppingProductDetail: React.FC = () => {
                         <div className="flex items-center gap-3">
                           <Avatar className="h-10 w-10 border">
                             <AvatarImage
-                              src={review.userImage || "/avatar3.svg"}
+                              src={"/avatar3.svg"}
                             />
                             <AvatarFallback>
                               {review.userName.charAt(0).toUpperCase()}
@@ -451,7 +445,7 @@ const ShoppingProductDetail: React.FC = () => {
                               {review.userName}
                             </p>
                             <p className="text-xs text-gray-500">
-                              {formatDate(review?.createdAt)}
+                              {formatDate(review.createdAt)}
                             </p>
                           </div>
                         </div>
@@ -459,7 +453,6 @@ const ShoppingProductDetail: React.FC = () => {
                           {[...Array(5)].map((_, i) => (
                             <Star
                               key={i}
-                              filled={i < review.rating}
                               className={`w-5 h-5 transition-all duration-200 ${
                                 i < review.rating
                                   ? "text-pink-400 fill-pink-400"

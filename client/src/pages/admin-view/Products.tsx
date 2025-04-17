@@ -57,7 +57,7 @@ const AdminProducts = () => {
   const { productList, isLoading } = useSelector(
     (state: RootState) => state.adminProducts
   );
-  const [currentEditedId, setCurrentEditedId] = useState(null);
+  const [currentEditedId, setCurrentEditedId] = useState('');
 
   useEffect(() => {
     dispatch(fetchAllProducts()).unwrap();
@@ -71,7 +71,7 @@ const AdminProducts = () => {
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    if (currentEditedId !== null) {
+    if (currentEditedId !== '') {
       dispatch(editProduct({ id: currentEditedId, formData }))
         .unwrap()
         .then((data) => {
@@ -84,7 +84,7 @@ const AdminProducts = () => {
           });
           setOpenCreateProductDialog(false);
           setFormData(initialFormData);
-          setCurrentEditedId(null);
+          setCurrentEditedId('');
           dispatch(fetchAllProducts()).unwrap();
         });
 
@@ -135,7 +135,7 @@ const AdminProducts = () => {
 
   const isFormValid = () => {
     return Object.keys(formData)
-      .map((key: any) => formData[key] !== "")
+      .map((key: string|number) => formData[key] !== "")
       .every((item) => item);
   };
   return (
@@ -172,7 +172,7 @@ const AdminProducts = () => {
           className="bg-pink-200 hover:bg-pink-300"
           onClick={() => {
             setOpenCreateProductDialog(true);
-            setCurrentEditedId(null);
+            setCurrentEditedId('');
           }}
         >
           <AiOutlinePlus /> Add New Product
@@ -214,7 +214,7 @@ const AdminProducts = () => {
         <SheetContent className="overflow-y-auto">
           <SheetHeader>
             <SheetTitle>
-              {currentEditedId !== null ? "Edit Product" : "Add New Product"}
+              {currentEditedId !== '' ? "Edit Product" : "Add New Product"}
             </SheetTitle>
           </SheetHeader>
           <ProductImageUpload
@@ -224,7 +224,7 @@ const AdminProducts = () => {
             setImageUploadedUrl={setImageUploadedUrl}
             imageLoadingState={imageLoadingState}
             setImageLoadingState={setImageLoadingState}
-            isEditMode={currentEditedId}
+            isEditMode={currentEditedId ? true : false}
           />
           <div className="py-2">
             <CommonForm
@@ -232,7 +232,7 @@ const AdminProducts = () => {
               setFormData={setFormData}
               onSubmit={onSubmit}
               formControls={addProductFormElements}
-              buttonText={currentEditedId !== null ? "Edit" : "Add"}
+              buttonText={currentEditedId !== '' ? "Edit" : "Add"}
               isBnDisabled={!isFormValid()}
             />
           </div>
