@@ -5,13 +5,15 @@ const constants_1 = require("../../core/constants");
 const auth_controller_1 = require("../auth.controller");
 const getFiltereProducts = async (req, res) => {
     try {
-        const { category = [], event = [], sortBy = 'price-lowtohigh' } = req.query;
+        const { category = '', event = '', sortBy = 'price-lowtohigh' } = req.query;
+        const categoryArray = category.toString().split(',').filter(Boolean);
+        const eventArray = event.toString().split(',').filter(Boolean);
         const filters = {};
-        if (category.length) {
-            filters.category = { in: category.toString().split(',') };
+        if (categoryArray.length) {
+            filters.category = { in: categoryArray };
         }
-        if (event.length) {
-            filters.event = { in: event.toString().split(',') };
+        if (eventArray.length) {
+            filters.event = { in: eventArray };
         }
         const sortMap = {
             'price-lowtohigh': { price: 'asc' },
@@ -19,9 +21,10 @@ const getFiltereProducts = async (req, res) => {
             'title-atoz': { name: 'asc' },
             'title-ztoa': { name: 'desc' }
         };
+        const sortKey = sortBy.toString();
         const products = await auth_controller_1.prisma.product.findMany({
             where: filters,
-            orderBy: sortMap[sortBy] || { name: 'asc' }
+            orderBy: sortMap[sortKey] || { name: 'asc' }
         });
         res.status(constants_1.HttpCode.OK).json({ success: true, data: products });
     }

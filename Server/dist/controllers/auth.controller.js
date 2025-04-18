@@ -51,7 +51,7 @@ const initiateRegistration = async (req, res) => {
         // Configure the email template
         const handlebarOptions = {
             viewEngine: {
-                extName: '.hbs',
+                extname: '.hbs',
                 partialsDir: path_1.default.resolve(__dirname, 'templates'),
                 defaultLayout: false
             },
@@ -191,7 +191,7 @@ const checkUser = async (req, res) => {
         // Setup Handlebars engine
         const handlebarOptions = {
             viewEngine: {
-                extName: '.hbs',
+                extname: '.hbs',
                 partialsDir: path_1.default.resolve(__dirname, 'templates'),
                 defaultLayout: false
             },
@@ -255,7 +255,7 @@ const checkPendingUser = async (req, res) => {
         // Setup Handlebars engine
         const handlebarOptions = {
             viewEngine: {
-                extName: '.hbs',
+                extname: '.hbs',
                 partialsDir: path_1.default.resolve(__dirname, 'templates'),
                 defaultLayout: false
             },

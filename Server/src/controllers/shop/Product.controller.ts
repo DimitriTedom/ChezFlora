@@ -1,29 +1,35 @@
 import { HttpCode } from '../../core/constants';
 import { Request, Response } from 'express';
 import { prisma } from '../auth.controller';
+import { Prisma,$Enums } from '@prisma/client';
 
 export const getFiltereProducts = async (req: Request, res: Response) => {
 	try {
-		const { category = [], event = [], sortBy = 'price-lowtohigh' } = req.query;
-		const filters: Record<string, any> = {};
+		const { category = '', event = '', sortBy = 'price-lowtohigh' } = req.query;
 
-		if (category.length) {
-			filters.category = { in: category.toString().split(',') };
-		}
-		if (event.length) {
-			filters.event = { in: event.toString().split(',') };
-		}
+		const categoryArray = category.toString().split(',').filter(Boolean) as $Enums.Category[];
+		const eventArray = event.toString().split(',').filter(Boolean) as $Enums.EventType[];
+				const filters: Prisma.ProductWhereInput = {};
 
-		const sortMap: Record<string, any> = {
+				if (categoryArray.length) {
+					filters.category = { in: categoryArray };
+				  }
+				  
+				  if (eventArray.length) {
+					filters.event = { in: eventArray };
+				  }
+				  type SortOption = 'price-lowtohigh' | 'price-hightolow' | 'title-atoz' | 'title-ztoa';
+
+		const sortMap: Record<SortOption, Prisma.ProductOrderByWithRelationInput> = {
 			'price-lowtohigh': { price: 'asc' },
 			'price-hightolow': { price: 'desc' },
 			'title-atoz': { name: 'asc' },
 			'title-ztoa': { name: 'desc' }
 		};
-
+		const sortKey = sortBy.toString() as SortOption;
 		const products = await prisma.product.findMany({
 			where: filters,
-			orderBy: sortMap[sortBy] || { name: 'asc' }
+			orderBy: sortMap[sortKey] || { name: 'asc' }
 		});
 
 		res.status(HttpCode.OK).json({ success: true, data: products });

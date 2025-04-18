@@ -27,8 +27,8 @@ const handleImageUpload = async (req, res) => {
         console.error('Erreur upload:', error);
         res.status(500).json({
             success: false,
-            message: "An Error Occured",
-            error: error.message
+            message: 'An Error Occured',
+            error: 'Error'
         });
     }
 };
@@ -108,7 +108,7 @@ const editProducts = async (req, res) => {
         }
         // Parsing des valeurs numériques
         const parsedPrice = price ? parseFloat(price) : findProduct.price;
-        const parsedSaleprice = saleprice ? parseFloat(saleprice) : findProduct.saleprice;
+        const parsedSaleprice = saleprice ? parseFloat(saleprice) : findProduct.saleprice ?? 0;
         const parsedStock = stock ? parseInt(stock) : findProduct.stock;
         if ((price && isNaN(parsedPrice)) || (saleprice && isNaN(parsedSaleprice)) || (stock && isNaN(parsedStock))) {
             return res.status(400).json({ success: false, message: 'Invalid input data' });
@@ -126,7 +126,7 @@ const editProducts = async (req, res) => {
                 image: image || findProduct.image
             }
         });
-        console.log(updatedProduct, "updated product"),
+        console.log(updatedProduct, 'updated product'),
             res.status(200).json({
                 success: true,
                 message: `${findProduct.name} updated successfully`,

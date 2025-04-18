@@ -7,13 +7,19 @@ const client_1 = require("@prisma/client");
 const addQuoteRequest = async (req, res) => {
     try {
         const { userId, eventDate, eventType, estimatedBudget, description } = req.body;
-        if (!userId || !eventDate || !eventType || !description || !estimatedBudget || estimatedBudget <= 0) {
+        if (!userId || !eventDate || !eventType || !description || !estimatedBudget) {
             return res.status(constants_1.HttpCode.BAD_REQUEST).json({
                 success: false,
                 message: "All fields (userId, eventDate, eventType, description,estimatedBudget) are required",
             });
         }
         const parsedEstimatedBudget = parseFloat(estimatedBudget);
+        if (parsedEstimatedBudget <= 0) {
+            return res.status(constants_1.HttpCode.BAD_REQUEST).json({
+                success: false,
+                message: "Estimated budget can't be less than or equal to zero",
+            });
+        }
         if (!Object.values(client_1.EventType).includes(eventType)) {
             return res.status(constants_1.HttpCode.BAD_REQUEST).json({
                 success: false,

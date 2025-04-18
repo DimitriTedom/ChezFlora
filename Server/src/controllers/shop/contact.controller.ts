@@ -1,5 +1,5 @@
 import nodemailer from 'nodemailer';
-import hbs from 'nodemailer-express-handlebars';
+import hbs, { NodemailerExpressHandlebarsOptions } from 'nodemailer-express-handlebars';
 import path from 'path';
 import { HttpCode } from "../../core/constants";
 import { Request, Response } from "express";
@@ -42,9 +42,9 @@ export const sendContactIssue = async (req: Request, res: Response) => {
         });
 
         // Configure the email template
-        const handlebarOptions = {
+        const handlebarOptions:NodemailerExpressHandlebarsOptions = {
             viewEngine: {
-                extName: '.hbs',
+                extname: '.hbs',
                 partialsDir: path.resolve(__dirname, 'templates'),
                 defaultLayout: false
             },

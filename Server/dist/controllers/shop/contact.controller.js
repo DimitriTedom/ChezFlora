@@ -46,7 +46,7 @@ const sendContactIssue = async (req, res) => {
         // Configure the email template
         const handlebarOptions = {
             viewEngine: {
-                extName: '.hbs',
+                extname: '.hbs',
                 partialsDir: path_1.default.resolve(__dirname, 'templates'),
                 defaultLayout: false
             },

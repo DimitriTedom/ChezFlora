@@ -68,7 +68,7 @@ const capturePayment = async (req, res) => {
             if (!product) {
                 return res.status(constants_1.HttpCode.NOT_FOUND).json({
                     success: false,
-                    message: `Not enough stock for ${product?.name}`
+                    message: `Not enough stock for this Product`
                 });
             }
             await auth_controller_1.prisma.product.update({

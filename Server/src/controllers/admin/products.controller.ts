@@ -27,8 +27,8 @@ export const handleImageUpload = async (req: Request, res: Response) => {
 		console.error('Erreur upload:', error);
 		res.status(500).json({
 			success: false,
-			message: "An Error Occured",
-			error: error.message
+			message: 'An Error Occured',
+			error: 'Error'
 		});
 	}
 };
@@ -36,48 +36,47 @@ export const handleImageUpload = async (req: Request, res: Response) => {
 //CREATE(ADD) PRODUCT
 export const addProduct = async (req: Request, res: Response) => {
 	try {
-	  const { image, name, description, price, category,event, saleprice, stock } = req.body;
-	  const parsedPrice = parseFloat(price);
-	  const parsedSaleprice = parseFloat(saleprice);
-	  const parsedStock = parseInt(stock);
-  
-	  if (isNaN(parsedPrice) || isNaN(parsedSaleprice) || isNaN(parsedStock)) {
-		return res.status(400).json({ success: false, message: 'Invalid input data' });
-	  }
-  
-	  const existingProduct = await prisma.product.findFirst({
-		where: { name }
-	  });
-	  if (existingProduct) {
-		return res.status(409).json({ success: false, message: 'Product already exists' });
-	  }
-  
-	  const newProduct = await prisma.product.create({
-		data: {
-		  name,
-		  image,
-		  description,
-		  price: parsedPrice,
-		  category,
-		  event,
-		  saleprice: parsedSaleprice,
-		  stock: parsedStock
+		const { image, name, description, price, category, event, saleprice, stock } = req.body;
+		const parsedPrice = parseFloat(price);
+		const parsedSaleprice = parseFloat(saleprice);
+		const parsedStock = parseInt(stock);
+
+		if (isNaN(parsedPrice) || isNaN(parsedSaleprice) || isNaN(parsedStock)) {
+			return res.status(400).json({ success: false, message: 'Invalid input data' });
 		}
-	  });
-	  console.log(newProduct);
-	  res.status(HttpCode.CREATED).json({
-		success: true,
-		data: newProduct
-	  });
-	} catch (error: any) {
-	  console.log(error);
-	  res.status(HttpCode.INTERNAL_SERVER_ERROR).json({
-		succes: false,
-		message: 'Error occured'
-	  });
+
+		const existingProduct = await prisma.product.findFirst({
+			where: { name }
+		});
+		if (existingProduct) {
+			return res.status(409).json({ success: false, message: 'Product already exists' });
+		}
+
+		const newProduct = await prisma.product.create({
+			data: {
+				name,
+				image,
+				description,
+				price: parsedPrice,
+				category,
+				event,
+				saleprice: parsedSaleprice,
+				stock: parsedStock
+			}
+		});
+		console.log(newProduct);
+		res.status(HttpCode.CREATED).json({
+			success: true,
+			data: newProduct
+		});
+	} catch (error) {
+		console.log(error);
+		res.status(HttpCode.INTERNAL_SERVER_ERROR).json({
+			succes: false,
+			message: 'Error occured'
+		});
 	}
-  };
-  
+};
 
 //READ(FETCH) PRODUCTS
 
@@ -101,7 +100,7 @@ export const fetchAllProducts = async (req: Request, res: Response) => {
 export const editProducts = async (req: Request, res: Response) => {
 	try {
 		const { id } = req.params;
-		const { image, name, description, price, category,event, saleprice, stock } = req.body;
+		const { image, name, description, price, category, event, saleprice, stock } = req.body;
 
 		const findProduct = await prisma.product.findUnique({ where: { id } });
 		if (!findProduct) {
@@ -113,7 +112,7 @@ export const editProducts = async (req: Request, res: Response) => {
 
 		// Parsing des valeurs numériques
 		const parsedPrice = price ? parseFloat(price) : findProduct.price;
-		const parsedSaleprice = saleprice ? parseFloat(saleprice) : findProduct.saleprice;
+		const parsedSaleprice = saleprice ? parseFloat(saleprice) : findProduct.saleprice ?? 0;
 		const parsedStock = stock ? parseInt(stock) : findProduct.stock;
 
 		if ((price && isNaN(parsedPrice)) || (saleprice && isNaN(parsedSaleprice)) || (stock && isNaN(parsedStock))) {
@@ -134,12 +133,12 @@ export const editProducts = async (req: Request, res: Response) => {
 			}
 		});
 
-		console.log(updatedProduct ,"updated product"),
-		res.status(200).json({
-			success: true,
-			message: `${findProduct.name} updated successfully`,
-			data: updatedProduct
-		});
+		console.log(updatedProduct, 'updated product'),
+			res.status(200).json({
+				success: true,
+				message: `${findProduct.name} updated successfully`,
+				data: updatedProduct
+			});
 	} catch (error) {
 		console.log(error);
 		res.status(500).json({
@@ -148,7 +147,6 @@ export const editProducts = async (req: Request, res: Response) => {
 		});
 	}
 };
-
 
 //DELETE PRODUCT
 
@@ -178,4 +176,3 @@ export const deleteProducts = async (req: Request, res: Response) => {
 		});
 	}
 };
-
