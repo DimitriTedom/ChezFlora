@@ -1,4 +1,3 @@
-// src/components/CustomToast.tsx
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faCheckCircle,
@@ -36,8 +35,7 @@ const CustomToast = ({
   subtitle,
   closeToast,
   toastProps,
-  isPaused,
-  ...props
+  // ...props
 }: CustomToastProps) => {
   // Use the provided progress value or default to 0.
   const progress = toastProps?.progress || 0;
@@ -47,8 +45,6 @@ const CustomToast = ({
       role="alert"
       aria-live="assertive"
       className={`relative flex items-center p-4 rounded-lg shadow-lg transition-transform transform hover:scale-105 ${bgColorMap[type]} text-white min-w-[300px]`}
-      onMouseEnter={props.pauseOnHover ? () => isPaused?.(true) : undefined}
-      onMouseLeave={props.pauseOnHover ? () => isPaused?.(false) : undefined}
       style={{ zIndex: 9999 }}
     >
       <FontAwesomeIcon

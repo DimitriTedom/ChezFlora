@@ -30,9 +30,8 @@ const AdminProductCard: React.FC<AdminProductCardProps> = ({
   const dispatch = useDispatch<AppDispatch>();
 
   const handleEdit = async (product: Product) => {
-    await dispatch(fetchProductDetails(product.id))
-      .then((data) => {
-        const formData = data?.payload?.data;
+    const response = await dispatch(fetchProductDetails(product.id)).unwrap()
+        const formData = response.data;
         onEdit({
           image: formData.image,
           name: formData.name,
@@ -43,10 +42,6 @@ const AdminProductCard: React.FC<AdminProductCardProps> = ({
           stock: formData.stock,
         });
         console.error("No product data returned");
-      })
-      .catch((error) =>
-        console.error("Error fetching product details:", error)
-      );
     // onEdit(product)
   };
   return (

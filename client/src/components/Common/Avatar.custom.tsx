@@ -16,12 +16,7 @@ import { useCustomToast } from "@/hooks/useCustomToast";
 import { logoutUser } from "@/store/authSlice";
 import { AppDispatch } from "@/store/store";
 import { User } from "@/store/authSlice";
-import {
-  LogOut,
-  User as UserIcon,
-  Settings as SettingsIcon,
-  Home as HomeIcon,
-} from "lucide-react";
+import { LogOut } from "lucide-react";
 
 export interface AvatarProps {
 user: User

@@ -1,8 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 import { API_URL } from "../authSlice";
-// import { Product } from "@/pages/Shopping-view/Carts/ProductCart";
-// import CartItem from "@/pages/Shopping-view/Carts/ShoopingCartItem";
 import { ProductDetails } from "@/pages/Shopping-view/ShoppingProductDetail";
 import { Filters } from "@/pages/Shopping-view/ShoppingStore";
 

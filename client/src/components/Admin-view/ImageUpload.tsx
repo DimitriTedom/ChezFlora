@@ -8,6 +8,7 @@ import { AppDispatch } from "@/store/store";
 import { uploadImage } from "@/store/imageUploadSlice";
 import { useCustomToast } from "@/hooks/useCustomToast";
 import { Skeleton } from "../ui/skeleton";
+import axios from "axios";
 
 interface ImageUploadProps {
   imageFile: File | null;
@@ -68,7 +69,7 @@ const ProductImageUpload = ({
       setImageLoadingState(true);
       const result = await dispatch(uploadImage(file)).unwrap();
       console.log(result);
-      setImageUploadedUrl((prev)=>result.data.url); // Accéder à data.url
+      setImageUploadedUrl(()=>result.data.url); // Accéder à data.url
       setImageLoadingState(false);
       showToast({
         message: result.message,
@@ -76,16 +77,18 @@ const ProductImageUpload = ({
         duration: 3000,
       });
       console.log(imageUploadedUrl,"upload image try")
-    } catch (error: any) {
-      setImageLoadingState(false);
-      handleRemoveImage();
-      showToast({
-        message: error.message,
-        type: "error",
-        duration: 3000,
-      });
-      console.log(imageUploadedUrl,"upload image catch")
-      console.log(error.message)
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        setImageLoadingState(false);
+        handleRemoveImage();
+        showToast({
+          message: error.message,
+          type: "error",
+          duration: 3000,
+        });
+        console.log(imageUploadedUrl,"upload image catch")
+        console.log(error.message)
+      }
     }
   };
 
