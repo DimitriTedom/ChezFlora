@@ -9,7 +9,7 @@
     "moduleResolution": "Node",
     "typeRoots": ["./node_modules/@types"],
     "sourceMap": true,
-    "outDir": "dist/",
+    "outDir": "./dist",
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "strict": true,
