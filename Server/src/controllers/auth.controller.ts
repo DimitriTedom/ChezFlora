@@ -6,9 +6,8 @@ import { HttpCode } from '../core/constants';
 import { registerSchema, loginSchema } from '../schemas/auth.schema';
 import { errorHandler } from '../middlewares/auth.middleware';
 import nodemailer from 'nodemailer';
-import hbs from 'nodemailer-express-handlebars';
+import hbs, { NodemailerExpressHandlebarsOptions } from 'nodemailer-express-handlebars';
 import path from 'path';
-import { create } from 'domain';
 export const prisma = new PrismaClient();
 
 export const initiateRegistration = async (req: Request, res: Response) => {
@@ -50,9 +49,9 @@ export const initiateRegistration = async (req: Request, res: Response) => {
 		});
 
 		// Configure the email template
-		const handlebarOptions = {
+		const handlebarOptions:NodemailerExpressHandlebarsOptions = {
 			viewEngine: {
-				extName: '.hbs',
+				extname: '.hbs',
 				partialsDir: path.resolve(__dirname, 'templates'),
 				defaultLayout: false
 			},
@@ -203,9 +202,9 @@ export const checkUser = async (req: Request, res: Response) => {
 		});
 
 		// Setup Handlebars engine
-		const handlebarOptions = {
+		const handlebarOptions:NodemailerExpressHandlebarsOptions = {
 			viewEngine: {
-				extName: '.hbs',
+				extname: '.hbs',
 				partialsDir: path.resolve(__dirname, 'templates'),
 				defaultLayout: false
 			},
@@ -275,9 +274,9 @@ export const checkPendingUser = async (req: Request, res: Response) => {
 		});
 
 		// Setup Handlebars engine
-		const handlebarOptions = {
+		const handlebarOptions:NodemailerExpressHandlebarsOptions = {
 			viewEngine: {
-				extName: '.hbs',
+				extname: '.hbs',
 				partialsDir: path.resolve(__dirname, 'templates'),
 				defaultLayout: false
 			},

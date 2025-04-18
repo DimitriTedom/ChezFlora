@@ -51,7 +51,7 @@ export const createOrder = async (req: Request, res: Response) => {
 export const capturePayment = async (req: Request, res: Response) => {
     try {
                 // we nedd to get the payemtId,payerId and orderID
-        const { paymentId, payerId,  } = req.body;
+        const { paymentId, payerId, orderId } = req.body;
 
         const order = await prisma.order.findUnique({ where: { id: orderId } });
         if (!order) {
@@ -76,7 +76,7 @@ export const capturePayment = async (req: Request, res: Response) => {
             if (!product) {
                 return res.status(HttpCode.NOT_FOUND).json({
                     success:false,
-                    message: `Not enough stock for ${product?.name}`
+                    message: `Not enough stock for this Product`
                 })
             }
 

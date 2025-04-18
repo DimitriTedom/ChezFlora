@@ -13,13 +13,19 @@ interface quoteRequestInput{
 export const addQuoteRequest = async (req: Request, res: Response) => {
     try {
         const {userId,eventDate,eventType,estimatedBudget,description}:quoteRequestInput = req.body;
-        if (!userId || !eventDate || !eventType || !description || !estimatedBudget || estimatedBudget <= 0) {
+        if (!userId || !eventDate || !eventType || !description || !estimatedBudget) {
             return res.status(HttpCode.BAD_REQUEST).json({
                 success: false,
                 message:  "All fields (userId, eventDate, eventType, description,estimatedBudget) are required",
             });
         }
         const parsedEstimatedBudget = parseFloat(estimatedBudget);
+        if (parsedEstimatedBudget <= 0) {
+            return res.status(HttpCode.BAD_REQUEST).json({
+                success: false,
+                message:  "Estimated budget can't be less than or equal to zero",
+            });
+        }
         if (!Object.values(EventType).includes(eventType)) {
             return res.status(HttpCode.BAD_REQUEST).json({
                 success: false,
@@ -97,7 +103,7 @@ export const fetchAllQuoteRequests = async (req: Request, res: Response) => {
             message:"Quote requests fetched successfully",
             data: quoteRequests,
         });
-    } catch (error: any) {
+    } catch (error) {
         console.error("Error creating quote request:", error);
         if (error instanceof Error && error.message.includes("prisma")) {
             return res.status(HttpCode.INTERNAL_SERVER_ERROR).json({

@@ -2,7 +2,6 @@ import { Router } from 'express';
 import { initiateRegistration,completeRegistration, login,logout, checkUser, updatePassword, verifyOtp,checkPendingUser } from '../controllers/auth.controller';
 import { HttpCode } from '../core/constants';
 import { authenticateUser } from '../middlewares/auth.middleware';
-import { create } from 'domain';
 const router = Router();
 
 router.post('/register/initiate', initiateRegistration);
