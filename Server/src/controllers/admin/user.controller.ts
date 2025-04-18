@@ -121,7 +121,7 @@ export const createUser = async (req: Request, res: Response) => {
 
 export const updateUserRoles = async (req: Request, res: Response) => {
 	try {
-		const { userIds, role }: RoleUpdate = req.body;
+		const { userIds, role } = req.body;
 		console.log("users:",userIds , "role:", role);
 		const adminId = req.user?.id;
 		if (!userIds.length || !Object.values(Role).includes(role)) {
