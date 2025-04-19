@@ -9,8 +9,12 @@ import { AppDispatch } from "@/store/store";
 import { useCustomToast } from "@/hooks/useCustomToast";
 import { checkUser } from "@/store/authSlice";
 
+interface ForgotPasswordFormData extends Record<string, unknown> {
+  email: string;
+}
+
 const ForgotPassword: React.FC = () => {
-  const [formData, setFormData] = useState({ email: "" });
+  const [formData, setFormData] = useState<ForgotPasswordFormData>({ email: "" });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -46,7 +50,7 @@ const ForgotPassword: React.FC = () => {
           type: "error",
           duration: 5000,
         });
-      setError(error);
+      setError((error as Error).message);
       console.log(error);
     } finally {
       setLoading(false);

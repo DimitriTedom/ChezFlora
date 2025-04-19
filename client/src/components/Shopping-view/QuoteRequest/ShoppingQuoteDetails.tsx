@@ -1,4 +1,4 @@
-import { Clock, Calendar, MessageSquare, Info, FileText } from "lucide-react";
+import { Clock, Calendar, MessageSquare, FileText } from "lucide-react";
 import { formatDate } from "@/lib/utils";
 import { QuoteRequest } from "@/store/shop/QuoteRequestSlice";
 import { DialogContent } from "@/components/ui/dialog";

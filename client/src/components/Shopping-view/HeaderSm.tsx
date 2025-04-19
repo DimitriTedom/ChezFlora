@@ -67,7 +67,7 @@ const HeaderSm: React.FC = () => {
   const { isAuthenticated, user } = useSelector(
     (state: RootState) => state.auth
   );
-  const { cartItems } = useSelector((state: RootState) => state.shoppingCart);
+  const  cart = useSelector((state: RootState) => state.shoppingCart.cart);
   const [openCartSheet, setOpenCartSheet] = useState<boolean>(false);
   const dispactch = useDispatch<AppDispatch>();
   const { showToast } = useCustomToast();
@@ -257,13 +257,8 @@ const HeaderSm: React.FC = () => {
                     </SheetTrigger>
                     <SheetContent className="py-8 px-2 flex flex-col items-center gap-5 overflow-y-auto">
                       <UserCartWrapper
-                        cartItems={
-                          cartItems &&
-                          cartItems.items &&
-                          cartItems.items.length > 0
-                            ? cartItems.items
-                            : []
-                        }
+                        cart={cart}
+                        setOpenCartSheet={setOpenCartSheet}
                       />
                     </SheetContent>
                   </Sheet>

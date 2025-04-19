@@ -17,13 +17,11 @@ export interface Product {
 interface UserProductCardProps {
   product: Product;
   handleGetProductDetails: (id: string) => void;
-  handleAddToCart: (id: string) => void;
 }
 
 const UserProductCard: React.FC<UserProductCardProps> = ({
   product,
-  handleGetProductDetails,
-  handleAddToCart,
+  handleGetProductDetails
 }) => {
   const [isLoaded, setIsLoaded] = useState(false);
   const discountPercentage = product.saleprice
@@ -120,14 +118,9 @@ const UserProductCard: React.FC<UserProductCardProps> = ({
             <Button
               className="w-full bg-pink-200 hover:bg-pink-300 text-black font-medium shadow-md transition-all duration-200 active:scale-95"
               size="lg"
-              onClick={(e) => {
-                e.stopPropagation(); // Prevent triggering card click
-                handleAddToCart(product?.id);
-                console.log(`Adding ${product.name} to cart`);
-              }}
             >
               <BsCartPlus className="mr-2" />
-              Add to Cart
+              view details
             </Button>
           )}
         </div>

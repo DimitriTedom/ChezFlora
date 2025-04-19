@@ -9,7 +9,8 @@ import {
 import { AppDispatch, RootState } from "@/store/store";
 import { useDispatch, useSelector } from "react-redux";
 import { useCustomToast } from "@/hooks/useCustomToast";
-import { EventType } from "@/store/shop/QuoteRequestSlice"; // Import EventType from your slice
+import { EventType } from "@/store/shop/QuoteRequestSlice";
+import axios from "axios";
 
 const QuoteRequestForm = () => {
   const [formData, setFormData] = useState<QuoteRequestFormData>({
@@ -86,12 +87,14 @@ const QuoteRequestForm = () => {
             });
           }
         });
-    } catch (error: any) {
-      showToast({
-        type: "error",
-        message: error.message || "Failed to submit quote request",
-        duration: 2000,
-      });
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        showToast({
+          type: "error",
+          message: error.message || "Failed to submit quote request",
+          duration: 2000,
+        });
+      }
     }
   };
 

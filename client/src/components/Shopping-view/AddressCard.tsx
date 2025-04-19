@@ -38,8 +38,12 @@ interface AddressCardProps {
 }: AddressCardProps) {
   return (
     <Card
-      onClick={()=>setCurrentSelectedAddress(addressInfo)  ? () => setCurrentSelectedAddress(addressInfo) : null}
-      className={`w-full max-w-md relative transition-all ${
+      onClick={() => { // Corrected onClick handler
+        if (setCurrentSelectedAddress) {
+          setCurrentSelectedAddress(addressInfo);
+        }
+      }}
+      className={`w-full max-w-md relative transition-all cursor-pointer ${ // Added cursor-pointer for better UX
         selectedId === addressInfo.id
           ? "border-2 border-primary shadow-lg"
           : "border border-gray-200"
@@ -87,7 +91,7 @@ interface AddressCardProps {
         <Button
           variant="outline"
           onClick={(e) => {
-            e.stopPropagation();
+            e.stopPropagation(); // Keep stopPropagation to prevent card click when editing
             handleEditAddress(addressInfo);
           }}
           className="gap-2"
@@ -97,7 +101,7 @@ interface AddressCardProps {
         <Button
           variant="outline"
           onClick={(e) => {
-            e.stopPropagation();
+            e.stopPropagation(); // Keep stopPropagation to prevent card click when deleting
             handleDeleteAddress(addressInfo);
           }}
           className="gap-2 text-destructive hover:text-destructive"
@@ -109,4 +113,4 @@ interface AddressCardProps {
   );
 }
 
-export default AddressCard
+export default AddressCard;

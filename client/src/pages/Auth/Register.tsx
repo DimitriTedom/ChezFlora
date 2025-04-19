@@ -11,7 +11,14 @@ import { initiateRegistrationUser } from "@/store/authSlice";
 import type { AppDispatch } from "@/store/store";
 import { useCustomToast } from "@/hooks/useCustomToast";
 import { Helmet } from "react-helmet-async";
-import ChezFloraLoader from "@/components/Common/ChezFloraLoader";
+// Removed unused import: import ChezFloraLoader from "@/components/Common/ChezFloraLoader";
+
+// Define interface for form data and add index signature
+interface RegisterFormData extends Record<string, unknown> {
+  name: string;
+  email: string;
+  password: string;
+}
 
 interface SocialButton {
   content: string;
@@ -21,7 +28,8 @@ interface SocialButton {
 }
 
 const AuthRegister: React.FC = () => {
-  const [formData, setFormData] = useState({
+  // Use the interface in useState
+  const [formData, setFormData] = useState<RegisterFormData>({
     name: "",
     email: "",
     password: "",
@@ -172,7 +180,8 @@ const AuthRegister: React.FC = () => {
         </div>
 
         {/* Formulaire d'inscription */}
-        <CommonForm
+        {/* Provide the type argument to CommonForm */}
+        <CommonForm<RegisterFormData>
           formControls={registerFormControls}
           formData={formData}
           setFormData={setFormData}
@@ -182,32 +191,6 @@ const AuthRegister: React.FC = () => {
         />
         {/* Gestion des erreurs et du chargement */}
         {error && <p className="text-red-500 text-center mt-2">{error}</p>}
-        {loading && <ChezFloraLoader/>
-        // (
-        //   <div className="flex justify-center mt-4">
-        //     <svg
-        //       className="animate-spin h-5 w-5 mr-3 text-pink-500"
-        //       xmlns="http://www.w3.org/2000/svg"
-        //       fill="none"
-        //       viewBox="0 0 24 24"
-        //     >
-        //       <circle
-        //         className="opacity-25"
-        //         cx="12"
-        //         cy="12"
-        //         r="10"
-        //         stroke="currentColor"
-        //         strokeWidth="4"
-        //       ></circle>
-        //       <path
-        //         className="opacity-75"
-        //         fill="currentColor"
-        //         d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.963 7.963 0 014 12H0c0 6.627 5.373 12 12 12a7.963 7.963 0 01-7.717-2.709z"
-        //       ></path>
-        //     </svg>
-        //   </div>
-        // )
-        }
 
         {/* Lien vers la connexion */}
         <div className="mt-4 text-center">

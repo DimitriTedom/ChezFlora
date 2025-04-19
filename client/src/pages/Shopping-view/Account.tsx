@@ -1,10 +1,20 @@
 import Address from "@/components/Shopping-view/Address";
+import { AddressData } from "@/components/Shopping-view/AddressCard";
 import ShoppingOrders from "@/components/Shopping-view/Orders";
 import ShoppingQuotes from "@/components/Shopping-view/ShoppingQuotes";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import React from "react";
 import { Helmet } from "react-helmet-async";
 
 const ShoppingAccount = () => {
+    const [currentSelectedAddress,setCurrentSelectedAddress] = React.useState<AddressData>({
+      id: '',
+      address: '',
+      city: '',
+      postalCode: '',
+      phone: '',
+      notes: '',
+    });
   return (
     <div className="flex flex-col w-full min-h-screen">
       <Helmet>
@@ -24,7 +34,11 @@ const ShoppingAccount = () => {
       </Helmet>
       <div className="mt-32 flex flex-col">
         <div className="relative z-10 h-[400px] w-full  overflow-hidden rounded-2xl">
-        <img src="/account2.jpg" alt="account" className="w-full h-full object-cover object-center rounded-2xl bg-red-300"/>
+          <img
+            src="/account2.jpg"
+            alt="account"
+            className="w-full h-full object-cover object-center rounded-2xl bg-red-300"
+          />
         </div>
 
         <div className="mx-auto mt-8  w-full">
@@ -37,19 +51,26 @@ const ShoppingAccount = () => {
                 <TabsTrigger value="quotes">Quotes</TabsTrigger>
               </TabsList>
               <TabsContent value="orders">
-                <ShoppingOrders/>
+                <ShoppingOrders />
               </TabsContent>
 
               <TabsContent value="address">
-                <Address/>
+                <Address
+                  selectedId={currentSelectedAddress.id}
+                  setCurrentSelectedAddress={setCurrentSelectedAddress}
+                />
               </TabsContent>
 
               <TabsContent value="profile">
-                  <h1>To be implemented later, the idea is to enable user to update it's password here without having to logout, and even update it's image</h1>
+                <h1>
+                  To be implemented later, the idea is to enable user to update
+                  it's password here without having to logout, and even update
+                  it's image
+                </h1>
               </TabsContent>
 
               <TabsContent value="quotes">
-                <ShoppingQuotes/>
+                <ShoppingQuotes />
               </TabsContent>
             </Tabs>
           </div>

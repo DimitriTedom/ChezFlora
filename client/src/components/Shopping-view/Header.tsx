@@ -8,7 +8,6 @@ import Logo from "../Common/Logo";
 import {
   NavigationMenu,
   NavigationMenuItem,
-  NavigationMenuLink as NavLinkUI,
   NavigationMenuList,
 } from "@/components/ui/navigation-menu";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -21,7 +20,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/store/store";
 import { Button } from "../ui/button";
 import UserCartWrapper from "./CartWrapper";
-import { addToCart, fetchCartItems } from "@/store/shop/cartSlice";
+import { fetchCartItems } from "@/store/shop/cartSlice";
 import { BsSearch } from "react-icons/bs";
 import FormTitle from "../Common/FormTitle";
 import { SearchIcon } from "lucide-react";
@@ -33,8 +32,6 @@ import ChezFloraLoader from "../Common/ChezFloraLoader";
 import UserProductCard, {
   Product,
 } from "@/pages/Shopping-view/Carts/ProductCart";
-import { useCustomToast } from "@/hooks/useCustomToast";
-import { fetchProductDetails } from "@/store/shop/ShopProductSlice";
 
 interface NavMenuLinkProps {
   url: string;
@@ -56,20 +53,6 @@ const NavMenuLink: React.FC<NavMenuLinkProps> = ({ url, text }) => (
   </NavigationMenuItem>
 );
 
-// const NavMenuDropdown: React.FC<NavMenuDropdownProps> = ({
-//   text,
-//   children,
-//  }) => (
-//   <NavigationMenuItem>
-//     <NavigationMenuTrigger className="text-gray-700 hover:bg-pink-100 transition-colors py-2 px-4 rounded-md text-xl">
-//       {text}
-//     </NavigationMenuTrigger>
-//     <NavigationMenuContent className="flex flex-col p-4 w-fit h-fit gap-3">
-//       {children}
-//     </NavigationMenuContent>
-//   </NavigationMenuItem>
-// );
-
 const ShoppingHeader: React.FC = () => {
   const [searchValue, setSearchValue] = useState<string>("");
   const { user, isAuthenticated } = useSelector(
@@ -80,18 +63,21 @@ const ShoppingHeader: React.FC = () => {
   const { searchResults, isLoading } = useSelector(
     (state: RootState) => state.searchPrdouct
   );
-  const { cartItems } = useSelector((state: RootState) => state.shoppingCart);
+  const cart = useSelector(
+    (state: RootState) => state.shoppingCart.cart
+  );
+
+  // const { cartItems } = useSelector((state: RootState) => state.shoppingCart);
   const [openCartSheet, setOpenCartSheet] = useState<boolean>(false);
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
-  const { showToast } = useCustomToast();
 
   useEffect(() => {
-    if (user?.id) {
+    if (user.id) {
       dispatch(fetchCartItems(user.id));
     }
-  }, [dispatch, user, cartItems]);
-
+  }, [dispatch, user.id]);
+  console.log(cart)
   useEffect(() => {
     if (
       productKeyword &&
@@ -111,58 +97,8 @@ const ShoppingHeader: React.FC = () => {
   const handleGetProductDetails = (productId: string) => {
     navigate(`/shop/detail/${productId}`);
   };
-  const items = (
-    useSelector((state: RootState) => state.shoppingCart.cartItems) as any
-  )?.items;
 
-  const handleAddToCart = async (productId: string) => {
-    try {
-      const prodResponse = await dispatch(
-        fetchProductDetails(productId)
-      ).unwrap();
-      const fetchedProduct = prodResponse.data;
 
-      if (!fetchedProduct) {
-        showToast({
-          message: "Failed to fetch product details",
-          type: "error",
-          duration: 5000,
-        });
-        return;
-      }
-
-      const found = items.find((item: any) => item.productId === productId);
-      const currentQty: number = found ? found.quantity : 0;
-
-      if (currentQty + 1 > fetchedProduct.stock) {
-        showToast({
-          message: "Cannot add more than available stock",
-          type: "error",
-          duration: 5000,
-        });
-        return;
-      }
-
-      const addResponse = await dispatch(
-        addToCart({ userId: user?.id!, productId, quantity: 1 })
-      ).unwrap();
-      if (addResponse?.success) {
-        dispatch(fetchCartItems(user!.id));
-        showToast({
-          message: "Product added to cart",
-          type: "success",
-          duration: 5000,
-        });
-      }
-    } catch (error) {
-      console.error("Add to Cart Error:", error);
-      showToast({
-        message: "An error occurred while adding to cart",
-        type: "error",
-        duration: 5000,
-      });
-    }
-  };
 
   return (
     <div className="w-screen lg:mb-32 bg-opacity-95 overflow-x-hidden">
@@ -241,7 +177,7 @@ const ShoppingHeader: React.FC = () => {
                               key={product.id}
                               product={product}
                               handleGetProductDetails={handleGetProductDetails}
-                              handleAddToCart={handleAddToCart}
+                              // handleAddToCart={handleAddToCart}
                             />
                           ))}
                         </div>
@@ -282,11 +218,6 @@ const ShoppingHeader: React.FC = () => {
               <NavMenuLink url="/shop/store" text="Store" />
             </NavigationMenuList>
           </NavigationMenu>
-          {/* <NavigationMenu>
-            <NavigationMenuList>
-              <NavMenuLink url="/shop/search" text="" />
-            </NavigationMenuList>
-          </NavigationMenu> */}
           <NavigationMenu>
             <NavigationMenuList>
               <NavMenuLink url="/shop/blog" text="Blog" />
@@ -316,18 +247,20 @@ const ShoppingHeader: React.FC = () => {
                 className="relative"
               >
                 <AiOutlineShoppingCart className="headerIcons" />
-                <span className={`absolute -top-2 -right-2 hidden items-center justify-center px-2 py-1 text-xs font-bold leading-none text-white bg-pink-400 rounded-full ${cartItems?.items?.length > 0 ? "inline-flex" : " "}`}>{cartItems?.items?.length}</span>
+                <span
+                  className={`absolute -top-2 -right-2 hidden items-center justify-center px-2 py-1 text-xs font-bold leading-none text-white bg-pink-400 rounded-full ${
+                    cart && cart?.items.length > 0 ? "inline-flex" : " "
+                  }`}
+                >
+                  {cart?.items.length}
+                </span>
                 <span className="sr-only">User Cart</span>
               </Button>
             </SheetTrigger>
             <SheetContent className="w-[60%] overflow-y-auto">
               <UserCartWrapper
                 setOpenCartSheet={setOpenCartSheet}
-                cartItems={
-                  cartItems && cartItems.items && cartItems.items.length > 0
-                    ? cartItems.items
-                    : []
-                }
+                cart={cart}
               />
             </SheetContent>
           </Sheet>

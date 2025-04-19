@@ -1,6 +1,4 @@
-import * as React from "react";
 import { useState } from "react";
-// Adaptez les imports de ShadCN UI et Lucide selon votre structure
 import {
   Dialog,
   DialogTrigger,

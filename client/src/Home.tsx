@@ -19,7 +19,6 @@ import AuthEnterOtp from "./pages/Auth/EnterOTP";
 import ShoppingStore from "./pages/Shopping-view/ShoppingStore";
 import ShoppingAbout from "./pages/Shopping-view/ShoppingAbout";
 import ShoppingContact from "./pages/Shopping-view/ShoppingContact";
-import BlogPostPage from "./pages/Shopping-view/Blog/BlogPostPage";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useDispatch, useSelector } from "react-redux";
@@ -59,7 +58,7 @@ export default function Home() {
     <>
       <ToastContainer
         position="top-right"
-        autoClose={5000}
+        autoClose={2000}
         hideProgressBar={false}
         newestOnTop={false}
         closeOnClick
@@ -130,7 +129,6 @@ export default function Home() {
           <Route path="checkout" element={<ShoppingCheckout />} />
           <Route path="account" element={<ShoppingAccount />} />
           <Route path="blog" element={<ShoppingBlog />} />
-          <Route path="blog/:id" element={<BlogPostPage />} />
           <Route path="contact" element={<ShoppingContact />} />
           <Route path="my-bookings" element={<MyBookings />} />
           <Route path="paypal-return" element={<PaypalReturnPage />} />

@@ -1,5 +1,3 @@
-import React from 'react'
-
 const MyBookings = () => {
   return (
     <div className='mt-32 min-h-screen'>

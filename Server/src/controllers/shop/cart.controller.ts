@@ -63,7 +63,7 @@ export const addToCart = async (req: Request, res: Response) => {
 				data: newCartItem
 			});
 		}
-	} catch (error: any) {
+	} catch (error) {
 		console.log(error);
 		res.status(HttpCode.INTERNAL_SERVER_ERROR).json({
 			succes: false,
@@ -145,7 +145,7 @@ export const updateCartIemQty = async (req: Request, res: Response) => {
 			message: 'Cart item quantity updaded succesfully',
 			data: updatedCartItem
 		});
-	} catch (error: any) {
+	} catch (error) {
 		console.log(error);
 		res.status(HttpCode.INTERNAL_SERVER_ERROR).json({
 			succes: false,
@@ -189,7 +189,7 @@ export const deleteCartITems = async (req: Request, res: Response) => {
 			success: true,
 			message: 'Cart item removed succesfully'
 		});
-	} catch (error: any) {
+	} catch (error) {
 		console.log(error);
 		res.status(HttpCode.INTERNAL_SERVER_ERROR).json({
 			succes: false,

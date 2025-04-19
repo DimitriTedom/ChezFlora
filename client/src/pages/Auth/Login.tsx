@@ -20,8 +20,13 @@ interface SocialButton {
   color?: string;
 }
 
+interface LoginFormData extends Record<string, unknown> {
+  email: string;
+  password: string;
+}
+
 const AuthLogin: React.FC = () => {
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<LoginFormData>({
     email: "",
     password: "",
   });

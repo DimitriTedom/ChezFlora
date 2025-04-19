@@ -1,6 +1,6 @@
 import { addressFormControls, initalAddressFormData } from "@/config";
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
-import React, { FormEvent, useEffect, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
 import CommonForm from "../Common/Form";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/store/store";
@@ -12,17 +12,28 @@ import {
 } from "@/store/shop/addressSlice";
 import AddressCard, { AddressData } from "./AddressCard";
 import { useCustomToast } from "@/hooks/useCustomToast";
+import axios from "axios";
+
+// Define interface for address form data
+interface AddressFormData {
+  [key: string]: unknown; // Add index signature
+  address: string;
+  city: string;
+  postalCode: string;
+  phone: string;
+  notes: string;
+}
 
 interface props {
   selectedId: string;
   setCurrentSelectedAddress: (address: AddressData) => void;
 }
 const Address = ({ selectedId, setCurrentSelectedAddress }: props) => {
-  const [formData, setFormData] = useState(initalAddressFormData);
+  // Use the interface in useState
+  const [formData, setFormData] = useState<AddressFormData>(initalAddressFormData);
   const dispatch = useDispatch<AppDispatch>();
   const { showToast } = useCustomToast();
-  const [currentEditedId, setCurrentEditedId] = useState(null);
-  // const [] = React.useState("");
+  const [currentEditedId, setCurrentEditedId] = useState('');
   const { user } = useSelector((state: RootState) => state.auth);
   const { addressList } = useSelector((state: RootState) => state.address);
   const handleSubmitAddress = async (e: FormEvent) => {
@@ -56,7 +67,7 @@ const Address = ({ selectedId, setCurrentSelectedAddress }: props) => {
             duration: 5000,
           });
         }
-        setCurrentEditedId(null);
+        setCurrentEditedId('');
       } else {
         const response = await dispatch(
           addAddress({ ...formData, userId: user.id })
@@ -73,18 +84,22 @@ const Address = ({ selectedId, setCurrentSelectedAddress }: props) => {
         }
       }
     } catch (error) {
-      console.error("Erreur lors de la soumission de l'adresse :", error);
-      showToast({
-        message: error.message || "Error adding address",
-        type: "error",
-        duration: 5000,
-      });
+      if (axios.isAxiosError(error)) {        
+        console.error("Erreur lors de la soumission de l'adresse :", error);
+        showToast({
+          message: error.message || "Error adding address",
+          type: "error",
+          duration: 5000,
+        });
+      }
     }
   };
   const isFormValid = () => {
-    return Object.keys(formData)
-      .map((key) => formData[key].trim() !== "")
-      .every((item) => item);
+    return Object.keys(initalAddressFormData).every((key) => {
+      const value = formData[key];
+      // Check if the value is a string and trim it, otherwise treat as invalid
+      return typeof value === 'string' && value.trim() !== '';
+    });
   };
   useEffect(() => {
     dispatch(fetchAllAddress(user?.id));
@@ -160,7 +175,8 @@ const Address = ({ selectedId, setCurrentSelectedAddress }: props) => {
       </CardHeader>
 
       <CardContent className="space-y-3">
-        <CommonForm
+        {/* Provide the type argument to CommonForm */}
+        <CommonForm<AddressFormData>
           formControls={addressFormControls}
           formData={formData}
           setFormData={setFormData}

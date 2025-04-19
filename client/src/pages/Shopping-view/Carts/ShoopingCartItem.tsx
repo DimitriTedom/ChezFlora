@@ -20,7 +20,7 @@ const CartItem: React.FC<CartItemProps> = ({ cartItem }) => {
 
   // Handler to delete a cart item.
   const handleCartItemDelete = (item: CartItemType) => {
-    dispatch(deleteCartITems({ userId: user?.id!, productId: item.productId }))
+    dispatch(deleteCartITems({ userId: user.id, productId: item.productId }))
       .unwrap()
       .then((response) => {
         if (response?.success) {
@@ -49,7 +49,7 @@ const CartItem: React.FC<CartItemProps> = ({ cartItem }) => {
     // Prevent quantity from falling below 1.
     if (action === "minus" && newQuantity < 1) return;
 
-    dispatch(updateCartIemQty({ userId: user?.id!, productId: item.productId, quantity: newQuantity }))
+    dispatch(updateCartIemQty({ userId: user.id, productId: item.productId, quantity: newQuantity }))
       .unwrap()
       .then((response) => {
         if (response?.success) {

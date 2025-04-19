@@ -1,8 +1,9 @@
-import React, { Fragment} from "react";
+import { Fragment} from "react";
 import { filterOptions } from "@/config";
 import { Label } from "../ui/label";
 import { Checkbox } from "../ui/checkbox";
 import { Separator } from "../ui/separator";
+import { Filters } from "@/pages/Shopping-view/ShoppingStore";
 
 // Define the type for a filter option
 interface FilterOption {
@@ -13,10 +14,10 @@ interface FilterOption {
 type FilterOptionsMap = {
   [key: string]: FilterOption[];
 };
-
+ 
 const filtersOpt: FilterOptionsMap = filterOptions;
 
-const ProductFilter: React.FC = ({ filters, handleFilter }) => {
+const ProductFilter = ({ filters, handleFilter }:{filters:Filters,handleFilter:(sectionId: string, optionId: string) => void}) => {
   return (
     <div className="bg-white rounded-lg shadow-sm">
       <div className="p-4 border-b">

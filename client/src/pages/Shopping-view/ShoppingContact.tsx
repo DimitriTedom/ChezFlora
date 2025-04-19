@@ -14,6 +14,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/store/store";
 import { ContactFormData, sendContactIssue } from "@/store/shop/ContactSlice";
 import { useCustomToast } from "@/hooks/useCustomToast";
+import axios from "axios";
 
 // Configuration objects
 const contactInfo = [
@@ -104,12 +105,14 @@ const ShoppingContact = () => {
         subject: "",
         message: "",
       });
-    } catch (error:any) {
-      showToast({
-        type: "error",
-        message: error.message,
-        duration:2000,
-      })
+    } catch (error) {
+      if (axios.isAxiosError(error)) {        
+        showToast({
+          type: "error",
+          message: error.message,
+          duration:2000,
+        })
+      }
     }
   };
   const validateEmail = (email: string) => {

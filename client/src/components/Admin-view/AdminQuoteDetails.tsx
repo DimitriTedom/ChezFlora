@@ -21,6 +21,7 @@ interface Props {
 }
 
 export interface StatusFormData {
+  [key: string]: unknown; // Add index signature
   status: QuoteStatus;
   adminResponse: string;
 }
@@ -221,7 +222,8 @@ const AdminQuoteDetails = ({ quoteRequestDetails }: Props) => {
           {/* Status Update Form */}
           <div className="w-full">
             <h3 className="font-medium text-lg mb-4">Update Quote Status</h3>
-            <CommonForm
+            {/* Provide the type argument to CommonForm */}
+            <CommonForm<StatusFormData>
               formControls={[
                 {
                   label: "Status",

@@ -14,7 +14,13 @@ export interface Product {
   image: string;
   stock: number;
 }
-
+export interface Cart {
+  id: string;
+  userId: string;
+  createdAt: string;
+  updatedAt: string;
+  items: CartItem[];
+}
 export interface CartItem {
   id: string;
   cartId: string;
@@ -24,7 +30,7 @@ export interface CartItem {
 }
 
 export interface CartState {
-  cartItems: CartItem[] | null;
+  cart?: Cart;
   isLoading: boolean;
   error?: string;
 }
@@ -50,14 +56,14 @@ export interface DeleteCartItemsPayload {
 export interface CartApiResponse {
   success: boolean;
   message: string;
-  data: CartState["cartItems"];
+  data: Cart;
 }
 
 // --------------------------
 // Initial State Declaration
 // --------------------------
 const initialState: CartState = {
-  cartItems: null,
+  cart: undefined,
   isLoading: false,
   error: undefined,
 };
@@ -98,11 +104,12 @@ export const fetchCartItems = createAsyncThunk<
       const response = await axios.get(
         `${API_URL}shop/cart/get/${userId}`
       );
-      return response.data;
+      return response.data as CartApiResponse;
     } catch (error) {
       if (axios.isAxiosError(error)) {
         return rejectWithValue(error.response?.data || "Error fetching cart items");
       }
+      return rejectWithValue("Unknown error")
     }
   }
 );
@@ -165,7 +172,7 @@ const ShoppingCartSlice = createSlice({
       addToCart.fulfilled,
       (state, action: PayloadAction<CartApiResponse>) => {
         state.isLoading = false;
-        state.cartItems = action.payload?.data || state.cartItems;
+        state.cart = action.payload?.data || state.cart;
       }
     );
     builder.addCase(
@@ -173,6 +180,7 @@ const ShoppingCartSlice = createSlice({
       (state, action: PayloadAction<string | undefined>) => {
         state.isLoading = false;
         state.error = action.payload;
+        state.cart = undefined;
       }
     );
 
@@ -183,17 +191,17 @@ const ShoppingCartSlice = createSlice({
     });
     builder.addCase(
       fetchCartItems.fulfilled,
-      (state, action: PayloadAction<CartApiResponse>) => {
+      (state, {payload}) => {
         state.isLoading = false;
-        state.cartItems = action.payload.data;
+        state.cart = payload.data;
       }
     );
     builder.addCase(
       fetchCartItems.rejected,
-      (state, action: PayloadAction<string | undefined>) => {
+      (state, {payload}) => {
         state.isLoading = false;
-        state.cartItems = [];
-        state.error = action.payload;
+        state.cart = undefined;
+        state.error = payload;
       }
     );
 
@@ -204,17 +212,17 @@ const ShoppingCartSlice = createSlice({
     });
     builder.addCase(
       updateCartIemQty.fulfilled,
-      (state, action: PayloadAction<CartApiResponse>) => {
+      (state, {payload}) => {
         state.isLoading = false;
-        state.cartItems = action.payload.data;
+        state.cart = payload.data;
       }
     );
     builder.addCase(
       updateCartIemQty.rejected,
-      (state, action: PayloadAction<string | undefined>) => {
+      (state, {payload}) => {
         state.isLoading = false;
-        state.cartItems = [];
-        state.error = action.payload;
+        state.cart = undefined;
+        state.error = payload;
       }
     );
 
@@ -231,9 +239,9 @@ const ShoppingCartSlice = createSlice({
     );
     builder.addCase(
       deleteCartITems.rejected,
-      (state, action: PayloadAction<string | undefined>) => {
+      (state, {payload}) => {
         state.isLoading = false;
-        state.error = action.payload;
+        state.error = payload;
       }
     );
   },

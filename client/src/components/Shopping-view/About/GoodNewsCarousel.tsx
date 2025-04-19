@@ -32,15 +32,11 @@ export function TestimonialCarousel() {
     <div className="bg-rose-200 p-8 relative w-full mx-auto">
 
       <Carousel
-        value={currentSlide}
-        onValueChange={(value) => setCurrentSlide(value)}
         orientation="horizontal"
-        loop
         className="w-full"
-        transition={0.3}
       >
         <CarouselContent>
-          {Testimonials.map((testimonial, index) => (
+          {Testimonials.map((testimonial) => ( // Removed unused index
             <CarouselItem key={testimonial.id}>
               <div className="p-6 md:p-8 bg-white/25 rounded-lg shadow-md flex flex-col items-center gap-6">
                 <img

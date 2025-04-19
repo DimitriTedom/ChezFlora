@@ -11,7 +11,7 @@ import { createNewOrder, orderData, OrderStatus, PaymentStatus } from "@/store/s
 import { useCustomToast } from "@/hooks/useCustomToast";
 
 const ShoppingCheckout = () => {
-  const {cartItems} = useSelector((state:RootState) => state.shoppingCart)
+  const cart = useSelector((state:RootState) => state.shoppingCart.cart)
   const {user} = useSelector((state:RootState) => state.auth)
   const [currentSelectedAddress,setCurrentSelectedAddress] = React.useState<AddressData>({
     id: '',
@@ -26,8 +26,8 @@ const ShoppingCheckout = () => {
   const dispatch = useDispatch<AppDispatch>()
   const {showToast}= useCustomToast()
   const totalCartAmount: number =
-  cartItems && cartItems.items && cartItems.items.length > 0
-    ? cartItems.items.reduce((sum, currentItem) => {
+  cart && cart?.items.length > 0
+    ? cart?.items.reduce((sum:number, currentItem:CartItem) => {
         const price =
           currentItem.product && currentItem.product.saleprice && currentItem.product.saleprice > 0
             ? currentItem.product.saleprice
@@ -37,7 +37,7 @@ const ShoppingCheckout = () => {
     : 0;
     // const navigate = useNavigate()
   const  handleInitiatePayapalPayment = () =>{
-    if (cartItems?.length === 0) {
+    if (cart?.items.length === 0) {
       showToast({
         message: "Your cart is empty.",
         subtitle: "Please add some items to your cart before checking out.",
@@ -56,12 +56,12 @@ const ShoppingCheckout = () => {
     }
     const orderData:orderData = {
       userId:user?.id,
-      cartId: cartItems?.id,
-      cartItems: cartItems.items.map((singleCartItem :CartItem)=>({
+      cartId: cart!.id,
+      cartItems: cart!.items.map((singleCartItem :CartItem)=>({
         productId : singleCartItem.productId,
         title     : singleCartItem.product.name,
         image     : singleCartItem.product.image,
-        price     : singleCartItem.product.saleprice > 0 ? singleCartItem.product.saleprice : singleCartItem.product.price,
+        price     : singleCartItem.product.saleprice ? singleCartItem.product.saleprice > 0 ? singleCartItem.product.saleprice : singleCartItem.product.price : singleCartItem.product.price,
         quantity  : singleCartItem.quantity,
       })),
       addressInfo:{
@@ -109,6 +109,7 @@ const ShoppingCheckout = () => {
   if(approvalURL){
     window.location.href = approvalURL;
   }
+  console.log(isPaymentStart)
   return (
     <div>
       <Helmet>
@@ -136,8 +137,8 @@ const ShoppingCheckout = () => {
           setCurrentSelectedAddress={setCurrentSelectedAddress}
           />
           <div className="flex flex-col lg:px-6 gap-4  w-full">
-          {cartItems && cartItems?.items && cartItems.items.length > 0 ? (
-          cartItems.items.map((item) => (
+          {cart && cart?.items.length > 0 ? (
+          cart?.items.map((item:CartItem) => (
             <CartItemComponent key={item.id} cartItem={item} />
           ))
         ) : (

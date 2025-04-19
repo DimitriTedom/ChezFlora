@@ -2,21 +2,21 @@ import React, { SetStateAction } from "react";
 import CartItemComponent from "@/pages/Shopping-view/Carts/ShoopingCartItem";
 import { SheetHeader } from "../ui/sheet";
 import { Button } from "../ui/button";
-import { CartItem as CartItemType } from "@/store/shop/cartSlice"; // Ensure this type is exported from your cartSlice
+import { Cart } from "@/store/shop/cartSlice"; // Ensure this type is exported from your cartSlice
 import { useNavigate } from "react-router-dom";
 
 // Define the props interface
 interface UserCartWrapperProps {
-  cartItems: CartItemType[];
+  cart: Cart | undefined;
   setOpenCartSheet: React.Dispatch<SetStateAction<boolean>>;
 }
 
-const UserCartWrapper: React.FC<UserCartWrapperProps> = ({ cartItems,setOpenCartSheet }) => {
-
+const UserCartWrapper: React.FC<UserCartWrapperProps> = ({ cart,setOpenCartSheet }) => {
+  console.log("cartWrappper:" ,cart)
   const navigate = useNavigate()
   const totalCartAmount: number =
-    cartItems && cartItems.length > 0
-      ? cartItems.reduce((sum, currentItem) => {
+    cart && cart?.items.length > 0
+      ? cart?.items.reduce((sum, currentItem) => {
           const price =
             currentItem.product && currentItem.product.saleprice && currentItem.product.saleprice > 0
               ? currentItem.product.saleprice
@@ -29,8 +29,8 @@ const UserCartWrapper: React.FC<UserCartWrapperProps> = ({ cartItems,setOpenCart
     <div className="w-full">
       <SheetHeader className="mb-8">Your Cart</SheetHeader>
       <div className="flex flex-col gap-6">
-        {cartItems && cartItems.length > 0 ? (
-          cartItems.map((item) => (
+        {cart && cart?.items.length > 0 ? (
+          cart?.items.map((item) => (
             <CartItemComponent key={item.id} cartItem={item} />
           ))
         ) : (

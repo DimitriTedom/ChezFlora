@@ -9,9 +9,14 @@ import type { AppDispatch } from "@/store/store";
 import { updatePassword } from "@/store/authSlice";
 import { useCustomToast } from "@/hooks/useCustomToast";
 
+interface EnterNewPasswordFormData extends Record<string, unknown> {
+  password: string;
+  password1: string;
+}
+
 const EnterNewPassword: React.FC = () => {
   const { email } = useParams<{ email: string }>();
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<EnterNewPasswordFormData>({
     password: "",
     password1: "",
   });
@@ -74,7 +79,7 @@ const EnterNewPassword: React.FC = () => {
 
 
         {/* Formulaire d'inscription */}
-        <CommonForm
+        <CommonForm<EnterNewPasswordFormData>
           formControls={EnterNewPasswordFormControls}
           formData={formData}
           setFormData={setFormData}

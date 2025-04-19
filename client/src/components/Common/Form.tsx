@@ -1,13 +1,12 @@
-import { AiOutlineEye } from "react-icons/ai"; 
-import { AiOutlineEyeInvisible } from "react-icons/ai"; 
+import { AiOutlineEye } from "react-icons/ai";
+import { AiOutlineEyeInvisible } from "react-icons/ai";
 import React, { useState } from "react";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
 import { Textarea } from "../ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
-import { StatusFormData } from "../Admin-view/AdminQuoteDetails";
-import { ProductFormData } from "@/pages/admin-view/Products";
+// Removed unused imports for ProductFormData and StatusFormData
 
 export interface FormControlItem {
   name: string;
@@ -15,27 +14,29 @@ export interface FormControlItem {
   placeholder: string;
   component: "input" | "textarea" | "select";
   type?: "email" | "text" | "password" | "date" | "number" | "tel"; // Added date type
-  options?: { id: string; label: string }[];
+  options?: { id: string | number; label: string }[]; // Allow number for id as well
 }
 
-export interface CommonFormProps {
+// Make the props interface generic
+export interface CommonFormProps<T> {
   formControls: FormControlItem[];
-  formData: StatusFormData | { email: string; password: string; } | ProductFormData | {status:string};
-  setFormData: (formData: StatusFormData) => void;
+  formData: T;
+  setFormData: React.Dispatch<React.SetStateAction<T>>;
   onSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
   onClick?: (e: React.MouseEvent) => void;
   buttonText?: string;
   isBnDisabled?: boolean;
 }
 
-const CommonForm: React.FC<CommonFormProps> = ({
+// Add the generic type parameter T to the component function using unknown
+const CommonForm = <T extends Record<string, unknown>>({
   formControls,
   formData,
   setFormData,
   onSubmit,
   isBnDisabled,
   buttonText,
-}) => {
+}: CommonFormProps<T>): React.ReactElement => {
   const [showPassword, setShowPassword] = useState<{ [key: string]: boolean }>({});
 
   const togglePasswordVisibility = (fieldName: string) => {
@@ -46,7 +47,8 @@ const CommonForm: React.FC<CommonFormProps> = ({
   };
 
   const renderInputByComponentType = (controlItem: FormControlItem) => {
-    const value = formData[controlItem.name] || "";
+    // Use type assertion
+    const value = (formData as T)[controlItem.name] ?? "";
 
     // Handle password visibility toggle
     if (controlItem.component === "input" && controlItem.type === "password") {
@@ -57,7 +59,7 @@ const CommonForm: React.FC<CommonFormProps> = ({
             name={controlItem.name}
             placeholder={controlItem.placeholder}
             id={controlItem.name}
-            value={value}
+            value={String(value)} // Ensure value is string
             onChange={(e) =>
               setFormData({
                 ...formData,
@@ -89,7 +91,7 @@ const CommonForm: React.FC<CommonFormProps> = ({
             name={controlItem.name}
             placeholder={controlItem.placeholder}
             id={controlItem.name}
-            value={value}
+            value={String(value)} // Ensure value is string
             onChange={(e) =>
               setFormData({
                 ...formData,
@@ -106,7 +108,7 @@ const CommonForm: React.FC<CommonFormProps> = ({
             name={controlItem.name}
             placeholder={controlItem.placeholder}
             id={controlItem.name}
-            value={value}
+            value={String(value)} // Ensure value is string
             onChange={(e) =>
               setFormData({
                 ...formData,
@@ -136,7 +138,7 @@ const CommonForm: React.FC<CommonFormProps> = ({
               {controlItem.options?.map((optionItem) => (
                 <SelectItem
                   key={optionItem.id}
-                  value={optionItem.id}
+                  value={String(optionItem.id)} // Ensure value is string
                 >
                   {optionItem.label}
                 </SelectItem>
@@ -152,7 +154,7 @@ const CommonForm: React.FC<CommonFormProps> = ({
             name={controlItem.name}
             placeholder={controlItem.placeholder}
             id={controlItem.name}
-            value={value}
+            value={String(value)} // Ensure value is string
             onChange={(e) =>
               setFormData({
                 ...formData,

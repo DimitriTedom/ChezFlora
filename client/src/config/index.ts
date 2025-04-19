@@ -1,7 +1,63 @@
 import { FormControlItem } from "@/components/Common/Form";
 import { Product } from "@/pages/Shopping-view/Carts/ProductCart";
 
-export const registerFormControls = [
+// Define form data interfaces
+export interface RegisterFormData {
+  name: string;
+  email: string;
+  password: string;
+}
+
+export interface LoginFormData {
+  email: string;
+  password: string;
+}
+
+export interface ForgotPasswordFormData {
+  email: string;
+}
+
+export interface EnterNewPasswordFormData {
+  password: string;
+  password1: string;
+}
+
+export interface AddProductFormData {
+  name: string;
+  description: string;
+  category: string;
+  event: string;
+  price: number;
+  saleprice?: number;
+  stock: number;
+}
+
+export interface QuoteRequestFormData {
+  eventType: string;
+  estimatedBudget: number;
+  eventDate: string;
+  description: string;
+}
+
+export interface AddressFormData {
+  address: string;
+  city: string;
+  postalCode: string;
+  phone: string;
+  notes: string;
+}
+
+export interface ContactFormData {
+  name: string;
+  email: string;
+  phone: string;
+  address?: string;
+  subject: string;
+  message: string;
+}
+
+
+export const registerFormControls: FormControlItem[] = [
     {
       name: "name",
       label: "Name",
@@ -25,8 +81,7 @@ export const registerFormControls = [
     },
 ]
 
-export const LoginFormControls =
-    [
+export const LoginFormControls: FormControlItem[] = [
         {
           name: "email",
           label: "Email",
@@ -42,8 +97,7 @@ export const LoginFormControls =
           type: "password",
         },
 ]
-export const ForgotPasswordFormControls =
-    [
+export const ForgotPasswordFormControls: FormControlItem[] = [
         {
           name: "email",
           label: "Email",
@@ -53,7 +107,7 @@ export const ForgotPasswordFormControls =
         },
 ]
 
-export const EnterNewPasswordFormControls =[
+export const EnterNewPasswordFormControls: FormControlItem[] = [
   {
     name: "password",
     label: "Password",
@@ -70,7 +124,7 @@ export const EnterNewPasswordFormControls =[
   },
 ]
 
-export const addProductFormElements = [
+export const addProductFormElements: FormControlItem[] = [
   {
     label: "Name",
     name: "name",
@@ -87,6 +141,7 @@ export const addProductFormElements = [
   {
     label: "Category",
     name: "category",
+    placeholder: "Select product category", // Added placeholder
     component: "select",
     options: [
       { id: "FRESH_FLOWERS", label: "Fresh Flowers" },
@@ -98,6 +153,7 @@ export const addProductFormElements = [
   {
     label: "Event",
     name: "event",
+    placeholder: "Select relevant event", // Added placeholder
     component: "select",
     options: [
       { id: "WEDDING", label: "Wedding" },

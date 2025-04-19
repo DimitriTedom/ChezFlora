@@ -21,7 +21,10 @@ import { Share2Icon, HeartIcon, ArrowRightIcon, Star } from "lucide-react";
 import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/store/store";
-import { fetchProductDetails, initalProductDetails } from "@/store/shop/ShopProductSlice";
+import {
+  fetchProductDetails,
+  initalProductDetails,
+} from "@/store/shop/ShopProductSlice";
 import ChezFloraGallery, {
   ChezFloraGalleryProps,
 } from "@/components/Shopping-view/ChezFloraGallery";
@@ -45,9 +48,9 @@ export interface Review {
   createdAt: string;
 }
 
-interface Cart {
-  items: CartItem[];
-}
+// interface Cart {
+//   items: CartItem[];
+// }
 export interface ProductDetails {
   id: string;
   name: string;
@@ -60,20 +63,19 @@ export interface ProductDetails {
   updatedAt: string;
   event: string;
   category: string;
-  averageReview?:number;
+  averageReview?: number;
   reviews?: Review[];
 }
 
 const ShoppingProductDetail: React.FC = () => {
-  const [productDetails, setProductDetails] = useState<ProductDetails>(
-    initalProductDetails
-  );
+  const [productDetails, setProductDetails] =
+    useState<ProductDetails>(initalProductDetails);
   const [quantity, setQuantity] = useState<number>(1);
   const [reviewContent, setReviewContent] = useState<string>("");
   const { id: prodId } = useParams<{ id: string }>();
   const dispatch = useDispatch<AppDispatch>();
   const { user } = useSelector((state: RootState) => state.auth);
-  const { cartItems } = useSelector((state: RootState) => state.shoppingCart);
+  const cart = useSelector((state: RootState) => state.shoppingCart.cart);
   const { isLoading } = useSelector((state: RootState) => state.shopProducts);
   const { isLoading: isProductReviewLoading, productReviews } = useSelector(
     (state: RootState) => state.shopProductReview
@@ -86,18 +88,14 @@ const ShoppingProductDetail: React.FC = () => {
     const fetchProductDetail = async () => {
       try {
         if (prodId) {
-          dispatch(fetchProductDetails(prodId))
-            .then((response) => {
-              // Check if the payload contains data before setting state
-              if (response.payload && response.payload.data) {
-                setProductDetails(response.payload.data);
-              } else {
-                console.error("No product data returned");
-              }
-            })
-            .catch((error) =>
-              console.error("Error fetching product details:", error)
-            );
+          const response = await dispatch(fetchProductDetails(prodId)).unwrap();
+          // Check if the payload contains data before setting state
+          if (response.data) {
+            setProductDetails(response.data);
+          } else {
+            alert("No product data returned");
+            console.error("No product data returned");
+          }
         }
       } catch (error) {
         console.error("Error fetching product details:", error);
@@ -108,7 +106,7 @@ const ShoppingProductDetail: React.FC = () => {
 
   // Fetch cart items for current user
   useEffect(() => {
-    if (user?.id) {
+    if (user.id) {
       dispatch(fetchCartItems(user.id));
     }
   }, [dispatch, user]);
@@ -144,12 +142,10 @@ const ShoppingProductDetail: React.FC = () => {
 
   // Simplify the lookup of current cart quantity without useMemo.
   // This expression safely finds the product in the cart; if not found, defaults to 0.
-  const currentCartQty: number = cartItems
-    ? (cartItems as Cart).items && Array.isArray((cartItems as Cart).items)
-      ? (cartItems as Cart).items.find(
-          (item: CartItem) => item.productId === productDetails?.id
-        )?.quantity || 0
-      : 0
+  const currentCartQty: number = Array.isArray(cart?.items)
+    ? cart?.items.find(
+        (item: CartItem) => item.productId === productDetails?.id
+      )?.quantity || 0
     : 0;
 
   // here i Check if adding more would exceed available stock
@@ -246,7 +242,8 @@ const ShoppingProductDetail: React.FC = () => {
         type: "success",
       });
     } catch (error) {
-      const errorMessage =  error instanceof Error ? error.message : "An unknown error occurred";
+      const errorMessage =
+        error instanceof Error ? error.message : "An unknown error occurred";
       showToast({
         message: errorMessage,
         subtitle: "Failed to copy link",
@@ -259,7 +256,7 @@ const ShoppingProductDetail: React.FC = () => {
       ? productReviews.reduce((sum, review) => sum + review.rating, 0) /
         productReviews.length
       : 0;
-  if (isLoading||isProductReviewLoading) {
+  if (isLoading || isProductReviewLoading) {
     return <ChezFloraLoader />;
   }
   if (!productDetails) {
@@ -325,7 +322,7 @@ const ShoppingProductDetail: React.FC = () => {
                 {/* <Star className="fill-yellow-400 text-yellow-400"/> */}
                 <StarRating rating={averageReview} />
                 <h1>
-                  {averageReview}({productReviews.length})
+                  {averageReview.toFixed(1)}({productReviews.length})
                 </h1>
               </div>
               <div className="flex items-center space-x-3 px-3 py-2">
@@ -350,19 +347,19 @@ const ShoppingProductDetail: React.FC = () => {
               </div>
               <Separator />
               <div className="flex gap-4 mt-4 flex-wrap">
-                <Badge className="flex items-center gap-2">
+                <Badge className="flex items-center gap-2 cursor-cell">
                   <AiOutlineStock />
                   <span className="text-sm">{productDetails.stock}</span>
                 </Badge>
-                <Badge className="flex items-center gap-2">
+                <Badge className="flex items-center gap-2 cursor-cell">
                   <BiCategoryAlt />
                   <span className="text-sm">{productDetails.category}</span>
                 </Badge>
-                <Badge className="flex items-center gap-2 p-2">
+                <Badge className="flex items-center gap-2 p-2 cursor-cell">
                   <MdEmojiEvents />
                   <span className="text-sm">{productDetails.event}</span>
                 </Badge>
-                <Badge className="flex items-center gap-2 p-2">
+                <Badge className="flex items-center gap-2 p-2 cursor-cell">
                   <GrValidate />
                   <span className="text-sm">
                     {productDetails.createdAt.split("T")[0]}
@@ -433,9 +430,7 @@ const ShoppingProductDetail: React.FC = () => {
                       <div className="flex flex-col lg:flex-row justify-between lg:items-center">
                         <div className="flex items-center gap-3">
                           <Avatar className="h-10 w-10 border">
-                            <AvatarImage
-                              src={"/avatar3.svg"}
-                            />
+                            <AvatarImage src={"/avatar3.svg"} />
                             <AvatarFallback>
                               {review.userName.charAt(0).toUpperCase()}
                             </AvatarFallback>

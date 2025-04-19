@@ -3,8 +3,6 @@ import { Helmet } from "react-helmet-async";
 import { useDispatch, useSelector } from "react-redux";
 import { Card, CardHeader, CardContent, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
-import { Grid } from "@/components/ui/grid";
-import { Button } from "@/components/ui/button";
 import AdminQuotes from "./Quotes";
 import { AppDispatch, RootState } from "@/store/store";
 import { getAllUsers } from "@/store/admin/UserSlice";
@@ -79,7 +77,7 @@ const AdminDashboard: React.FC = () => {
               <CardTitle>Quotes</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-3xl font-bold">{quoteRequestList.length}</p>
+              <p className="text-3xl font-bold">{quoteRequestList? quoteRequestList.length : 0}</p>
               <p className="text-sm text-gray-500">Total Quote Requests</p>
             </CardContent>
           </Card>
