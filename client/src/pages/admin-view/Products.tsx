@@ -134,9 +134,11 @@ const AdminProducts = () => {
   };
 
   const isFormValid = () => {
-    return Object.keys(formData)
-      .map((key: string|number) => formData[key] !== "")
-      .every((item) => item);
+    const keys = Object.keys(formData) as Array<keyof ProductFormData>;
+    return keys.every((key)=>{
+      const value = formData[key];
+      return value !== "" && value != null
+    })
   };
   return (
     <Fragment>

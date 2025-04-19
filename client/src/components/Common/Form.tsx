@@ -5,19 +5,22 @@ import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
 import { Textarea } from "../ui/textarea";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
-// Removed unused imports for ProductFormData and StatusFormData
-
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../ui/select";
 export interface FormControlItem {
   name: string;
   label: string;
   placeholder: string;
   component: "input" | "textarea" | "select";
-  type?: "email" | "text" | "password" | "date" | "number" | "tel"; // Added date type
-  options?: { id: string | number; label: string }[]; // Allow number for id as well
+  type?: "email" | "text" | "password" | "date" | "number" | "tel"; 
+  options?: { id: string | number; label: string }[]; 
 }
 
-// Make the props interface generic
 export interface CommonFormProps<T> {
   formControls: FormControlItem[];
   formData: T;
@@ -28,8 +31,7 @@ export interface CommonFormProps<T> {
   isBnDisabled?: boolean;
 }
 
-// Add the generic type parameter T to the component function using unknown
-const CommonForm = <T extends Record<string, unknown>>({
+const CommonForm = <T extends object>({
   formControls,
   formData,
   setFormData,
@@ -37,7 +39,9 @@ const CommonForm = <T extends Record<string, unknown>>({
   isBnDisabled,
   buttonText,
 }: CommonFormProps<T>): React.ReactElement => {
-  const [showPassword, setShowPassword] = useState<{ [key: string]: boolean }>({});
+  const [showPassword, setShowPassword] = useState<{ [key: string]: boolean }>(
+    {}
+  );
 
   const togglePasswordVisibility = (fieldName: string) => {
     setShowPassword((prevState) => ({
@@ -47,8 +51,7 @@ const CommonForm = <T extends Record<string, unknown>>({
   };
 
   const renderInputByComponentType = (controlItem: FormControlItem) => {
-    // Use type assertion
-    const value = (formData as T)[controlItem.name] ?? "";
+    const value = (formData as Record<string, unknown>)[controlItem.name] ?? "";
 
     // Handle password visibility toggle
     if (controlItem.component === "input" && controlItem.type === "password") {
@@ -59,7 +62,7 @@ const CommonForm = <T extends Record<string, unknown>>({
             name={controlItem.name}
             placeholder={controlItem.placeholder}
             id={controlItem.name}
-            value={String(value)} // Ensure value is string
+            value={String(value)}
             onChange={(e) =>
               setFormData({
                 ...formData,
@@ -87,11 +90,11 @@ const CommonForm = <T extends Record<string, unknown>>({
       case "input":
         return (
           <Input
-            type={controlItem.type || "text"} 
+            type={controlItem.type || "text"}
             name={controlItem.name}
             placeholder={controlItem.placeholder}
             id={controlItem.name}
-            value={String(value)} // Ensure value is string
+            value={String(value)}
             onChange={(e) =>
               setFormData({
                 ...formData,
@@ -108,7 +111,7 @@ const CommonForm = <T extends Record<string, unknown>>({
             name={controlItem.name}
             placeholder={controlItem.placeholder}
             id={controlItem.name}
-            value={String(value)} // Ensure value is string
+            value={String(value)}
             onChange={(e) =>
               setFormData({
                 ...formData,
@@ -136,10 +139,7 @@ const CommonForm = <T extends Record<string, unknown>>({
             </SelectTrigger>
             <SelectContent>
               {controlItem.options?.map((optionItem) => (
-                <SelectItem
-                  key={optionItem.id}
-                  value={String(optionItem.id)} // Ensure value is string
-                >
+                <SelectItem key={optionItem.id} value={String(optionItem.id)}>
                   {optionItem.label}
                 </SelectItem>
               ))}
@@ -154,7 +154,7 @@ const CommonForm = <T extends Record<string, unknown>>({
             name={controlItem.name}
             placeholder={controlItem.placeholder}
             id={controlItem.name}
-            value={String(value)} // Ensure value is string
+            value={String(value)}
             onChange={(e) =>
               setFormData({
                 ...formData,
