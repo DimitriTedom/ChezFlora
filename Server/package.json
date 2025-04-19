@@ -9,8 +9,8 @@
   },
   "scripts": {
     "dev": "ts-node-dev --respawn --clear --transpile-only --ignore-watch node_modules ./src/app.ts",
-    "build": "rimraf ./src/Server/dist && tsc --outDir src/Server/dist",
-    "start": "node src/Server/dist/app.js",
+    "build": "rimraf ./dist && tsc",
+    "start": "node dist/app.js",
     "postinstall": "prisma generate"
   },
   "keywords": [],
