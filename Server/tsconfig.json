@@ -5,7 +5,7 @@
     "types": ["node",  "express"],
     "target": "ESNext",
     "module": "CommonJS",
-    "rootDir": "./src",
+    "rootDir": "../Server",
     "moduleResolution": "Node",
     "typeRoots": ["./node_modules/@types"],
     "sourceMap": true,
