@@ -27,7 +27,7 @@ dotenv.config();
 const app = express();
 app.use(
 	cors({
-		origin: 'https://chez-flora-frontend.onrender.com',
+		origin: 'https://chez-flora-sigma.vercel.app',
 		methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
 		allowedHeaders: ['Content-Type', 'Authorization', 'Cache-Control', 'Expires', 'Pragma'],
 		credentials: true
