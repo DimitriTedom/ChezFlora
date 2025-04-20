@@ -7,8 +7,8 @@ export const createPayPalPayment = (cartItems: any[], totalAmount: number) => {
             payment_method: "paypal",
         },
         redirect_urls: {
-            return_url: "http://localhost:5173/shop/paypal-return",
-            cancel_url: "http://localhost:5173/shop/paypal-cancel",
+            return_url: "https://chez-flora-frontend.onrender.com/shop/paypal-return",
+            cancel_url: "https://chez-flora-frontend.onrender.com/shop/paypal-cancel",
         },
         transactions: [
             {
