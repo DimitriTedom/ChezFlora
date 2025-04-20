@@ -9,6 +9,7 @@
   },
   "scripts": {
     "dev": "ts-node-dev --respawn --clear --transpile-only --ignore-watch node_modules ./src/app.ts",
+    "postbuild": "cp -r src/controllers/shop/templates dist/controllers/shop/templates && cp -r src/controllers/templates dist/controllers/templates",
     "build": "rimraf ./dist && tsc",
     "start": "node dist/app.js",
     "postinstall": "prisma generate"
