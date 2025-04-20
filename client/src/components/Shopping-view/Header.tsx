@@ -76,7 +76,7 @@ const ShoppingHeader: React.FC = () => {
     if (user.id) {
       dispatch(fetchCartItems(user.id));
     }
-  }, [dispatch, user.id]);
+  }, [dispatch, user.id,cart]);
   console.log(cart)
   useEffect(() => {
     if (

@@ -53,7 +53,7 @@ const Address = ({ selectedId, setCurrentSelectedAddress }: props) => {
     }
 
     try {
-      if (currentEditedId !== null) {
+      if (currentEditedId !== '') {
         const response = await dispatch(
           editAddress({ userId: user.id, addressId: currentEditedId, formData })
         ).unwrap();
@@ -170,7 +170,7 @@ const Address = ({ selectedId, setCurrentSelectedAddress }: props) => {
       </div>
       <CardHeader>
         <CardTitle>
-          {currentEditedId !== null ? "Edit Address" : "Add Address"}
+          {currentEditedId !== '' ? "Edit Address" : "Add Address"}
         </CardTitle>
       </CardHeader>
 
@@ -181,7 +181,7 @@ const Address = ({ selectedId, setCurrentSelectedAddress }: props) => {
           formData={formData}
           setFormData={setFormData}
           onSubmit={handleSubmitAddress}
-          buttonText={currentEditedId !== null ? "Edit" : "Add"}
+          buttonText={currentEditedId !== '' ? "Edit" : "Add"}
           isBnDisabled={!isFormValid()}
         />
       </CardContent>
