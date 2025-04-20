@@ -50,7 +50,7 @@ export const addToCart = async (req: Request, res: Response) => {
 				data: updatedCartItem
 			});
 		} else {
-			const newCartItem = await prisma.cartItem.create({
+			await prisma.cartItem.create({
 				data: {
 					cartId: cart.id,
 					productId,
@@ -60,7 +60,6 @@ export const addToCart = async (req: Request, res: Response) => {
 			return res.status(HttpCode.CREATED).json({
 				success: true,
 				message: 'Product added to cart',
-				data: newCartItem
 			});
 		}
 	} catch (error) {
@@ -136,14 +135,13 @@ export const updateCartIemQty = async (req: Request, res: Response) => {
 				message: 'Cart item not found'
 			});
 		}
-		const updatedCartItem = await prisma.cartItem.update({
+ await prisma.cartItem.update({
 			where: { id: cartItem?.id },
 			data: { quantity }
 		});
 		return res.status(HttpCode.OK).json({
 			success: true,
 			message: 'Cart item quantity updaded succesfully',
-			data: updatedCartItem
 		});
 	} catch (error) {
 		console.log(error);

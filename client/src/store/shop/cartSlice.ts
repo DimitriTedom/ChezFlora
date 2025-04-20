@@ -58,7 +58,10 @@ export interface CartApiResponse {
   message: string;
   data: Cart;
 }
-
+export interface ApiResponse{
+  success:boolean;
+  message:string;
+}
 // --------------------------
 // Initial State Declaration
 // --------------------------
@@ -73,7 +76,7 @@ const initialState: CartState = {
 // ----------------------
 
 export const addToCart = createAsyncThunk<
-  CartApiResponse, 
+ApiResponse, 
   AddToCartPayload,
   { rejectValue: string }
 >(
@@ -84,11 +87,12 @@ export const addToCart = createAsyncThunk<
         `${API_URL}shop/cart/addtocart`,
         { userId, productId, quantity }
       );
-      return response.data;
+      return response.data as ApiResponse;
     } catch (error) {
       if (axios.isAxiosError(error)) {
         return rejectWithValue(error.response?.data || "Error adding to cart");
       }
+      return rejectWithValue("Unknown error")
     }
   }
 );
@@ -115,7 +119,7 @@ export const fetchCartItems = createAsyncThunk<
 );
 
 export const updateCartIemQty = createAsyncThunk<
-  CartApiResponse,
+ApiResponse,
   UpdateCartQtyPayload,
   { rejectValue: string }
 >(
@@ -126,17 +130,18 @@ export const updateCartIemQty = createAsyncThunk<
         `${API_URL}shop/cart/update-cart`,
         { userId, productId, quantity }
       );
-      return response.data;
+      return response.data as ApiResponse;
     } catch (error) {
       if (axios.isAxiosError(error)) {
         return rejectWithValue(error.response?.data || "Error updating cart item quantity");
       }
+      return rejectWithValue("Unknown error")
     }
   }
 );
 
 export const deleteCartITems = createAsyncThunk<
-  CartApiResponse,
+ApiResponse,
   DeleteCartItemsPayload,
   { rejectValue: string }
 >(
@@ -170,9 +175,8 @@ const ShoppingCartSlice = createSlice({
     });
     builder.addCase(
       addToCart.fulfilled,
-      (state, action: PayloadAction<CartApiResponse>) => {
+      (state) => {
         state.isLoading = false;
-        state.cart = action.payload?.data || state.cart;
       }
     );
     builder.addCase(
@@ -212,9 +216,8 @@ const ShoppingCartSlice = createSlice({
     });
     builder.addCase(
       updateCartIemQty.fulfilled,
-      (state, {payload}) => {
+      (state) => {
         state.isLoading = false;
-        state.cart = payload.data;
       }
     );
     builder.addCase(
