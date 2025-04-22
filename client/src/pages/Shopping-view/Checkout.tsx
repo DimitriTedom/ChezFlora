@@ -161,7 +161,7 @@ const ShoppingCheckout = () => {
           <div className="flex flex-col lg:px-6 gap-4  w-full">
             <h1 className="text-gray-500 text-2xl font-semibold">
               Use this testing Credentials for paypal payements: <br /> Email:
-              sb-474dnj39297199@business.example.com <br /> password: 8v]uy+MJ
+              sb-xei8z39301430@personal.example.com <br /> password:{" }wW2-9}l "}
             </h1>
             {cart && cart?.items.length > 0 ? (
               cart?.items.map((item: CartItem) => (
