@@ -119,13 +119,13 @@ const ShoppingCheckout = () => {
         });
       });
   };
-  // useEffect(()=>{
 
-  // },[approvalURL,dispatch])
-  if (approvalURL) {
-    window.location.href = approvalURL;
-  }
-  console.log(isPaymentStart);
+  React.useEffect(() => {
+    if (approvalURL && isPaymentStart) {
+      window.location.href = approvalURL;
+    }
+  }, [approvalURL, isPaymentStart]);
+
   return (
     <div>
       <Helmet>
