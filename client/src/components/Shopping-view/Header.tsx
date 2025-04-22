@@ -247,7 +247,7 @@ const ShoppingHeader: React.FC = () => {
                 <AiOutlineShoppingCart className="headerIcons" />
                 <span
                   className={`absolute -top-2 -right-2 hidden items-center justify-center px-2 py-1 text-xs font-bold leading-none text-white bg-pink-400 rounded-full ${
-                    cart && cart?.items.length > 0 ? "inline-flex" : " "
+                    cart && cart?.items.length > 0 ? "inline-flex lg:block" : " "
                   }`}
                 >
                   {cart?.items.length}
