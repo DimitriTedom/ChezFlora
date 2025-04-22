@@ -126,8 +126,8 @@ const ShoppingProductDetail: React.FC = () => {
       ? [
           productDetails.image,
           "/flowerGen5.jpg",
-          "/flower1.jpg",
-          "/flower12.webp",
+          "https://images.pexels.com/photos/931162/pexels-photo-931162.jpeg",
+          "https://images.pexels.com/photos/1353126/pexels-photo-1353126.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
         ]
       : ["/flowerGen5.jpg", "/flower1.jpg", "/flower12.webp"],
   };
@@ -267,6 +267,8 @@ const ShoppingProductDetail: React.FC = () => {
     <div className="flex flex-col gap-8 p-4 mt-24 min-h-screen">
       <Helmet>
         <title>{productDetails.name} | ChezFlora</title>
+        <link rel="icon" href="/favicon.ico" type="image/x-icon" />
+
         <meta
           name="description"
           content={`Discover ${productDetails.name} at ChezFlora: ${productDetails.description}. Perfect for ${productDetails.event}.`}

@@ -67,7 +67,6 @@ const ShoppingHeader: React.FC = () => {
     (state: RootState) => state.shoppingCart.cart
   );
 
-  // const { cartItems } = useSelector((state: RootState) => state.shoppingCart);
   const [openCartSheet, setOpenCartSheet] = useState<boolean>(false);
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
@@ -77,7 +76,6 @@ const ShoppingHeader: React.FC = () => {
       dispatch(fetchCartItems(user.id));
     }
   }, [dispatch, user.id,cart]);
-  console.log(cart)
   useEffect(() => {
     if (
       productKeyword &&
@@ -103,17 +101,17 @@ const ShoppingHeader: React.FC = () => {
   return (
     <div className="w-screen lg:mb-32 bg-opacity-95 overflow-x-hidden">
       {/* Mobile Header */}
-      <div className="w-full flex items-center justify-between border-b-[1px] border-b-pink-700 fixed top-0 z-[50] bg-opacity-50 backdrop-blur-sm transition-all duration-300 lg:hidden bg-white/80 py-3 px-4 overflow-x-hidden">
+      <div className="w-full flex items-center justify-between border-b-pink-700 fixed top-0 z-[50] bg-opacity-50 transition-all duration-300 lg:hidden py-3 px-4 overflow-x-hidden backdrop-blur-md bg-white/30 shadow-md border-b border-white/40">
         <div className="hidden md:block">
           <Logo />
         </div>
         <Sheet>
-          <SheetTrigger>
+          <SheetTrigger className="flex justify-center w-full">
             <div className="flex items-center justify-between bg-opacity-50 bg-transparent bg-white shadow-lg rounded-full p-2 w-full md:w-[50%]">
               <button className="mr-2 bg-white rounded-full p-2 flex items-center justify-center shadow-md">
                 <MagnifyingGlassIcon className="w-6 h-6 text-black" />
               </button>
-              <div className="flex flex-col w-[17rem] md:w-[40rem] justify-center">
+              <div className="flex flex-col w-full md:w-[40rem] justify-center rounded-full">
                 <Input
                   type="text"
                   value={searchValue}
@@ -130,7 +128,7 @@ const ShoppingHeader: React.FC = () => {
               </button>
             </div>
           </SheetTrigger>
-          <SheetContent side="top" className="h-screen">
+          <SheetContent side="top" className="h-screen overflow-y-auto">
             <div className="flex flex-col">
               {/* <div className="relative z-10 h-[400px] w-full  overflow-hidden rounded-2xl">
                 <img
@@ -203,7 +201,7 @@ const ShoppingHeader: React.FC = () => {
       </div>
 
       {/* Header for Larger Screens */}
-      <div className="lg:flex w-screen items-center py-5 justify-between border-b-3 border-b-gray-700 border shadow-md px-[6rem] hidden fixed bg-white bg-opacity-85 lg:mb-8">
+      <div className="lg:flex w-screen items-center py-5 justify-between border-b-3 border-b-gray-700 border px-[6rem] hidden fixed bg-white bg-opacity-85 lg:mb-8 backdrop-blur-md bg-white/30 shadow-md border-b border-white/40">
         <Link to="/shop/home">
           <Logo />
         </Link>

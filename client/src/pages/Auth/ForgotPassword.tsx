@@ -14,7 +14,9 @@ interface ForgotPasswordFormData extends Record<string, unknown> {
 }
 
 const ForgotPassword: React.FC = () => {
-  const [formData, setFormData] = useState<ForgotPasswordFormData>({ email: "" });
+  const [formData, setFormData] = useState<ForgotPasswordFormData>({
+    email: "",
+  });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -37,7 +39,7 @@ const ForgotPassword: React.FC = () => {
           if (data?.success) {
             showToast({
               message: data.message,
-              subtitle:"Redirecting to Enter OPTP...",
+              subtitle: "Redirecting to Enter OPTP...",
               type: "info",
               duration: 5000,
             });
@@ -45,11 +47,11 @@ const ForgotPassword: React.FC = () => {
           }
         });
     } catch (error) {
-        showToast({
-          message: "An error occured",
-          type: "error",
-          duration: 5000,
-        });
+      showToast({
+        message: "An error occured",
+        type: "error",
+        duration: 5000,
+      });
       setError((error as Error).message);
       console.log(error);
     } finally {
@@ -81,7 +83,10 @@ const ForgotPassword: React.FC = () => {
           property="og:url"
           content="https://www.chezflora.com/auth/forgot-password"
         />
-        <meta property="og:image" content="/assets/og-forgot-password.jpg" />{" "}
+        <meta
+          property="og:image"
+          content="https://chez-flora-sigma.vercel.app/flowerGen5.jpg"
+        />
         <meta property="og:image:width" content="1200" />
         <meta property="og:image:height" content="630" />
         <meta name="twitter:card" content="summary_large_image" />
@@ -99,8 +104,7 @@ const ForgotPassword: React.FC = () => {
           href="https://www.chezflora.com/auth/forgot-password"
         />
         <link rel="icon" href="/favicon.ico" type="image/x-icon" />
-        <meta name="theme-color" content="#E9F5DB" />{" "}
-
+        <meta name="theme-color" content="#E9F5DB" />
       </Helmet>
       <div className="bg-white p-8 rounded-[40px] shadow-2xl border w-full lg:px-[20rem] lg:py-[3rem] xl:px-[10rem]">
         <div className="mb-[1rem] lg:mb-[2rem]">

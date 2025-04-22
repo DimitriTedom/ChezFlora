@@ -66,6 +66,7 @@ const SearchPage = () => {
           property="og:image"
           content="https://www.chezflora.com/images/search-preview.jpg"
         />
+        <link rel="icon" href="/favicon.ico" type="image/x-icon" />
       </Helmet>
       <div className="flex flex-col">
         <div className="mx-auto mt-8  w-full">

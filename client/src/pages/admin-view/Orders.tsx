@@ -84,9 +84,11 @@ const AdminOrders = () => {
           />
           <meta
             property="og:image"
-            content="https://www.chezflora.com/images/admin-orders-preview.jpg"
+            content="https://chez-flora-sigma.vercel.app/flowerGen5.jpg"
           />
         </Helmet>
+        <link rel="icon" href="/favicon.ico" type="image/x-icon" />
+
         <CardHeader>
           <CardTitle className="flex items-start"></CardTitle>
         </CardHeader>

@@ -7,13 +7,14 @@ import React from "react";
 import { Helmet } from "react-helmet-async";
 
 const ShoppingAccount = () => {
-    const [currentSelectedAddress,setCurrentSelectedAddress] = React.useState<AddressData>({
-      id: '',
-      address: '',
-      city: '',
-      postalCode: '',
-      phone: '',
-      notes: '',
+  const [currentSelectedAddress, setCurrentSelectedAddress] =
+    React.useState<AddressData>({
+      id: "",
+      address: "",
+      city: "",
+      postalCode: "",
+      phone: "",
+      notes: "",
     });
   return (
     <div className="flex flex-col w-full min-h-screen">
@@ -29,7 +30,9 @@ const ShoppingAccount = () => {
           property="og:description"
           content="Access your order history, update preferences, and customize your floral subscription."
         />
-        <meta property="og:image" content="/assets/og-account.jpg" />{" "}
+        <meta property="og:image" content="/assets/og-account.jpg" />
+        <link rel="icon" href="/favicon.ico" type="image/x-icon" />
+
         {/* Dashboard UI mockup */}
       </Helmet>
       <div className="mt-32 flex flex-col">

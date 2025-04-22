@@ -21,12 +21,18 @@ const AdminDashboard: React.FC = () => {
   // Selectors
   const { pagination } = useSelector((state: RootState) => state.adminUsers);
   const { orderList } = useSelector((state: RootState) => state.adminOrder);
-  const { productList } = useSelector((state: RootState) => state.adminProducts);
-  const { quoteRequestList } = useSelector((state: RootState) => state.adminQuoteRequest);
+  const { productList } = useSelector(
+    (state: RootState) => state.adminProducts
+  );
+  const { quoteRequestList } = useSelector(
+    (state: RootState) => state.adminQuoteRequest
+  );
 
   useEffect(() => {
     // Fetch summary data
-    dispatch(getAllUsers({ page: 1, limit: 5, search: "", role: UsersRole.ALL }));
+    dispatch(
+      getAllUsers({ page: 1, limit: 5, search: "", role: UsersRole.ALL })
+    );
     dispatch(getAllOrdersofAllUsers());
     dispatch(fetchAllProducts());
     dispatch(getAllQuotesofAllUsers());
@@ -36,13 +42,24 @@ const AdminDashboard: React.FC = () => {
     <>
       <Helmet>
         <title>Admin Dashboard | ChezFlora Admin</title>
-        <meta name="description" content="Overview of users, orders, products, and quotes." />
+        <meta
+          name="description"
+          content="Overview of users, orders, products, and quotes."
+        />
+        <link rel="icon" href="/favicon.ico" type="image/x-icon" />
+        <meta
+          name="og:image"
+          content="https://chez-flora-sigma.vercel.app/flowerGen5.jpg"
+        />
       </Helmet>
 
       <div className="space-y-6 p-6">
         {/* Summary Cards */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          <Card className="cursor-pointer hover:shadow-lg transition" onClick={() => setTab("customers") }>
+          <Card
+            className="cursor-pointer hover:shadow-lg transition"
+            onClick={() => setTab("customers")}
+          >
             <CardHeader>
               <CardTitle>Customers</CardTitle>
             </CardHeader>
@@ -52,7 +69,10 @@ const AdminDashboard: React.FC = () => {
             </CardContent>
           </Card>
 
-          <Card className="cursor-pointer hover:shadow-lg transition" onClick={() => setTab("orders") }>
+          <Card
+            className="cursor-pointer hover:shadow-lg transition"
+            onClick={() => setTab("orders")}
+          >
             <CardHeader>
               <CardTitle>Orders</CardTitle>
             </CardHeader>
@@ -62,7 +82,10 @@ const AdminDashboard: React.FC = () => {
             </CardContent>
           </Card>
 
-          <Card className="cursor-pointer hover:shadow-lg transition" onClick={() => setTab("products") }>
+          <Card
+            className="cursor-pointer hover:shadow-lg transition"
+            onClick={() => setTab("products")}
+          >
             <CardHeader>
               <CardTitle>Products</CardTitle>
             </CardHeader>
@@ -72,12 +95,17 @@ const AdminDashboard: React.FC = () => {
             </CardContent>
           </Card>
 
-          <Card className="cursor-pointer hover:shadow-lg transition" onClick={() => setTab("quotes") }>
+          <Card
+            className="cursor-pointer hover:shadow-lg transition"
+            onClick={() => setTab("quotes")}
+          >
             <CardHeader>
               <CardTitle>Quotes</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-3xl font-bold">{quoteRequestList? quoteRequestList.length : 0}</p>
+              <p className="text-3xl font-bold">
+                {quoteRequestList ? quoteRequestList.length : 0}
+              </p>
               <p className="text-sm text-gray-500">Total Quote Requests</p>
             </CardContent>
           </Card>

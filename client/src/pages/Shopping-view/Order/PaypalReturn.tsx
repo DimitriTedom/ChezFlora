@@ -59,6 +59,7 @@ const PaypalReturnPage = () => {
           property="og:image"
           content="https://www.chezflora.com/images/order-confirmation-preview.jpg"
         />
+        <link rel="icon" href="/favicon.ico" type="image/x-icon" />
       </Helmet>
       <FormTitle
         title="Paypal Processing Payment..."

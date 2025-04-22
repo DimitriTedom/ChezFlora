@@ -53,6 +53,7 @@ const PaymentSuccessPage = () => {
           property="og:image"
           content="https://www.chezflora.com/images/payment-success-preview.jpg"
         />
+        <link rel="icon" href="/favicon.ico" type="image/x-icon" />
       </Helmet>
       <FormTitle title="Congratulations 🎉 !" />
       <Confetti recycle={false} numberOfPieces={1000} />

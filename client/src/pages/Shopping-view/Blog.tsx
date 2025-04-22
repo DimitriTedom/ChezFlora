@@ -13,6 +13,7 @@ const ShoppingBlog = () => {
           name="description"
           content="Read expert guides on flower care, event decoration ideas, and eco-friendly gardening tips. Stay inspired for your next project."
         />
+        <link rel="icon" href="/favicon.ico" type="image/x-icon" />
         {/* Open Graph Tags */}
         <meta
           property="og:title"
@@ -26,7 +27,7 @@ const ShoppingBlog = () => {
         {/* Blog post cover image */}
       </Helmet>
       <div className="relative">
-      <img
+        <img
           src="/motifFlower.png"
           alt="motifFlower"
           className="absolute scale-50 top-[-9%] right-[-50%] md:scale-75 opacity-70 rotate-180 xl:right-[-20%]"
@@ -48,14 +49,14 @@ const ShoppingBlog = () => {
             ))}
           </div>
 
-          <JoinNewsLetterComponent/>
-      <div className="w-48 h-48 rounded-full bg-pink-100 blur-3xl absolute z-[-2] left-[10%] lg:w-60 lg:h-60"></div>
+          <JoinNewsLetterComponent />
+          <div className="w-48 h-48 rounded-full bg-pink-100 blur-3xl absolute z-[-2] left-[10%] lg:w-60 lg:h-60"></div>
 
-      <img
-          src="/motifFlower2.png"
-          alt="motifFlower2"
-          className="absolute scale-50 bottom-[-7%] lg:bottom-[-9%] left-[-50%] md:scale-75 opacity-80  xl:left-[-10%]"
-        />
+          <img
+            src="/motifFlower2.png"
+            alt="motifFlower2"
+            className="absolute scale-50 bottom-[-7%] lg:bottom-[-9%] left-[-50%] md:scale-75 opacity-80  xl:left-[-10%]"
+          />
         </div>
       </div>
     </div>

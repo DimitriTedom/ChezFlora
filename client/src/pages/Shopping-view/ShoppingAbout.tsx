@@ -44,7 +44,8 @@ const ShoppingAbout = () => {
           name="twitter:description"
           content="Founded in 2016, we blend artistry and sustainability to create unforgettable floral experiences for events and homes."
         />
-        <meta name="twitter:image" content="/assets/og-about.jpg" />{" "}
+        <meta name="twitter:image" content="/assets/og-about.jpg" />
+        <link rel="icon" href="/favicon.ico" type="image/x-icon" />
       </Helmet>
 
       {/* Hero Section */}
@@ -71,18 +72,21 @@ const ShoppingAbout = () => {
           ))}
         </div>
       </div>
-{/* Fast Facts */}
+      {/* Fast Facts */}
       <section className="pt-32">
-          <FastFacts/>
+        <FastFacts />
       </section>
       {/* Good news from Far away */}
 
       <section className="mt-16 px-4 md:px-8 lg:px-16 py-12 bg-rose-200 rounded-xl relative">
-            <FormTitle title="🗞️ Good news from far away" comment="Let's see what people think of ChezFlora" />
-            <div>
-                {/* <img src="/GroupOfAvatars.png" alt="group of avatars" className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2" /> */}
-            <GoodNewsCarousel/>
-            </div>
+        <FormTitle
+          title="🗞️ Good news from far away"
+          comment="Let's see what people think of ChezFlora"
+        />
+        <div>
+          {/* <img src="/GroupOfAvatars.png" alt="group of avatars" className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2" /> */}
+          <GoodNewsCarousel />
+        </div>
       </section>
     </div>
   );

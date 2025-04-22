@@ -62,7 +62,7 @@ const AuthLogin: React.FC = () => {
         });
       }
     } catch (error) {
-      console.log(error)
+      console.log(error);
       showToast({
         message: "An error Occured", //normally suposed to Captures messages from rejected thunk
         type: "error",
@@ -117,7 +117,10 @@ const AuthLogin: React.FC = () => {
           property="og:url"
           content="https://www.chezflora.com/auth/login"
         />
-        <meta property="og:image" content="/assets/og-login.jpg" />{" "}
+        <meta
+          property="og:image"
+          content="https://chez-flora-sigma.vercel.app/flowerGen5.jpg"
+        />
         {/* Replace with login-themed image */}
         <meta property="og:image:width" content="1200" />
         <meta property="og:image:height" content="630" />
@@ -132,7 +135,7 @@ const AuthLogin: React.FC = () => {
         {/* Branding & Technical Tags */}
         <link rel="canonical" href="https://www.chezflora.com/auth/login" />
         <link rel="icon" href="/favicon.ico" type="image/x-icon" />
-        <meta name="theme-color" content="#E9F5DB" />{" "}
+        <meta name="theme-color" content="#E9F5DB" />
         {/* Soft green from palette */}
       </Helmet>
       <div className="bg-white p-8 rounded-[40px] shadow-2xl border w-full lg:px-[20rem] lg:py-[3rem] xl:px-[10rem]">
@@ -180,31 +183,32 @@ const AuthLogin: React.FC = () => {
         />
         {/* GESTION DES ERREURS ET CHARGEMENT */}
         {error && <p className="text-red-500 text-center mt-2">{error}</p>}
-        {loading && <ChezFloraLoader/>
-        // (
-        //   <div className="flex justify-center mt-4">
-        //     <svg
-        //       className="animate-spin h-5 w-5 mr-3 text-pink-500"
-        //       xmlns="http://www.w3.org/2000/svg"
-        //       fill="none"
-        //       viewBox="0 0 24 24"
-        //     >
-        //       <circle
-        //         className="opacity-25"
-        //         cx="12"
-        //         cy="12"
-        //         r="10"
-        //         stroke="currentColor"
-        //         strokeWidth="4"
-        //       ></circle>
-        //       <path
-        //         className="opacity-75"
-        //         fill="currentColor"
-        //         d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.963 7.963 0 014 12H0c0 6.627 5.373 12 12 12a7.963 7.963 0 01-7.717-2.709z"
-        //       ></path>
-        //     </svg>
-        //   </div>
-        // )
+        {
+          loading && <ChezFloraLoader />
+          // (
+          //   <div className="flex justify-center mt-4">
+          //     <svg
+          //       className="animate-spin h-5 w-5 mr-3 text-pink-500"
+          //       xmlns="http://www.w3.org/2000/svg"
+          //       fill="none"
+          //       viewBox="0 0 24 24"
+          //     >
+          //       <circle
+          //         className="opacity-25"
+          //         cx="12"
+          //         cy="12"
+          //         r="10"
+          //         stroke="currentColor"
+          //         strokeWidth="4"
+          //       ></circle>
+          //       <path
+          //         className="opacity-75"
+          //         fill="currentColor"
+          //         d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.963 7.963 0 014 12H0c0 6.627 5.373 12 12 12a7.963 7.963 0 01-7.717-2.709z"
+          //       ></path>
+          //     </svg>
+          //   </div>
+          // )
         }
 
         {/* LIGNE DE LIEN D'INSCRIPTION */}

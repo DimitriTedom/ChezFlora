@@ -23,10 +23,10 @@ const NotFound = () => {
           property="og:image"
           content="https://www.chezflora.com/images/404-preview.jpg"
         />
+        <link rel="icon" href="/favicon.ico" type="image/x-icon" />
       </Helmet>
 
       <ShoppingHeader />
-
 
       <div className="flex-grow flex flex-col items-center justify-center p-4">
         <h1 className="text-5xl font-bold text-center mb-6">Page Not Found</h1>
@@ -35,14 +35,11 @@ const NotFound = () => {
           alt="Page not found illustration"
           className="w-64 h-auto mb-6"
         />
-
       </div>
-
 
       <div className="z-[1] w-full">
         <Footer />
       </div>
-
 
       <div className="lg:hidden w-full z-[2]">
         <HeaderSm />

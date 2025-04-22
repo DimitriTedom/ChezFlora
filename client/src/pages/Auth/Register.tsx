@@ -126,7 +126,11 @@ const AuthRegister: React.FC = () => {
           property="og:url"
           content="https://www.chezflora.com/auth/register"
         />
-        <meta property="og:image" content="/assets/og-register.jpg" />{" "}
+        <meta
+          property="og:image"
+          content="https://chez-flora-sigma.vercel.app/flowerGen5.jpg"
+        />
+        <link rel="icon" href="/favicon.ico" type="image/x-icon" />
         {/* Replace with signup-themed image */}
         <meta property="og:image:width" content="1200" />
         <meta property="og:image:height" content="630" />

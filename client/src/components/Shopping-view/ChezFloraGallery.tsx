@@ -15,7 +15,7 @@ export interface ChezFloraGalleryProps {
 }
 
  function ChezFloraGallery({ images }: ChezFloraGalleryProps) {
-  // On prend la première image comme image principale par défaut, s’il y en a
+
   const [mainImage, setMainImage] = useState<string>(
     images?.length ? images[0] : ""
   );
@@ -103,7 +103,7 @@ export interface ChezFloraGalleryProps {
                   <img
                     src={img}
                     alt={`Photo ${index}`}
-                    className="w-full h-auto rounded-md shadow-sm hover:opacity-80 transition-opacity"
+                    className="w-full h-[250px] rounded-md shadow-sm hover:opacity-80 transition-opacity"
                   />
                 </button>
               ))}

@@ -249,12 +249,13 @@ const AdminCustomers = () => {
           <meta property="og:type" content="website" />
           <meta
             property="og:url"
-            content="https://www.chezflora.com/admin/customers"
+            content="https://chez-flora-sigma.vercel.app"
           />
           <meta
             property="og:image"
-            content="https://www.chezflora.com/images/admin-customers-preview.jpg"
+            content="https://chez-flora-sigma.vercel.app/flowerGen5.jpg"
           />
+          <link rel="icon" href="/favicon.ico" type="image/x-icon" />
         </Helmet>
 
         <div className="p-6">

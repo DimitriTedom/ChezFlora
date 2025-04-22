@@ -81,22 +81,24 @@ const ShoppingContact = () => {
     message: "",
   });
   const dispatch = useDispatch<AppDispatch>();
-  const { isLoading} = useSelector((state: RootState) => state.shopContact);
-  const {showToast} = useCustomToast()
+  const { isLoading } = useSelector((state: RootState) => state.shopContact);
+  const { showToast } = useCustomToast();
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     console.log(formData);
     try {
-      dispatch(sendContactIssue(formData)).unwrap().then((data) => {
-        console.log(data);
-        if (data.success) {
-          showToast({
-            type: "success",
-            message: data.message,
-            duration:2000,
-          })
-        }
-      });
+      dispatch(sendContactIssue(formData))
+        .unwrap()
+        .then((data) => {
+          console.log(data);
+          if (data.success) {
+            showToast({
+              type: "success",
+              message: data.message,
+              duration: 2000,
+            });
+          }
+        });
       setFormData({
         name: "",
         email: "",
@@ -106,24 +108,26 @@ const ShoppingContact = () => {
         message: "",
       });
     } catch (error) {
-      if (axios.isAxiosError(error)) {        
+      if (axios.isAxiosError(error)) {
         showToast({
           type: "error",
           message: error.message,
-          duration:2000,
-        })
+          duration: 2000,
+        });
       }
     }
   };
   const validateEmail = (email: string) => {
     return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
   };
-  
+
   const validateFormData = (data: ContactFormData) => {
     return (
       Boolean(data.name) &&
-      Boolean(data.email) && validateEmail(data.email) &&
-      Boolean(data.phone) && data.phone.length >= 8 &&
+      Boolean(data.email) &&
+      validateEmail(data.email) &&
+      Boolean(data.phone) &&
+      data.phone.length >= 8 &&
       Boolean(data.subject) &&
       Boolean(data.message)
     );
@@ -161,6 +165,7 @@ const ShoppingContact = () => {
           property="og:image:alt"
           content="ChezFlora's Parisian floral studio entrance"
         />
+        <link rel="icon" href="/favicon.ico" type="image/x-icon" />
 
         {/* Twitter Card Tags */}
         <meta name="twitter:card" content="summary_large_image" />
@@ -185,9 +190,9 @@ const ShoppingContact = () => {
         <div className="w-full md:w-1/2 mb-8 md:mb-0">
           <h1 className="text-4xl font-bold mb-4">Contact us📬️</h1>
           <p className="text-gray-600 mb-4">
-                Have questions? Fill out the form below and we'll get back to
-                you within 24 hours.
-              </p>
+            Have questions? Fill out the form below and we'll get back to you
+            within 24 hours.
+          </p>
           {/* Contact Information */}
           <div className="space-y-4 mb-8">
             {contactInfo.map((info) => (
@@ -217,7 +222,6 @@ const ShoppingContact = () => {
 
           {/* Form Section */}
           <div className=" mx-auto">
-
             <CommonForm
               formControls={contactFormControls}
               formData={formData}

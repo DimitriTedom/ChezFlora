@@ -8,9 +8,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { sortOptions } from "@/config";
-import {
-  fetchAllFilteredProducts,
-} from "@/store/shop/ShopProductSlice";
+import { fetchAllFilteredProducts } from "@/store/shop/ShopProductSlice";
 import { AppDispatch, RootState } from "@/store/store";
 import { ArrowUpDownIcon } from "lucide-react";
 import { useEffect, useState } from "react";
@@ -22,7 +20,6 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import QuoteRequestForm from "@/components/Shopping-view/QuoteRequestForm";
 import FormTitle from "@/components/Common/FormTitle";
 import EventCarousel from "@/components/Shopping-view/ProductImageCarousel";
-
 
 export interface Filters {
   [key: string]: string[];
@@ -95,7 +92,7 @@ const ShoppingStore = () => {
 
   const handleGetProductDetails = (productId: string) => {
     navigate(`/shop/detail/${productId}`);
-    console.log(searchParams)
+    console.log(searchParams);
   };
 
   // console.log("Cart items from store:", cartItems, Array.isArray(cartItems));
@@ -114,6 +111,7 @@ const ShoppingStore = () => {
           content="Discover our boutique locations and schedule an in-person consultation for your event or home décor needs."
         />
         <meta property="og:image" content="/assets/og-store.jpg" />
+        <link rel="icon" href="/favicon.ico" type="image/x-icon" />
       </Helmet>
 
       <div className="mt-24 flex flex-col lg:flex-row gap-6 p-4 md:p-6">
@@ -186,8 +184,8 @@ const ShoppingStore = () => {
 
         <div className="flex flex-col lg:flex-row gap-8 justify-between items-center w-full">
           <div className="lg:w-[50%] h-full">
-          {/* <ProductImageCarousel {...productData} /> */}
-          <EventCarousel/>
+            {/* <ProductImageCarousel {...productData} /> */}
+            <EventCarousel />
           </div>
           <QuoteRequestForm />
         </div>

@@ -57,7 +57,7 @@ const AdminProducts = () => {
   const { productList, isLoading } = useSelector(
     (state: RootState) => state.adminProducts
   );
-  const [currentEditedId, setCurrentEditedId] = useState('');
+  const [currentEditedId, setCurrentEditedId] = useState("");
 
   useEffect(() => {
     dispatch(fetchAllProducts()).unwrap();
@@ -71,7 +71,7 @@ const AdminProducts = () => {
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    if (currentEditedId !== '') {
+    if (currentEditedId !== "") {
       dispatch(editProduct({ id: currentEditedId, formData }))
         .unwrap()
         .then((data) => {
@@ -84,7 +84,7 @@ const AdminProducts = () => {
           });
           setOpenCreateProductDialog(false);
           setFormData(initialFormData);
-          setCurrentEditedId('');
+          setCurrentEditedId("");
           dispatch(fetchAllProducts()).unwrap();
         });
 
@@ -135,10 +135,10 @@ const AdminProducts = () => {
 
   const isFormValid = () => {
     const keys = Object.keys(formData) as Array<keyof ProductFormData>;
-    return keys.every((key)=>{
+    return keys.every((key) => {
       const value = formData[key];
-      return value !== "" && value != null
-    })
+      return value !== "" && value != null;
+    });
   };
   return (
     <Fragment>
@@ -160,8 +160,9 @@ const AdminProducts = () => {
         />
         <meta
           property="og:image"
-          content="https://www.chezflora.com/images/admin-products-preview.jpg"
+          content="https://chez-flora-sigma.vercel.app/flowerGen5.jpg"
         />
+        <link rel="icon" href="/favicon.ico" type="image/x-icon" />
       </Helmet>
       <div className="w-full mb-5 flex-col gap-3 flex justify-between items-center lg:flex-row">
         <div>
@@ -174,7 +175,7 @@ const AdminProducts = () => {
           className="bg-pink-200 hover:bg-pink-300"
           onClick={() => {
             setOpenCreateProductDialog(true);
-            setCurrentEditedId('');
+            setCurrentEditedId("");
           }}
         >
           <AiOutlinePlus /> Add New Product
@@ -216,7 +217,7 @@ const AdminProducts = () => {
         <SheetContent className="overflow-y-auto">
           <SheetHeader>
             <SheetTitle>
-              {currentEditedId !== '' ? "Edit Product" : "Add New Product"}
+              {currentEditedId !== "" ? "Edit Product" : "Add New Product"}
             </SheetTitle>
           </SheetHeader>
           <ProductImageUpload
@@ -234,7 +235,7 @@ const AdminProducts = () => {
               setFormData={setFormData}
               onSubmit={onSubmit}
               formControls={addProductFormElements}
-              buttonText={currentEditedId !== '' ? "Edit" : "Add"}
+              buttonText={currentEditedId !== "" ? "Edit" : "Add"}
               isBnDisabled={!isFormValid()}
             />
           </div>

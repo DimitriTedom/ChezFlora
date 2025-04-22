@@ -30,9 +30,9 @@ import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 import { Flower, Sprout, Home, Cake, Cross, Heart, Gift } from "lucide-react";
 const images = [
   "/flowerGen5.jpg",
-  "/flower2.jpg",
-  "/flower3.jpg",
-  "/flower4.jpg",
+  "/account2.jpg",
+  "/blog4.jpeg",
+  "/AdminAvatar.jpeg",
 ];
 const filterCategory = [
   {
