@@ -1,7 +1,7 @@
 # ChezFlora 🌸  
 *Modern e-commerce platform for floral decoration and event services*
 
-![ChezFlora Logo](/client/public/flowerGen5.jpg)
+![ChezFlora Logo](/client/public/Thumbnail.png)
 
 ---
 
@@ -71,6 +71,7 @@ ChezFlora’s design reflects nature, elegance, and simplicity.
 - Node.js with Express.js  
 - MongoDB (ORM: Prisma)  
 - JWT Authentication (with cookie-based sessions)
+- Nodemailer & express handlebars
 
 **CMS & Tools:**  
 - Swagger/OpenAPI for API documentation  
@@ -93,12 +94,12 @@ ChezFlora’s design reflects nature, elegance, and simplicity.
 2. Install dependencies:
    ```bash
    # /client/
-   npm install
+   npm install or yarn
 
    # /Server/
-   yarn
+   yarn or npm install
    ```
-3. Create a `.env` file in the root directory and configure the following environment variables:
+3. Create a `.env` file in the /Server/ directory and configure the following environment variables:
    ```env
         DATABASE_URL="your_database_connection_string"
         PORT=3000
@@ -113,14 +114,15 @@ ChezFlora’s design reflects nature, elegance, and simplicity.
         SMTP_USER="your_smtp_user"
         SMTP_PASS="your_smtp_password"
         CLIENT_URL="http://localhost:5173"
+        ...as listed in .env.example
    ```
  Some of these variables are used for:
 - **JWT_SECRET**: Signing JSON Web Tokens.
-- **DATABASE_URL**: Connecting to your PostgreSQL database.
+- **DATABASE_URL**: Connecting to your MongoDb database.
 - **SMTP_HOST, SMTP_PORT, SMTP_USER, SMTP_PASS**: Configuring your SMTP server for sending emails (OTP).
 4. Run the development server:
    ```bash
-   npm run dev
+   npm run dev or yarn dev
    ```
 
 ---
