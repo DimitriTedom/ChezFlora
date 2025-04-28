@@ -15,10 +15,10 @@ import {
   Package,
   ShoppingCart,
   FileText,
-  Settings,
-  CalendarDays,
-  BookOpen,
-  MessageCircle
+  // Settings,
+  // CalendarDays,
+  // BookOpen,
+  // MessageCircle
 } from "lucide-react"
 import { useNavigate } from "react-router-dom"
 import Logo from "../Common/Logo"
@@ -32,11 +32,11 @@ const AdminSidebar = () => {
     { title: "Products", icon: Package, path: "/admin/products" },
     { title: "Orders", icon: ShoppingCart, path: "/admin/orders" },
     { title: "Quotes", icon: FileText, path: "/admin/quotes" },
-    { title: "Blogs", icon: BookOpen, path: "/admin/blog" },
+    // { title: "Blogs", icon: BookOpen, path: "/admin/blog" },
     { title: "Customers", icon: HiOutlineUsers, path: "/admin/users" },
-    { title: "Agenda", icon: CalendarDays, path: "/admin/calendar" },
-    { title: "Customer Reviews", icon: MessageCircle, path: "/admin/reviews" },
-    { title: "Parameters", icon: Settings, path: "/admin/settings" }
+    // { title: "Agenda", icon: CalendarDays, path: "/admin/calendar" },
+    // { title: "Customer Reviews", icon: MessageCircle, path: "/admin/reviews" },
+    // { title: "Parameters", icon: Settings, path: "/admin/settings" }
   ]
 
   return (

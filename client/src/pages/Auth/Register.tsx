@@ -2,8 +2,8 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import CommonForm from "@/components/Common/Form";
-import { AiOutlineFacebook, AiOutlineTwitter } from "react-icons/ai";
-import { FcGoogle } from "react-icons/fc";
+// import { AiOutlineFacebook, AiOutlineTwitter } from "react-icons/ai";
+// import { FcGoogle } from "react-icons/fc";
 import FormTitle from "@/components/Common/FormTitle";
 import { registerFormControls } from "@/config";
 import { useDispatch } from "react-redux";
@@ -20,12 +20,12 @@ interface RegisterFormData extends Record<string, unknown> {
   password: string;
 }
 
-interface SocialButton {
-  content: string;
-  icon: React.ReactNode;
-  to: string;
-  color?: string;
-}
+// interface SocialButton {
+//   content: string;
+//   icon: React.ReactNode;
+//   to: string;
+//   color?: string;
+// }
 
 const AuthRegister: React.FC = () => {
   // Use the interface in useState
@@ -81,23 +81,23 @@ const AuthRegister: React.FC = () => {
       .finally(() => setLoading(false));
   };
 
-  const socialButtons: SocialButton[] = [
-    {
-      content: "Continue with Facebook",
-      icon: <AiOutlineFacebook color="#3b5998" size={24} />,
-      to: "/facebook-login",
-    },
-    {
-      content: "Continue with Google",
-      icon: <FcGoogle size={24} />,
-      to: "/google-login",
-    },
-    {
-      content: "Continue with Twitter",
-      icon: <AiOutlineTwitter color="#1da1f2" size={24} />,
-      to: "/twitter-login",
-    },
-  ];
+  // const socialButtons: SocialButton[] = [
+  //   {
+  //     content: "Continue with Facebook",
+  //     icon: <AiOutlineFacebook color="#3b5998" size={24} />,
+  //     to: "/facebook-login",
+  //   },
+  //   {
+  //     content: "Continue with Google",
+  //     icon: <FcGoogle size={24} />,
+  //     to: "/google-login",
+  //   },
+  //   {
+  //     content: "Continue with Twitter",
+  //     icon: <AiOutlineTwitter color="#1da1f2" size={24} />,
+  //     to: "/twitter-login",
+  //   },
+  // ];
 
   return (
     <div className="flex items-center justify-center mt-32">
@@ -158,30 +158,30 @@ const AuthRegister: React.FC = () => {
         </div>
 
         {/* Boutons de connexion via réseaux sociaux */}
-        <div className="space-y-3 mb-6">
-          {socialButtons.map((button, index) => (
-            <Link
-              key={index}
-              to={button.to}
-              className="relative flex items-center justify-center space-x-3 w-full py-2 px-6 bg-pink-200 border-[2px] border-gray-300 rounded-full hover:bg-pink-300 transition duration-300"
-            >
-              <div className="absolute left-4">{button.icon}</div>
-              <span className="text-md font-medium text-gray-800">
-                {button.content}
-              </span>
-            </Link>
-          ))}
-        </div>
+        {/*<div className="space-y-3 mb-6">*/}
+        {/*  {socialButtons.map((button, index) => (*/}
+        {/*    <Link*/}
+        {/*      key={index}*/}
+        {/*      to={button.to}*/}
+        {/*      className="relative flex items-center justify-center space-x-3 w-full py-2 px-6 bg-pink-200 border-[2px] border-gray-300 rounded-full hover:bg-pink-300 transition duration-300"*/}
+        {/*    >*/}
+        {/*      <div className="absolute left-4">{button.icon}</div>*/}
+        {/*      <span className="text-md font-medium text-gray-800">*/}
+        {/*        {button.content}*/}
+        {/*      </span>*/}
+        {/*    </Link>*/}
+        {/*  ))}*/}
+        {/*</div>*/}
 
         {/* Séparateur */}
-        <div className="relative flex items-center justify-center mb-6">
-          <div className="absolute inset-0 flex items-center">
-            <div className="w-full border-t border-gray-200"></div>
-          </div>
-          <div className="relative flex justify-center text-sm">
-            <span className="bg-white px-2 text-gray-500">OR</span>
-          </div>
-        </div>
+        {/*<div className="relative flex items-center justify-center mb-6">*/}
+        {/*  <div className="absolute inset-0 flex items-center">*/}
+        {/*    <div className="w-full border-t border-gray-200"></div>*/}
+        {/*  </div>*/}
+        {/*  <div className="relative flex justify-center text-sm">*/}
+        {/*    <span className="bg-white px-2 text-gray-500">OR</span>*/}
+        {/*  </div>*/}
+        {/*</div>*/}
 
         {/* Formulaire d'inscription */}
         {/* Provide the type argument to CommonForm */}

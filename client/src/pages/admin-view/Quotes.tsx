@@ -63,7 +63,7 @@ const AdminQuotes = () => {
   }
   return (
     <>
-      <FormTitle title="All Quotes Requests" comment="As, the Super admin, you have th right to update Request Status, and answer users" snowStyle="mb-16"/>
+      <FormTitle title="All Quotes Requests ❤️" comment="As, the Super admin, you have th right to update Request Status, and answer users" snowStyle="mb-16"/>
     <Card>
       <Helmet>
         <title>Quote Requests | ChezFlora Admin</title>

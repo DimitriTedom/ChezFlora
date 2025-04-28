@@ -130,25 +130,30 @@ const HeaderSm: React.FC = () => {
                             Write Blogs and share them.
                           </p>
                         </div>
-                        <nav className="border-t-2 border-pink-200 w-full py-5 flex flex-col gap-4">
+                        <nav className="border-t-2 border-pink-200 w-full py-5 flex flex-col items-center gap-4">
                           <NavigationMenu>
                             <NavigationMenuList>
                               <NavMenuLink url="/shop/home" text="Home" />
                             </NavigationMenuList>
                           </NavigationMenu>
-                          <NavigationMenu>
+                          <NavigationMenu className="mt-4">
                             <NavigationMenuList>
                               <NavMenuLink url="/shop/store" text="Store" />
                             </NavigationMenuList>
                           </NavigationMenu>
-                          <NavigationMenu>
+                          <NavigationMenu className="mt-4">
                             <NavigationMenuList>
-                              <NavMenuLink url="/shop/blog" text="Blog" />
+                              <NavMenuLink url="/shop/quotes" text="Quotes" />
                             </NavigationMenuList>
                           </NavigationMenu>
-                          <NavigationMenu>
+                          <NavigationMenu className="mt-4">
                             <NavigationMenuList>
                               <NavMenuLink url="/shop/about" text="About" />
+                            </NavigationMenuList>
+                          </NavigationMenu>
+                          <NavigationMenu className="mt-4">
+                            <NavigationMenuList>
+                              <NavMenuLink url="/shop/contact" text="Contact" />
                             </NavigationMenuList>
                           </NavigationMenu>
                         </nav>

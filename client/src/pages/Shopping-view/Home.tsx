@@ -7,8 +7,8 @@ import FormTitle from "@/components/Common/FormTitle";
 import  { Product } from "./Carts/ProductCart";
 import Spinner from "@/components/Shopping-view/ShowMoreSpinner";
 import TestimonialCard, { Testimonial } from "./Carts/TestimonialCard";
-import BlogCard from "./Carts/BlogCard";
-import { blogsArray } from "@/data/blogs";
+// import BlogCard from "./Carts/BlogCard";
+// import { blogsArray } from "@/data/blogs";
 import { Link, useNavigate } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import UserProductCard from "./Carts/ProductCart";
@@ -280,7 +280,7 @@ const ShoppingHome = () => {
       <section className="w-full py-16 px-4 sm:px-6 lg:px-8 bg-white">
         <div className="max-w-7xl mx-auto">
           {/* Categories Section */}
-          <div className="w-48 h-48 rounded-full bg-green-200 blur-3xl absolute z-[2] right-[10%] lg:w-60 lg:h-60"></div>
+          <div className="w-48 h-48 rounded-full bg-green-200 blur-3xl absolute z-[-1] right-[10%] lg:w-60 lg:h-60"></div>
           <div className="mb-16">
             <h2 className="text-3xl font-bold text-center mb-12">
               Shop By Category
@@ -289,7 +289,7 @@ const ShoppingHome = () => {
             <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-4">
               {filterCategory.map((category) => (
                 <Card
-                  className="hover:shadow-lg transition-shadow duration-300 h-full"
+                  className="hover:shadow-lg hover:shadow-green-300 transition-shadow duration-300 h-full"
                   key={category.id}
                   onClick={() =>
                     handleNavigateToStorePage(category.id, "category")
@@ -307,7 +307,7 @@ const ShoppingHome = () => {
               ))}
             </div>
           </div>
-          <div className="w-48 h-48 rounded-full bg-pink-200 blur-3xl absolute z-[2] left-[10%] lg:w-60 lg:h-60"></div>
+          <div className="w-48 h-48 rounded-full bg-pink-200 blur-3xl absolute z-[-1] left-[10%] lg:w-60 lg:h-60"></div>
           {/* Events Section */}
           <div>
             <h2 className="text-3xl font-bold text-center mb-12">
@@ -316,7 +316,7 @@ const ShoppingHome = () => {
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
               {filterEvent.map((event) => (
                 <Card
-                  className="hover:shadow-lg transition-shadow duration-300 h-full"
+                  className="hover:shadow-lg hover:shadow-pink-300 transition-shadow duration-300 h-full"
                   onClick={() => handleNavigateToStorePage(event.id, "event")}
                 >
                   <CardHeader className="flex flex-col items-center">
@@ -360,16 +360,11 @@ const ShoppingHome = () => {
           )}
         </div>
         <Link to="/shop/store">
-          <Button className="flex items-center justify-center rounded-full text-sm lg:text-xl px-[1rem] py-4 bg-orange-300 border border-solid border-orange-500 hover:bg-oramge-500 hover:shadow-md duration-300 cursor-pointer">
+          <Button className="flex items-center justify-center rounded-full text-sm lg:text-xl px-[1rem] py-4 bg-pink-200 border border-solid border-pink-300 hover:bg-pink-300 hover:shadow-md duration-300 cursor-pointer">
             <Spinner />
             <span className="ml-4">Show me more</span>
-          </Button>{" "}
+          </Button>
         </Link>
-        <img
-          src="/motifFlower2.png"
-          alt="motifFlower2"
-          className="absolute scale-50 bottom-[-9%] left-[-50%] md:scale-75 opacity-80  xl:left-[-10%]"
-        />
       </section>
 
       {/* Testimonials */}
@@ -399,39 +394,35 @@ const ShoppingHome = () => {
       </section>
 
       {/* Blog */}
-      <section className="flex flex-col items-center gap-8 mt-[4rem] bg-gray-100 p-[3rem] rounded-3xl relative overflow-hidden">
-        <div>
-          <FormTitle
-            title="Find our all blogs from here"
-            comment="our blogs are written from very research research and well known writers writers so that  we can provide you the best blogs and articles articles for you to read them all along"
-          />
-        </div>
-        <img
-          src="/motifFlower.png"
-          alt="motifFlower"
-          className="absolute scale-50 top-[-9%] right-[-50%] md:scale-75 opacity-70 rotate-180 xl:right-[-10%]"
-        />
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mt-8 max-w-full">
-          {blogsArray.map((blog) => (
-            <BlogCard
-              key={blog.id}
-              {...blog}
-              authorImageUrl={blog.authorImageUrl} // Optional prop
-            />
-          ))}
-        </div>
-        {/* <img
-          src="/motifFlower2.png"
-          alt="motifFlower2"
-          className="absolute scale-50 bottom-[-9%] left-[-50%] md:scale-75 opacity-80  xl:left-[-10%]"
-        /> */}
-        <Link to="/shop/blog">
-          <Button className="flex items-center justify-center rounded-full text-sm lg:text-xl px-[1rem] py-4 bg-rose-300 border border-solid border-orange-500 hover:bg-oramge-500 hover:shadow-md duration-300 cursor-pointer">
-            <Spinner />
-            <span className="ml-4">Show me more</span>
-          </Button>{" "}
-        </Link>
-      </section>
+      {/*<section className="flex flex-col items-center gap-8 mt-[4rem] bg-gray-100 p-[3rem] rounded-3xl relative overflow-hidden">*/}
+      {/*  <div>*/}
+      {/*    <FormTitle*/}
+      {/*      title="Find our all blogs from here"*/}
+      {/*      comment="our blogs are written from very research research and well known writers writers so that  we can provide you the best blogs and articles articles for you to read them all along"*/}
+      {/*    />*/}
+      {/*  </div>*/}
+      {/*  <img*/}
+      {/*    src="/motifFlower.png"*/}
+      {/*    alt="motifFlower"*/}
+      {/*    className="absolute scale-50 top-[-9%] right-[-50%] md:scale-75 opacity-70 rotate-180 xl:right-[-10%]"*/}
+      {/*  />*/}
+      {/*  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mt-8 max-w-full">*/}
+      {/*    {blogsArray.map((blog) => (*/}
+      {/*      <BlogCard*/}
+      {/*        key={blog.id}*/}
+      {/*        {...blog}*/}
+      {/*        authorImageUrl={blog.authorImageUrl} // Optional prop*/}
+      {/*      />*/}
+      {/*    ))}*/}
+      {/*  </div>*/}
+
+      {/*  <Link to="/shop/blog">*/}
+      {/*    <Button className="flex items-center justify-center rounded-full text-sm lg:text-xl px-[1rem] py-4 bg-rose-300 border border-solid border-orange-500 hover:bg-oramge-500 hover:shadow-md duration-300 cursor-pointer">*/}
+      {/*      <Spinner />*/}
+      {/*      <span className="ml-4">Show me more</span>*/}
+      {/*    </Button>{" "}*/}
+      {/*  </Link>*/}
+      {/*</section>*/}
     </div>
   );
 };

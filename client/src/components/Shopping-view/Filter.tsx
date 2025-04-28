@@ -4,6 +4,7 @@ import { Label } from "../ui/label";
 import { Checkbox } from "../ui/checkbox";
 import { Separator } from "../ui/separator";
 import { Filters } from "@/pages/Shopping-view/ShoppingStore";
+import {Card} from "@/components/ui/card.tsx";
 
 // Define the type for a filter option
 interface FilterOption {
@@ -19,7 +20,7 @@ const filtersOpt: FilterOptionsMap = filterOptions;
 
 const ProductFilter = ({ filters, handleFilter }:{filters:Filters,handleFilter:(sectionId: string, optionId: string) => void}) => {
   return (
-    <div className="bg-white rounded-lg shadow-sm">
+    <Card className="bg-white rounded-xl shadow-sm">
       <div className="p-4 border-b">
         <h2 className="text-lg font-semibold">Filters</h2>
       </div>
@@ -51,7 +52,7 @@ const ProductFilter = ({ filters, handleFilter }:{filters:Filters,handleFilter:(
           </Fragment>
         ))}
       </div>
-    </div>
+    </Card>
   );
 };
 

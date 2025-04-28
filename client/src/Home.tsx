@@ -4,7 +4,6 @@ import AuthLogin from "./pages/Auth/Login";
 import AuthRegister from "./pages/Auth/Register";
 import AdminLayout from "./components/Admin-view/Layout";
 import AdminDashboard from "./pages/admin-view/Dashboard";
-import AdminBlogs from "./pages/admin-view/Blogs";
 import AdminOrders from "./pages/admin-view/Orders";
 import AdminProducts from "./pages/admin-view/Products";
 import ShoppingLayout from "./components/Shopping-view/Layout";
@@ -12,7 +11,7 @@ import NotFound from "./pages/Not-Found";
 import ShoppingHome from "./pages/Shopping-view/Home";
 import ShoppingCheckout from "./pages/Shopping-view/Checkout";
 import ShoppingAccount from "./pages/Shopping-view/Account";
-import ShoppingBlog from "./pages/Shopping-view/Blog";
+import ShoppingBlog from "./pages/Shopping-view/Quotes.tsx";
 import CheckAuth from "./components/Common/Check-auth";
 import UnAuthPage from "./pages/UnAuthPAge";
 import AuthEnterOtp from "./pages/Auth/EnterOTP";
@@ -110,7 +109,7 @@ export default function Home() {
           <Route path="account" element={<AdminAccount />} />
           <Route path="orders" element={<AdminOrders />} />
           <Route path="quotes" element={<AdminQuotes />} />
-          <Route path="blogs" element={<AdminBlogs />} />
+          {/*<Route path="blogs" element={<AdminBlogs />} />*/}
           <Route path="users" element={<AdminCustomers />} />
         </Route>
         <Route
@@ -128,7 +127,7 @@ export default function Home() {
           <Route path="search" element={<SearchPage />} />
           <Route path="checkout" element={<ShoppingCheckout />} />
           <Route path="account" element={<ShoppingAccount />} />
-          <Route path="blog" element={<ShoppingBlog />} />
+          <Route path="quotes" element={<ShoppingBlog />} />
           <Route path="contact" element={<ShoppingContact />} />
           <Route path="my-bookings" element={<MyBookings />} />
           <Route path="paypal-return" element={<PaypalReturnPage />} />

@@ -268,13 +268,13 @@ export const events = [
     id: "2",
     title: "Elegant Garden Party",
     price: 3000,
-    imageUrl: "/flowerGen4(Services).jpg",
+    imageUrl: "/blog3.jpeg",
   },
   {
     id: "3",
     title: "Luxury Wedding Reception",
     price: 5000,
-    imageUrl: "/contact4.jpg",
+    imageUrl: "/blog2.jpeg",
   },
 ];
 

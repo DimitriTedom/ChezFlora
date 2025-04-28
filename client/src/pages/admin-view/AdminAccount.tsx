@@ -1,4 +1,4 @@
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Tabs, TabsContent, TabsList } from "@/components/ui/tabs";
 import { Helmet } from "react-helmet-async";
 
 const AdminAccount = () => {
@@ -36,11 +36,11 @@ const AdminAccount = () => {
           <div className="flex flex-col rounded-lg border bg-background p-6 shadow-md w-full">
             <Tabs defaultValue="orders" className="w-full">
               <TabsList className="flex justify-center space-x-4">
-                <TabsTrigger value="profile">Profile</TabsTrigger>
+                <h1 className={"font-bold"}>Profile</h1>
               </TabsList>
               <TabsContent value="profile">
-                <h1>
-                  To be implemented later, the idea is to enable user to update
+                <h1 className={"mt-4"}>
+                  To be implemented later, the idea is to enable Admin to update
                   it's password here without having to logout, and even update
                   it's image
                 </h1>

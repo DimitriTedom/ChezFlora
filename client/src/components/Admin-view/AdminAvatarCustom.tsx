@@ -85,7 +85,7 @@ user: User
         <DropdownMenuItem asChild className="cursor-pointer hover:bg-accent">
           <Link to="/admin/account" className="flex items-center space-x-2">
             <AiOutlineUser className="h-4 w-4 text-muted-foreground" />
-            <span>Account DashBoard</span>
+            <span>Profile</span>
           </Link>
         </DropdownMenuItem>
 

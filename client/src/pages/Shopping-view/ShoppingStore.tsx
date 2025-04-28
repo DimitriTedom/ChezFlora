@@ -17,9 +17,6 @@ import { useDispatch, useSelector } from "react-redux";
 import UserProductCard, { Product } from "./Carts/ProductCart";
 import ChezFloraLoader from "@/components/Common/ChezFloraLoader";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import QuoteRequestForm from "@/components/Shopping-view/QuoteRequestForm";
-import FormTitle from "@/components/Common/FormTitle";
-import EventCarousel from "@/components/Shopping-view/ProductImageCarousel";
 
 export interface Filters {
   [key: string]: string[];
@@ -174,27 +171,14 @@ const ShoppingStore = () => {
       </div>
       {/* REQUEST YOUR PERSONALIZE QUOTE */}
 
-      <section className="flex flex-col items-center gap-8 mt-[4rem] bg-rose-100 p-[3rem] rounded-3xl relative overflow-hidden">
-        <div>
-          <FormTitle
-            title="Request your personalized quote"
-            comment="Some of our decorations, what do you think about them ?"
-          />
-        </div>
-
-        <div className="flex flex-col lg:flex-row gap-8 justify-between items-center w-full">
-          <div className="lg:w-[50%] h-full">
-            {/* <ProductImageCarousel {...productData} /> */}
-            <EventCarousel />
-          </div>
-          <QuoteRequestForm />
-        </div>
-        {/* <img
-          src="/ProduitEnVedeteFlower-removebg-preview.png"
-          alt="motifFlower2"
-          className="absolute scale-50 bottom-[-20%] left-[-50%] md:scale-75 opacity-80  xl:left-[-20%]"
-        /> */}
-      </section>
+      {/*<section className="flex flex-col items-center gap-8 mt-[4rem] bg-rose-100 p-[3rem] rounded-3xl relative overflow-hidden">*/}
+      {/*  <div>*/}
+      {/*    <FormTitle*/}
+      {/*      title="Request your personalized quote"*/}
+      {/*      comment="Some of our decorations, what do you think about them ?"*/}
+      {/*    />*/}
+      {/*  </div>*/}
+      {/*</section>*/}
     </div>
   );
 };

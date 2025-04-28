@@ -8,7 +8,6 @@ import {
 import CommonForm from "@/components/Common/Form";
 import { Helmet } from "react-helmet-async";
 import { useState } from "react";
-import JoinNewsLetterComponent from "@/components/Shopping-view/contact/JoinNewsLetter";
 import { contactFormControls } from "@/config";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/store/store";
@@ -188,7 +187,7 @@ const ShoppingContact = () => {
       <div className="flex flex-col md:flex-row items-center gap-4 xl:gap-12 justify-between p-8">
         {/* Left Side: Contact Information and Form */}
         <div className="w-full md:w-1/2 mb-8 md:mb-0">
-          <h1 className="text-4xl font-bold mb-4">Contact us📬️</h1>
+          <h1 className="text-4xl font-bold mb-4">Contact us 📬️</h1>
           <p className="text-gray-600 mb-4">
             Have questions? Fill out the form below and we'll get back to you
             within 24 hours.
@@ -247,8 +246,6 @@ const ShoppingContact = () => {
           />
         </div>
       </div>
-
-      <JoinNewsLetterComponent />
     </div>
   );
 };

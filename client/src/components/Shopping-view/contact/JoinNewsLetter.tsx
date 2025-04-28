@@ -39,7 +39,6 @@ const JoinNewsLetterComponent = () => {
       {/* Image Section */}
       <div className="w-full max-w-md lg:max-w-lg">
         <img
-          // src="/news-removebg-preview.png"
           src="/joinUs.svg"
           alt="Illustration of joining the newsletter"
           className="w-full h-auto object-contain"

@@ -218,7 +218,7 @@ const ShoppingHeader: React.FC = () => {
           </NavigationMenu>
           <NavigationMenu>
             <NavigationMenuList>
-              <NavMenuLink url="/shop/blog" text="Blog" />
+              <NavMenuLink url="/shop/quotes" text="Quotes" />
             </NavigationMenuList>
           </NavigationMenu>
           <NavigationMenu>
