@@ -23,6 +23,7 @@ import adminQuoteRequestRouter from './routes/admin/QuoteRequest.routes'
 import adminUserRouter from './routes/admin/user.routes';
 import cookieParser from 'cookie-parser';
 import helmet from 'helmet';
+import { exportUsersAsCSV } from './controllers/admin/exportUsersAsCSV';
 dotenv.config();
 const app = express();
 app.use(
@@ -60,6 +61,7 @@ app.use('/api/shop/contact',shopContactRouter)
 app.use('/api/shop/quote',shopQuoteRequestRouter)
 app.use('/api/admin/quotes',adminQuoteRequestRouter);
 app.use('/api/admin/users', adminUserRouter);
+app.use('/api/admin/users/export',exportUsersAsCSV)
 app.use(morgan('combined'));
 
 setupSwagger(app);

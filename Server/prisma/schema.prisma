@@ -77,7 +77,7 @@ type AddressInfo {
   phone      String
   notes      String?
 }
- 
+
 // Models
 model Product {
   id            String    @id @default(auto()) @map("_id") @db.ObjectId
@@ -109,7 +109,7 @@ model Article {
   createdAt   DateTime        @default(now())
   updatedAt   DateTime        @updatedAt
 
-  reviews      BlogReview[]
+  reviews BlogReview[]
 }
 
 model PendingUser {
@@ -142,14 +142,13 @@ model User {
   blogReviews    BlogReview[]
 }
 
-
 model ProductReview {
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
   userId    String
   userName  String
-  user      User     @relation(fields: [userId], references: [id])
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   productId String
-  product   Product  @relation(fields: [productId], references: [id])
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
   rating    Int
   content   String
   createdAt DateTime @default(now())
@@ -169,11 +168,10 @@ model BlogReview {
   updatedAt DateTime @updatedAt
 }
 
-
 model Order {
   id              String            @id @default(auto()) @map("_id") @db.ObjectId
   userId          String
-  user            User              @relation(fields: [userId], references: [id])
+  user            User              @relation(fields: [userId], references: [id], onDelete: Cascade)
   cartId          String
   cartItems       CartItemDetails[]
   addressInfo     AddressInfo
@@ -191,7 +189,7 @@ model Order {
 model Address {
   id         String   @id @default(auto()) @map("_id") @db.ObjectId
   userId     String
-  user       User     @relation(fields: [userId], references: [id])
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   address    String
   phone      String
   city       String
@@ -205,7 +203,7 @@ model Address {
 model Cart {
   id        String     @id @default(auto()) @map("_id") @db.ObjectId
   userId    String
-  user      User       @relation(fields: [userId], references: [id])
+  user      User       @relation(fields: [userId], references: [id], onDelete: Cascade)
   items     CartItem[]
   createdAt DateTime   @default(now())
   updatedAt DateTime   @updatedAt
@@ -223,7 +221,7 @@ model CartItem {
 model QuoteRequest {
   id              String      @id @default(auto()) @map("_id") @db.ObjectId
   userId          String
-  user            User        @relation(fields: [userId], references: [id])
+  user            User        @relation(fields: [userId], references: [id], onDelete: Cascade)
   eventDate       DateTime
   estimatedBudget Float
   adminResponse   String?

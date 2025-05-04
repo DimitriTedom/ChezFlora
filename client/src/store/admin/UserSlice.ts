@@ -57,6 +57,25 @@ const initialState: AdminUserState = {
     total: 0,
   },
 };
+export const downloadUsersCSV = async () => {
+  try {
+    const response = await axios.get(`${API_URL}admin/users/export`, {
+      responseType: "blob",
+      withCredentials: true
+    });
+
+    const url = window.URL.createObjectURL(new Blob([response.data]));
+    const link = document.createElement("a");
+    link.href = url;
+    link.setAttribute("download", "users.csv");
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+  } catch (error) {
+    console.error("Failed to download CSV", error);
+  }
+};
+
 export const adminCreateUser = createAsyncThunk<
   RegisterResponse,
   { name: string; email: string; password: string },

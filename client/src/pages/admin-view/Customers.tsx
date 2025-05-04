@@ -39,7 +39,7 @@ import {
   getAllUsers,
   updateUserRoles,
   deleteUsers,
-  adminCreateUser,
+  adminCreateUser, downloadUsersCSV,
 } from "@/store/admin/UserSlice";
 import { Role, UsersRole } from "@/store/authSlice";
 import { useCustomToast } from "@/hooks/useCustomToast";
@@ -140,7 +140,7 @@ const AdminCustomers = () => {
       });
     };
     fetchUsers();
-  }, []);
+  }, [selectedRole,searchTerm]);
 
   // Handle role change for a single user
   const handleRoleChange = async (userId: string, newRole: Role) => {
@@ -224,7 +224,6 @@ const AdminCustomers = () => {
       </div>
     );
   }
-
   return (
     <>
       <FormTitle
@@ -633,7 +632,7 @@ const AdminCustomers = () => {
 
           {/* Bulk Actions */}
           <div className="mt-4 flex justify-end gap-2">
-            <Button variant="outline">Export CSV</Button>
+            <Button variant="outline" onClick={downloadUsersCSV}>Export CSV</Button>
             <Button
               variant="destructive"
               onClick={handleBulkDelete}
