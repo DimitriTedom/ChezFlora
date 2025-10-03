@@ -2,16 +2,14 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import CommonForm from "@/components/Common/Form";
-// import { AiOutlineFacebook, AiOutlineTwitter } from "react-icons/ai";
-// import { FcGoogle } from "react-icons/fc";
 import FormTitle from "@/components/Common/FormTitle";
 import { registerFormControls } from "@/config";
 import { useDispatch } from "react-redux";
 import { initiateRegistrationUser } from "@/store/authSlice";
 import type { AppDispatch } from "@/store/store";
 import { useCustomToast } from "@/hooks/useCustomToast";
+import { validateEmail, validatePassword, validateName, sanitizeInput } from "@/config";
 import { Helmet } from "react-helmet-async";
-// Removed unused import: import ChezFloraLoader from "@/components/Common/ChezFloraLoader";
 
 // Define interface for form data and add index signature
 interface RegisterFormData extends Record<string, unknown> {
@@ -20,15 +18,7 @@ interface RegisterFormData extends Record<string, unknown> {
   password: string;
 }
 
-// interface SocialButton {
-//   content: string;
-//   icon: React.ReactNode;
-//   to: string;
-//   color?: string;
-// }
-
 const AuthRegister: React.FC = () => {
-  // Use the interface in useState
   const [formData, setFormData] = useState<RegisterFormData>({
     name: "",
     email: "",
@@ -36,49 +26,84 @@ const AuthRegister: React.FC = () => {
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [validationErrors, setValidationErrors] = useState<{ [key: string]: string }>({});
   const { showToast } = useCustomToast();
 
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
 
+  const validateForm = (): boolean => {
+    const errors: { [key: string]: string } = {};
+
+    // Validate name
+    if (!formData.name.trim()) {
+      errors.name = "Name is required";
+    } else if (!validateName(formData.name)) {
+      errors.name = "Name can only contain letters, spaces, hyphens, and apostrophes (2-50 characters)";
+    }
+
+    // Validate email
+    if (!formData.email.trim()) {
+      errors.email = "Email is required";
+    } else if (!validateEmail(formData.email)) {
+      errors.email = "Please enter a valid email address";
+    }
+
+    // Validate password
+    if (!formData.password) {
+      errors.password = "Password is required";
+    } else {
+      const passwordValidation = validatePassword(formData.password);
+      if (!passwordValidation.isValid) {
+        errors.password = passwordValidation.message;
+      }
+    }
+
+    setValidationErrors(errors);
+    return Object.keys(errors).length === 0;
+  };
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
     setError(null);
-    // Vérification basique des champs
-    if (!formData.name || !formData.email || !formData.password) {
-      setError("All fields are required");
+    setValidationErrors({});
+
+    if (!validateForm()) {
       setLoading(false);
       return;
     }
 
-    dispatch(initiateRegistrationUser(formData))
-      .unwrap()
-      .then((response) => {
-        // this response contains a json of succes boolean and succes message
-        if (response?.success) {
-          showToast({
-            message: response.message,
-            type: "success",
-            subtitle: "Redirecting to Verify OTP page...",
-            duration: 3000,
-          });
-          setTimeout(() => {
-            navigate(`/auth/complete/${formData.email}`);
-          }, 3000);
-        } else {
-          console.log("Registration failed: ", response.message);
-        }
-      })
-      .catch((err) => {
+    try {
+      // Sanitize inputs
+      const sanitizedData = {
+        name: sanitizeInput(formData.name),
+        email: formData.email.toLowerCase().trim(),
+        password: formData.password
+      };
+
+      const response = await dispatch(initiateRegistrationUser(sanitizedData)).unwrap();
+      
+      if (response?.success) {
         showToast({
-          message: err,
-          type: "error",
+          message: response.message,
+          type: "success",
+          subtitle: "Check your email for verification code",
           duration: 5000,
         });
-        setError(err || "Registration failed");
-      })
-      .finally(() => setLoading(false));
+        navigate(`/auth/complete/${sanitizedData.email}`);
+      }
+    } catch (err: any) {
+      const errorMessage = err || "Registration failed. Please try again.";
+      setError(errorMessage);
+      showToast({
+        message: errorMessage,
+        type: "error",
+        duration: 5000,
+      });
+    } finally {
+      setLoading(false);
+    }
   };
 
   // const socialButtons: SocialButton[] = [
@@ -195,6 +220,13 @@ const AuthRegister: React.FC = () => {
         />
         {/* Gestion des erreurs et du chargement */}
         {error && <p className="text-red-500 text-center mt-2">{error}</p>}
+        {Object.keys(validationErrors).length > 0 && (
+          <div className="mt-2">
+            {Object.entries(validationErrors).map(([field, message]) => (
+              <p key={field} className="text-red-500 text-sm">{message}</p>
+            ))}
+          </div>
+        )}
 
         {/* Lien vers la connexion */}
         <div className="mt-4 text-center">

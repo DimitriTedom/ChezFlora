@@ -21,9 +21,7 @@ router.get('/checkauth', authenticateUser, (req, res)=>{
             id:user.id,
             email:user.email,
             role:user.role,
-            name:user.name,
-            createdAt:user.createdAt,
-            updatedAt:user.updatedAt
+            name:user.name
         }
     })
 });

@@ -43,8 +43,8 @@ const NavMenuLink: React.FC<NavMenuLinkProps> = ({ url, text }) => (
     <NavLink
       to={url}
       className={({ isActive }) =>
-        `text-gray-700 hover:bg-pink-100 transition-colors py-2 px-4 rounded-md ${
-          isActive ? "bg-pink-100" : ""
+        `text-gray-700 hover:text-pink-600 hover:bg-pink-50 transition-all duration-300 py-2 px-4 rounded-lg font-medium ${
+          isActive ? "bg-pink-100 text-pink-600 shadow-sm" : ""
         }`
       }
     >
@@ -101,81 +101,77 @@ const ShoppingHeader: React.FC = () => {
   return (
     <div className="w-screen lg:mb-32 bg-opacity-95 overflow-x-hidden">
       {/* Mobile Header */}
-      <div className="w-full flex items-center justify-between border-b-pink-700 fixed top-0 z-[50] bg-opacity-50 transition-all duration-300 lg:hidden py-3 px-4 overflow-x-hidden backdrop-blur-md bg-white/30 shadow-md border-b border-white/40">
+      <div className="w-full flex items-center justify-between fixed top-0 z-[50] transition-all duration-300 lg:hidden py-4 px-4 overflow-x-hidden glass-effect shadow-lg border-b border-pink-200">
         <div className="hidden md:block">
           <Logo />
         </div>
         <Sheet>
           <SheetTrigger className="flex justify-center w-full">
-            <div className="flex items-center justify-between bg-opacity-50 bg-transparent bg-white shadow-lg rounded-full p-2 w-full md:w-[50%]">
-              <button className="mr-2 bg-white rounded-full p-2 flex items-center justify-center shadow-md">
-                <MagnifyingGlassIcon className="w-6 h-6 text-black" />
+            <div className="flex items-center justify-between glass-effect rounded-full p-3 w-full md:w-[60%] shadow-lg border border-pink-200">
+              <button className="mr-3 bg-gradient-to-r from-pink-400 to-rose-500 rounded-full p-2 flex items-center justify-center shadow-md hover:shadow-lg transition-all duration-300">
+                <MagnifyingGlassIcon className="w-5 h-5 text-white" />
               </button>
-              <div className="flex flex-col w-full md:w-[40rem] justify-center rounded-full">
+              <div className="flex flex-col w-full justify-center">
                 <Input
                   type="text"
                   value={searchValue}
                   onChange={(e) => setSearchValue(e.target.value)}
-                  placeholder="Store or Blogs ?"
-                  className="bg-white outline-none w-full text-gray-700 px-2 border-none shadow-none"
+                  placeholder="Search flowers..."
+                  className="bg-transparent outline-none w-full text-gray-700 px-2 border-none shadow-none placeholder:text-gray-500"
                 />
-                <div className="ml-4 text-gray-400 md:block">
+                <div className="ml-2 text-gray-400 text-xs md:block">
                   category • name • event
                 </div>
               </div>
-              <button className="bg-white rounded-full p-2 flex items-center justify-center shadow-md">
-                <CgOptions className="w-6 h-6 text-black" />
+              <button className="bg-gradient-to-r from-green-400 to-emerald-500 rounded-full p-2 flex items-center justify-center shadow-md hover:shadow-lg transition-all duration-300">
+                <CgOptions className="w-5 h-5 text-white" />
               </button>
             </div>
           </SheetTrigger>
-          <SheetContent side="top" className="h-screen overflow-y-auto">
+          <SheetContent side="top" className="h-screen overflow-y-auto flower-gradient">
             <div className="flex flex-col">
-              {/* <div className="relative z-10 h-[400px] w-full  overflow-hidden rounded-2xl">
-                <img
-                  src="/account2.jpg"
-                  alt="account"
-                  className="w-full h-full object-cover object-center rounded-2xl bg-red-300"
-                />
-              </div> */}
-
-              <div className="mx-auto mt-8  w-full">
-                <div className="flex flex-col rounded-lg border bg-background p-6 shadow-md w-full">
+              <div className="mx-auto mt-8 w-full">
+                <div className="flex flex-col rounded-2xl border bg-white bg-opacity-90 backdrop-blur-sm p-6 shadow-xl w-full border-pink-200">
                   <Tabs defaultValue="products" className="w-full">
-                    <TabsList className="rounded-xl grid grid-cols-2">
-                      <TabsTrigger value="products">Products</TabsTrigger>
-                      <TabsTrigger value="blogs">Blogs</TabsTrigger>
+                    <TabsList className="rounded-xl grid grid-cols-2 bg-pink-100">
+                      <TabsTrigger value="products" className="rounded-lg data-[state=active]:bg-white data-[state=active]:text-pink-600">Products</TabsTrigger>
+                      <TabsTrigger value="blogs" className="rounded-lg data-[state=active]:bg-white data-[state=active]:text-pink-600">Blogs</TabsTrigger>
                     </TabsList>
                     <TabsContent value="products">
                       <FormTitle
-                        title="Products ?"
-                        comment="Find your favorite products here"
+                        title="Find Beautiful Flowers"
+                        comment="Discover our amazing collection of fresh flowers"
                         snowStyle="items-start gap-1"
                       />
                       <div className="mt-5 relative">
-                        <SearchIcon className="w-6 h-6 text-black absolute top-2 right-3" />
+                        <SearchIcon className="w-6 h-6 text-pink-500 absolute top-3 right-4" />
                         <Input
                           value={productKeyword}
-                          className="rounded-full p-5 border-black"
-                          placeholder="Search Products..."
+                          className="rounded-xl p-4 border-pink-200 focus:border-pink-400 focus:ring-pink-300 bg-white"
+                          placeholder="Search beautiful flowers..."
                           onChange={(e) => setProductKeyword(e.target.value)}
                         />
                       </div>
                       {isLoading ? (
-                        <ChezFloraLoader />
-                      ) : searchResults.length === 0 ? (
                         <div className="flex justify-center items-center h-[300px]">
-                          <span className="text-3xl font-bold">
-                            No Results Found
-                          </span>
+                          <ChezFloraLoader />
+                        </div>
+                      ) : searchResults.length === 0 && productKeyword ? (
+                        <div className="flex flex-col justify-center items-center h-[300px] text-center">
+                          <svg className="w-16 h-16 text-gray-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                          </svg>
+                          <span className="text-2xl font-bold text-gray-600 mb-2">No Flowers Found</span>
+                          <span className="text-gray-500">Try searching with different keywords</span>
                         </div>
                       ) : (
-                        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4 py-8 px-4">
-                          {searchResults.map((product: Product) => (
+                        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-6 py-8">
+                          {searchResults.map((product: Product, index: number) => (
                             <UserProductCard
                               key={product.id}
                               product={product}
                               handleGetProductDetails={handleGetProductDetails}
-                              // handleAddToCart={handleAddToCart}
+                              index={index}
                             />
                           ))}
                         </div>
@@ -184,10 +180,17 @@ const ShoppingHeader: React.FC = () => {
 
                     <TabsContent value="blogs">
                       <FormTitle
-                        title="Blogs ?"
-                        comment="Find your favorite Blogs here"
+                        title="Flower Care Blogs"
+                        comment="Learn how to care for your beautiful flowers"
                         snowStyle="items-start gap-1"
                       />
+                      <div className="flex flex-col justify-center items-center h-[300px] text-center">
+                        <svg className="w-16 h-16 text-pink-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                        </svg>
+                        <span className="text-2xl font-bold text-gray-600 mb-2">Coming Soon</span>
+                        <span className="text-gray-500">Flower care blogs are on the way!</span>
+                      </div>
                     </TabsContent>
                   </Tabs>
                 </div>
@@ -201,11 +204,11 @@ const ShoppingHeader: React.FC = () => {
       </div>
 
       {/* Header for Larger Screens */}
-      <div className="lg:flex w-screen items-center py-5 justify-between border-b-3 border-b-gray-700 border px-[6rem] hidden fixed bg-white bg-opacity-85 lg:mb-8 backdrop-blur-md bg-white/30 shadow-md border-b border-white/40">
+      <div className="lg:flex w-screen items-center py-6 justify-between px-[6rem] hidden fixed glass-effect shadow-lg border-b border-pink-200 z-[50]">
         <Link to="/shop/home">
           <Logo />
         </Link>
-        <nav className="hidden md:hidden lg:flex space-x-6 text-xl">
+        <nav className="hidden md:hidden lg:flex space-x-8 text-lg">
           <NavigationMenu>
             <NavigationMenuList>
               <NavMenuLink url="/shop/home" text="Home" />
@@ -232,7 +235,7 @@ const ShoppingHeader: React.FC = () => {
             </NavigationMenuList>
           </NavigationMenu>
         </nav>
-        <div className="hidden lg:flex lg:items-center lg:space-x-4">
+        <div className="hidden lg:flex lg:items-center lg:space-x-6">
           {isAuthenticated ? (
             <Sheet
               open={openCartSheet}
@@ -243,12 +246,12 @@ const ShoppingHeader: React.FC = () => {
                   onClick={() => setOpenCartSheet(true)}
                   variant="outline"
                   size="icon"
-                  className="relative"
+                  className="relative hover:bg-pink-50 hover:border-pink-300 transition-all duration-300 border-pink-200"
                 >
                   <AiOutlineShoppingCart className="headerIcons" />
                   <span
-                    className={`absolute -top-2 -right-2 hidden items-center justify-center px-2 py-1 text-xs font-bold leading-none text-white bg-pink-400 rounded-full ${
-                      cart && cart?.items.length > 0 ? "inline-flex lg:block" : " "
+                    className={`absolute -top-2 -right-2 items-center justify-center px-2 py-1 text-xs font-bold leading-none text-white bg-gradient-to-r from-pink-500 to-rose-500 rounded-full shadow-lg ${
+                      cart && cart?.items.length > 0 ? "inline-flex lg:flex" : "hidden"
                     }`}
                   >
                     {cart?.items.length}
@@ -268,20 +271,20 @@ const ShoppingHeader: React.FC = () => {
               onClick={() => navigate('/auth/login?returnTo=' + encodeURIComponent('/shop/checkout'))}
               variant="outline"
               size="icon"
-              className="relative"
+              className="relative hover:bg-pink-50 hover:border-pink-300 transition-all duration-300 border-pink-200"
             >
               <AiOutlineShoppingCart className="headerIcons" />
               <span className="sr-only">Login to view cart</span>
             </Button>
           )}
-          <span className="w-[2px] h-8 bg-pink-400"></span>
+          <div className="w-[2px] h-8 bg-gradient-to-b from-pink-400 to-rose-500 rounded-full"></div>
           <Link to="/shop/search">
-            <Button variant="outline" size="icon">
+            <Button variant="outline" size="icon" className="hover:bg-pink-50 hover:border-pink-300 transition-all duration-300 border-pink-200">
               <BsSearch className="headerIcons" />
               <span className="sr-only">Search</span>
             </Button>
           </Link>
-          <span className="w-[2px] h-8 bg-pink-400"></span>
+          <div className="w-[2px] h-8 bg-gradient-to-b from-pink-400 to-rose-500 rounded-full"></div>
           {isAuthenticated ? <AvatarCustum user={user} /> : <SignInButton />}
         </div>
       </div>

@@ -193,43 +193,51 @@ const ShoppingHome = () => {
 
       <div className="w-48 h-48 rounded-full bg-pink-100 blur-3xl absolute z-[-2] left-[10%] lg:w-60 lg:h-60"></div>
       {/* Hero Section */}
-      <section className="w-full flex flex-col lg:flex-row lg:items-center lg:min-h-screen relative py-16 lg:py-0 sm:mt-16">
-        <div className="flex flex-col gap-6 lg:w-[55%] xl:w-[50%] px-4 lg:pl-16 xl:pl-32">
-          <h1 className="text-3xl lg:text-5xl xl:text-6xl font-bold font-Poppins leading-tight lg:leading-snug">
-            Decorate your life with nature
-          </h1>
-          <p className="text-gray-700 text-lg lg:text-xl xl:text-2xl max-w-3xl leading-relaxed">
-            Let nature inspire you to cultivate a lifestyle that is both
-            beautiful and harmonious with the world around you and take time to
-            appreciate the changing seasons.
-          </p>
-          <div className="relative max-w-fit">
-            <FaSearchengin className="absolute top-1/2 left-4 transform -translate-y-1/2 text-white w-6 h-6" />
+      <section className="w-full flex flex-col lg:flex-row lg:items-center lg:min-h-screen relative py-16 lg:py-0 sm:mt-16 overflow-hidden">
+        {/* Floating background elements */}
+        <div className="absolute top-10 left-10 w-32 h-32 bg-pink-200 rounded-full opacity-20 float animate-pulse"></div>
+        <div className="absolute top-32 right-20 w-24 h-24 bg-green-200 rounded-full opacity-20 float" style={{animationDelay: '1s'}}></div>
+        <div className="absolute bottom-20 left-1/4 w-16 h-16 bg-purple-200 rounded-full opacity-20 float" style={{animationDelay: '2s'}}></div>
+        
+        <div className="flex flex-col gap-8 lg:w-[55%] xl:w-[50%] px-4 lg:pl-16 xl:pl-32 z-10">
+          <div className="space-y-6">
+            <h1 className="text-4xl lg:text-6xl xl:text-7xl font-bold font-playfair leading-tight lg:leading-snug gradient-text">
+              Decorate your life with nature
+            </h1>
+            <p className="text-gray-700 text-lg lg:text-xl xl:text-2xl max-w-3xl leading-relaxed opacity-90">
+              Let nature inspire you to cultivate a lifestyle that is both
+              beautiful and harmonious with the world around you and take time to
+              appreciate the changing seasons.
+            </p>
+          </div>
+          
+          <div className="relative max-w-fit group">
+            <FaSearchengin className="absolute top-1/2 left-5 transform -translate-y-1/2 text-white w-6 h-6 z-10" />
             <Link to="/shop/search">
-            <Button className="bg-pink-300 rounded-full px-8 py-4 pl-12 text-lg hover:bg-pink-400 transition-colors">
-              Start your search
-            </Button>
+              <Button className="btn-flower pl-14 py-6 text-lg font-semibold group-hover:scale-105 transition-all duration-300">
+                Start your search
+              </Button>
             </Link>
           </div>
-          <div className="grid grid-cols-3 gap-4 mt-8 lg:mt-12 max-w-2xl">
+          
+          <div className="grid grid-cols-3 gap-6 mt-12 lg:mt-16 max-w-2xl">
             {hereoStats.map((item, index) => (
               <div
                 key={index}
-                className="flex flex-col justify-center p-4 border-l-2 border-gray-200"
+                className="flex flex-col justify-center p-6 border-l-4 border-gradient-to-b from-pink-400 to-rose-500 bg-white bg-opacity-50 backdrop-blur-sm rounded-r-lg shadow-lg hover:shadow-xl transition-all duration-300"
               >
                 <h2 className="flex items-center gap-2">
-                  <span className="text-3xl lg:text-4xl xl:text-5xl font-medium">
+                  <span className="text-3xl lg:text-4xl xl:text-5xl font-bold text-gray-800">
                     {item.value}
                   </span>
                   <Plus className="w-6 h-6 text-pink-500" />
                 </h2>
-                <span className="text-gray-500 mt-2 text-sm lg:text-base">
+                <span className="text-gray-600 mt-2 text-sm lg:text-base font-medium">
                   {item.title}
                 </span>
               </div>
             ))}
           </div>
-          <div className=" w-64 h-64 rounded-full bg-green-100 blur-3xl absolute -z-10 top-64 right-0"></div>
         </div>
 
         <div className="relative lg:absolute right-0 top-1/2 lg:-translate-y-1/2 w-full lg:w-[45%] xl:w-[40%] mt-12 lg:mt-0 px-4 lg:px-0">
@@ -243,63 +251,72 @@ const ShoppingHome = () => {
             <CarouselContent>
               {images.map((img, index) => (
                 <CarouselItem key={index}>
-                  <div className="relative rounded-[2rem] overflow-hidden">
+                  <div className="relative rounded-[2rem] overflow-hidden shadow-2xl flower-shadow">
                     <img
                       src={img}
-                      alt={`Flower ${index + 1}`}
-                      className="object-cover w-full h-[400px] lg:h-[600px] xl:h-[700px] "
+                      alt={`Beautiful flower arrangement ${index + 1}`}
+                      className="object-cover w-full h-[400px] lg:h-[600px] xl:h-[700px] transition-transform duration-700 hover:scale-110"
                     />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
                   </div>
                 </CarouselItem>
               ))}
             </CarouselContent>
 
-            {/* Navigation Arrows */}
+            {/* Enhanced Navigation Arrows */}
             <div className="absolute top-1/2 -left-[5%] -translate-y-1/2 w-full px-4 flex justify-between">
               <Button
                 variant="ghost"
                 size="icon"
                 onClick={handlePrev}
-                className="h-12 w-12 rounded-full bg-white/30 backdrop-blur-sm hover:bg-white/50 shadow-lg hover:shadow-xl transition-all"
+                className="h-14 w-14 rounded-full glass-effect hover:bg-white/60 shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-110"
               >
-                <FaArrowLeft className="h-6 w-6 text-gray-800" />
+                <FaArrowLeft className="h-6 w-6 text-gray-700" />
               </Button>
               <Button
                 variant="ghost"
                 size="icon"
                 onClick={handleNext}
-                className="h-12 w-12 rounded-full bg-white/30 backdrop-blur-sm hover:bg-white/50 shadow-lg hover:shadow-xl transition-all"
+                className="h-14 w-14 rounded-full glass-effect hover:bg-white/60 shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-110"
               >
-                <FaArrowRight className="h-6 w-6 text-gray-800" />
+                <FaArrowRight className="h-6 w-6 text-gray-700" />
               </Button>
             </div>
           </Carousel>
         </div>
       </section>
-      {/* I will implememt the shop by section here */}
-      <section className="w-full py-16 px-4 sm:px-6 lg:px-8 bg-white">
+      {/* Shop by Category and Events */}
+      <section className="w-full py-20 px-4 sm:px-6 lg:px-8 flower-gradient relative overflow-hidden">
+        {/* Background decorations */}
+        <div className="absolute top-20 right-10 w-64 h-64 bg-pink-200 rounded-full opacity-20 blur-3xl animate-pulse"></div>
+        <div className="absolute bottom-20 left-10 w-48 h-48 bg-green-200 rounded-full opacity-20 blur-3xl" style={{animationDelay: '1s'}}></div>
+        
         <div className="max-w-7xl mx-auto">
           {/* Categories Section */}
-          <div className="w-48 h-48 rounded-full bg-green-200 blur-3xl absolute z-[-1] right-[10%] lg:w-60 lg:h-60"></div>
-          <div className="mb-16">
-            <h2 className="text-3xl font-bold text-center mb-12">
-              Shop By Category
-            </h2>
-            <div className=" w-64 h-64 rounded-full bg-green-200 blur-3xl absolute -z-10 bottom-64 right-0"></div>
-            <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-4">
+          <div className="mb-20">
+            <div className="text-center mb-12">
+              <h2 className="text-4xl lg:text-5xl font-bold font-playfair text-gray-800 mb-4">
+                Shop By Category
+              </h2>
+              <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+                Discover our beautiful collection organized by type
+              </p>
+            </div>
+            
+            <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-6">
               {filterCategory.map((category) => (
                 <Card
-                  className="hover:shadow-lg hover:shadow-green-300 transition-shadow duration-300 h-full"
+                  className="group hover:shadow-2xl hover:shadow-green-300/50 transition-all duration-500 h-full cursor-pointer border-green-200 bg-white/80 backdrop-blur-sm card-hover"
                   key={category.id}
                   onClick={() =>
                     handleNavigateToStorePage(category.id, "category")
                   }
                 >
-                  <CardHeader className="flex flex-col items-center">
-                    <div className="p-3 rounded-full bg-green-50 text-green-600 mb-4">
+                  <CardHeader className="flex flex-col items-center p-8">
+                    <div className="p-4 rounded-full bg-gradient-to-br from-green-100 to-green-200 text-green-600 mb-6 group-hover:scale-110 transition-transform duration-300 shadow-lg">
                       {category.icon}
                     </div>
-                    <CardTitle className="text-lg text-center">
+                    <CardTitle className="text-lg text-center font-semibold text-gray-800 group-hover:text-green-600 transition-colors">
                       {category.label}
                     </CardTitle>
                   </CardHeader>
@@ -307,23 +324,30 @@ const ShoppingHome = () => {
               ))}
             </div>
           </div>
-          <div className="w-48 h-48 rounded-full bg-pink-200 blur-3xl absolute z-[-1] left-[10%] lg:w-60 lg:h-60"></div>
+          
           {/* Events Section */}
           <div>
-            <h2 className="text-3xl font-bold text-center mb-12">
-              Shop By Occasion
-            </h2>
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+            <div className="text-center mb-12">
+              <h2 className="text-4xl lg:text-5xl font-bold font-playfair text-gray-800 mb-4">
+                Shop By Occasion
+              </h2>
+              <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+                Perfect flowers for every special moment
+              </p>
+            </div>
+            
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-6">
               {filterEvent.map((event) => (
                 <Card
-                  className="hover:shadow-lg hover:shadow-pink-300 transition-shadow duration-300 h-full"
+                  key={event.id}
+                  className="group hover:shadow-2xl hover:shadow-pink-300/50 transition-all duration-500 h-full cursor-pointer border-pink-200 bg-white/80 backdrop-blur-sm card-hover"
                   onClick={() => handleNavigateToStorePage(event.id, "event")}
                 >
-                  <CardHeader className="flex flex-col items-center">
-                    <div className="p-3 rounded-full bg-pink-50 text-pink-600 mb-4">
+                  <CardHeader className="flex flex-col items-center p-6">
+                    <div className="p-3 rounded-full bg-gradient-to-br from-pink-100 to-pink-200 text-pink-600 mb-4 group-hover:scale-110 transition-transform duration-300 shadow-lg">
                       {event.icon}
                     </div>
-                    <CardTitle className="text-lg text-center">
+                    <CardTitle className="text-sm text-center font-semibold text-gray-800 group-hover:text-pink-600 transition-colors">
                       {event.label}
                     </CardTitle>
                   </CardHeader>
@@ -334,70 +358,105 @@ const ShoppingHome = () => {
         </div>
       </section>
       {/* Featured Products */}
-      <section className="flex flex-col items-center gap-8 mt-[4rem]  px-[3rem] py-[5rem] rounded-3xl relative overflow-hidden">
-        <div>
+      <section className="flex flex-col items-center gap-12 mt-20 px-8 py-20 bg-white relative overflow-hidden">
+        {/* Background decorative elements */}
+        <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-bl from-pink-100 to-transparent rounded-full opacity-50"></div>
+        <div className="absolute bottom-0 left-0 w-80 h-80 bg-gradient-to-tr from-green-100 to-transparent rounded-full opacity-50"></div>
+        
+        <div className="text-center max-w-4xl">
           <FormTitle
             title="Featured Products"
-            comment={`Whether you're offering an elegant bouquet, beautifying your home or celebrating a special occasion, our featured products are carefully chosen for their freshness.`}
+            comment="Whether you're offering an elegant bouquet, beautifying your home or celebrating a special occasion, our featured products are carefully chosen for their freshness, beauty, and lasting quality."
           />
         </div>
+        
+        {/* Decorative flower motif */}
         <img
           src="/motifFlower.png"
-          alt="motifFlower"
-          className="absolute z-20 scale-50 top-[-9%] right-[-50%] md:scale-75 opacity-70 rotate-180 xl:right-[-10%]"
+          alt="Decorative flower motif"
+          className="absolute z-10 scale-50 top-[-5%] right-[-30%] md:scale-75 opacity-30 rotate-180 xl:right-[-5%] pointer-events-none"
         />
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 md:gap-6 lg:gap-8 mt-8 max-w-full">
+        
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6 lg:gap-8 mt-12 max-w-full w-full">
           {productList && productList.length > 0 ? (
-            productList.map((product: Product) => (
+            productList.slice(0, 10).map((product: Product, index: number) => (
               <UserProductCard
                 key={product.id}
                 product={product}
                 handleGetProductDetails={handleGetProductDetails}
+                index={index}
               />
             ))
           ) : (
-            <div className="col-span-full flex flex-col items-center justify-center py-12">
+            <div className="col-span-full flex flex-col items-center justify-center py-16">
               <img 
                 src="/NoProducts.svg" 
                 alt="No products found" 
-                className="w-32 h-32 md:w-48 md:h-48 opacity-50 mb-4"
+                className="w-32 h-32 md:w-48 md:h-48 opacity-50 mb-6"
               />
-              <h1 className="text-lg md:text-xl text-gray-500 font-medium">No items found</h1>
+              <h1 className="text-xl md:text-2xl text-gray-500 font-medium mb-2">No items found</h1>
+              <p className="text-gray-400">Please check back later for new products</p>
             </div>
           )}
         </div>
-        <Link to="/shop/store">
-          <Button className="flex items-center justify-center rounded-full text-sm lg:text-xl px-[1rem] py-4 bg-pink-200 border border-solid border-pink-300 hover:bg-pink-300 hover:shadow-md duration-300 cursor-pointer">
+        
+        <Link to="/shop/store" className="mt-8">
+          <Button className="group btn-flower px-8 py-4 text-lg font-semibold hover:scale-105 transition-all duration-300 shadow-xl">
             <Spinner />
-            <span className="ml-4">Show me more</span>
+            <span className="ml-3">Explore All Products</span>
+            <svg className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+            </svg>
           </Button>
         </Link>
       </section>
 
       {/* Testimonials */}
-      <section className="flex flex-col items-center gap-8 mt-[4rem] bg-rose-100 p-[3rem] rounded-3xl relative overflow-hidden">
-        <div>
+      <section className="flex flex-col items-center gap-12 mt-20 flower-gradient p-12 lg:p-20 relative overflow-hidden">
+        {/* Background decorative elements */}
+        <div className="absolute top-10 left-10 w-72 h-72 bg-gradient-to-br from-rose-200 to-pink-200 rounded-full opacity-30 blur-3xl"></div>
+        <div className="absolute bottom-10 right-10 w-64 h-64 bg-gradient-to-tl from-purple-200 to-pink-200 rounded-full opacity-30 blur-3xl"></div>
+        
+        <div className="text-center max-w-4xl z-10">
           <FormTitle
-            title="Testimonials"
-            comment="What our customers say about us"
+            title="What Our Customers Say"
+            comment="Discover why thousands of customers trust ChezFlora for their floral needs. Read their beautiful stories and experiences."
           />
         </div>
+        
+        {/* Decorative flower motifs */}
         <img
           src="/motifFloral-removebg-preview.png"
-          alt="motifFlower"
-          className="absolute scale-50 top-[-9%] right-[-50%] md:scale-75 opacity-70 rotate-180  xl:right-[-10%]"
+          alt="Decorative floral motif"
+          className="absolute scale-50 top-[-5%] right-[-30%] md:scale-75 opacity-40 rotate-180 xl:right-[-5%] pointer-events-none"
         />
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mt-8 max-w-full">
-          {testimonials.map((testimonial, index) => (
-            <TestimonialCard key={index} {...testimonial} />
-          ))}
-        </div>
-
         <img
           src="/ProduitEnVedeteFlower-removebg-preview.png"
-          alt="motifFlower2"
-          className="absolute scale-50 bottom-[-20%] left-[-50%] md:scale-75 opacity-80  xl:left-[-20%]"
+          alt="Decorative flower motif"
+          className="absolute scale-50 bottom-[-10%] left-[-30%] md:scale-75 opacity-40 xl:left-[-10%] pointer-events-none"
         />
+        
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 mt-12 max-w-full w-full z-10">
+          {testimonials.map((testimonial, index) => (
+            <div key={index} className="group">
+              <TestimonialCard {...testimonial} />
+            </div>
+          ))}
+        </div>
+        
+        <div className="mt-12 text-center z-10">
+          <p className="text-lg text-gray-600 mb-6">Join thousands of happy customers</p>
+          <div className="flex items-center justify-center space-x-2">
+            <div className="flex">
+              {[...Array(5)].map((_, i) => (
+                <svg key={i} className="w-6 h-6 text-yellow-400 fill-current" viewBox="0 0 20 20">
+                  <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                </svg>
+              ))}
+            </div>
+            <span className="text-lg font-semibold text-gray-700">4.8/5 from 1000+ reviews</span>
+          </div>
+        </div>
       </section>
 
       {/* Blog */}

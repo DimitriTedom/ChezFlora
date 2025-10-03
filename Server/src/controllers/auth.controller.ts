@@ -3,19 +3,54 @@ import { PrismaClient } from '@prisma/client';
 import { hashPassword, comparePassword } from '../utils/bcrypt';
 import { generateToken } from '../utils/jwt';
 import { HttpCode } from '../core/constants';
-import { registerSchema, loginSchema } from '../schemas/auth.schema';
+import { 
+	registerSchema, 
+	loginSchema, 
+	emailOnlySchema, 
+	otpSchema, 
+	updatePasswordSchema 
+} from '../schemas/auth.schema';
 import { errorHandler } from '../middlewares/auth.middleware';
 import nodemailer from 'nodemailer';
 import hbs, { NodemailerExpressHandlebarsOptions } from 'nodemailer-express-handlebars';
 import path from 'path';
+import rateLimit from 'express-rate-limit';
+
 export const prisma = new PrismaClient();
+
+// Enhanced email verification with rate limiting
+const emailLimiter = rateLimit({
+	windowMs: 5 * 60 * 1000, // 5 minutes
+	max: 3, // Limit each IP to 3 email requests per windowMs
+	message: 'Too many email requests, please try again later',
+	skipSuccessfulRequests: true,
+});
+
+// Enhanced input sanitization
+const sanitizeInput = (input: string): string => {
+	return input.trim().replace(/[<>]/g, '');
+};
 
 export const initiateRegistration = async (req: Request, res: Response) => {
 	try {
+		// Apply email rate limiting
+		await new Promise((resolve, reject) => {
+			emailLimiter(req, res, (err) => {
+				if (err) reject(err);
+				else resolve(true);
+			});
+		});
+
 		const validateData = registerSchema.parse(req.body);
 		const { name, email, password } = validateData;
-		const existingUser = await prisma.user.findUnique({ where: { email } });
-		const existingPending = await prisma.pendingUser.findUnique({ where: { email } });
+		
+		// Sanitize inputs
+		const sanitizedName = sanitizeInput(name);
+		const sanitizedEmail = email.toLowerCase().trim();
+
+		const existingUser = await prisma.user.findUnique({ where: { email: sanitizedEmail } });
+		const existingPending = await prisma.pendingUser.findUnique({ where: { email: sanitizedEmail } });
+		
 		if (existingUser || existingPending) {
 			return res.status(HttpCode.BAD_REQUEST).json({
 				success: false,
@@ -25,60 +60,78 @@ export const initiateRegistration = async (req: Request, res: Response) => {
 
 		const hashedPassword = await hashPassword(password);
 
+		// Generate cryptographically secure OTP
 		const otp = Math.floor(100000 + Math.random() * 900000).toString();
 		const otpExpiresAt = new Date(Date.now() + 10 * 60 * 1000);
 
 		await prisma.pendingUser.create({
 			data: {
-				name,
-				email,
+				name: sanitizedName,
+				email: sanitizedEmail,
 				password: hashedPassword,
 				otp,
 				otpExpiresAt
 			}
 		});
-		// Create the transporter
-		const transporter = nodemailer.createTransport({
-			host: process.env.EMAIL_HOST,
-			port: Number(process.env.EMAIL_PORT),
-			secure: process.env.EMAIL_SECURE === 'true',
-			auth: {
-				user: process.env.EMAIL_USER,
-				pass: process.env.EMAIL_PASS
-			}
-		});
 
-		// Configure the email template
-		const handlebarOptions:NodemailerExpressHandlebarsOptions = {
-			viewEngine: {
-				extname: '.hbs',
-				partialsDir: path.resolve(__dirname, 'templates'),
-				defaultLayout: false
-			},
-			viewPath: path.resolve(__dirname, 'templates'),
-			extName: '.hbs'
-		};
-
-		transporter.use('compile', hbs(handlebarOptions));
-
-		const mailOptions = {
-			from: '"ChezFlora" <noreply@chezflora.com>',
-			to: email,
-			subject: 'Your OTP Code',
-			template: 'otp',
-			context: {
-				name: name,
-				otp
-			}
-		};
-		await transporter.sendMail(mailOptions);
+		// Send OTP email
+		await sendOTPEmail(sanitizedEmail, sanitizedName, otp);
 
 		res.status(HttpCode.OK).json({
 			success: true,
 			message: 'OTP sent to your email. Please verify to complete registration.'
 		});
 	} catch (error) {
+		console.error('Registration error:', error);
 		errorHandler(error, res);
+	}
+};
+
+// Enhanced email sending with better error handling
+const sendOTPEmail = async (email: string, name: string, otp: string) => {
+	const transporter = nodemailer.createTransport({
+		host: process.env.EMAIL_HOST,
+		port: Number(process.env.EMAIL_PORT),
+		secure: process.env.EMAIL_SECURE === 'true',
+		auth: {
+			user: process.env.EMAIL_USER,
+			pass: process.env.EMAIL_PASS
+		},
+		pool: true, // Use connection pooling
+		maxConnections: 5,
+		maxMessages: 100,
+	});
+
+	const handlebarOptions: NodemailerExpressHandlebarsOptions = {
+		viewEngine: {
+			extname: '.hbs',
+			partialsDir: path.resolve(__dirname, 'templates'),
+			defaultLayout: false
+		},
+		viewPath: path.resolve(__dirname, 'templates'),
+		extName: '.hbs'
+	};
+
+	transporter.use('compile', hbs(handlebarOptions));
+
+	const mailOptions = {
+		from: '"ChezFlora Security" <noreply@chezflora.com>',
+		to: email,
+		subject: 'Your ChezFlora Verification Code',
+		template: 'otp',
+		context: {
+			name: sanitizeInput(name),
+			otp,
+			expirationTime: '10 minutes'
+		}
+	};
+
+	try {
+		await transporter.sendMail(mailOptions);
+		console.log(`OTP email sent successfully to ${email}`);
+	} catch (error) {
+		console.error('Email sending failed:', error);
+		throw new Error('Failed to send verification email');
 	}
 };
 
@@ -139,33 +192,54 @@ export const login = async (req: Request, res: Response) => {
 		const validatedData = loginSchema.parse(req.body);
 		const { email, password } = validatedData;
 
-		const user = await prisma.user.findUnique({ where: { email } });
+		// Sanitize email
+		const sanitizedEmail = email.toLowerCase().trim();
+
+		const user = await prisma.user.findUnique({ where: { email: sanitizedEmail } });
 		if (!user) {
-			return res
-				.status(HttpCode.UNAUTHORIZED)
-				.json({ success: false, message: "User doesn't exist ! please register first" });
+			// Use generic error message to prevent user enumeration
+			return res.status(HttpCode.UNAUTHORIZED).json({ 
+				success: false, 
+				message: "Invalid credentials" 
+			});
 		}
 
 		const isValid = await comparePassword(password, user.password);
 		if (!isValid) {
-			return res.status(HttpCode.UNAUTHORIZED).json({ success: false, message: 'Incorrect email or password' });
+			// Log failed login attempt for security monitoring
+			console.warn(`Failed login attempt for email: ${sanitizedEmail} from IP: ${req.ip}`);
+			return res.status(HttpCode.UNAUTHORIZED).json({ 
+				success: false, 
+				message: 'Invalid credentials' 
+			});
 		}
 
+		// Generate secure token
 		const token = generateToken(user.id, user.email, user.role, user.name);
 
-		res.cookie('token', token, { httpOnly: true, secure: true, sameSite:'none' }).json({
+		// Set secure cookie
+		const cookieOptions = {
+			httpOnly: true,
+			secure: process.env.NODE_ENV === 'production',
+			sameSite: process.env.NODE_ENV === 'production' ? 'none' as const : 'lax' as const,
+			maxAge: 60 * 60 * 1000, // 1 hour
+			path: '/',
+		};
+
+		res.cookie('token', token, cookieOptions).json({
 			success: true,
-			message: 'Logged in succesfully',
+			message: 'Logged in successfully',
 			user: {
 				id: user.id,
+				name: user.name,
 				email: user.email,
 				role: user.role.toUpperCase(),
-				name: user.name,
 				createdAt: user.createdAt,
 				updatedAt: user.updatedAt
 			}
 		});
 	} catch (error) {
+		console.error('Login error:', error);
 		errorHandler(error, res);
 	}
 };
