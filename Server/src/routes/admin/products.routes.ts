@@ -5,7 +5,8 @@ import {
 	addProduct,
 	fetchAllProducts,
 	deleteProducts,
-	editProducts
+	editProducts,
+	deleteImageFromCloudinary
 } from '../../controllers/admin/products.controller';
 import { upload } from '../../Helpers/cloudinary';
 
@@ -16,5 +17,6 @@ router.post('/add', addProduct);
 router.put('/edit/:id', editProducts);
 router.get('/get', fetchAllProducts);
 router.delete('/delete/:id', deleteProducts);
+router.delete('/delete-image', deleteImageFromCloudinary);
 
 export default router;

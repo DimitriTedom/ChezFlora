@@ -1,6 +1,6 @@
 // pages/LoginPage.tsx
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import CommonForm from "@/components/Common/Form";
 // import { AiOutlineFacebook, AiOutlineTwitter } from "react-icons/ai";
 // import { FcGoogle } from "react-icons/fc";
@@ -36,6 +36,9 @@ const AuthLogin: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const { showToast } = useCustomToast();
   const dispatch = useDispatch<AppDispatch>();
+  const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const returnTo = searchParams.get('returnTo');
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -50,10 +53,19 @@ const AuthLogin: React.FC = () => {
         showToast({
           message: response.message,
           type: "success",
-          subtitle: "Redirecting to home page...",
+          subtitle: "Redirecting...",
           duration: 3000,
         });
-        // setTimeout(() => navigate("/shop/home"), 3000);
+        
+        // Redirect to return URL or default location
+        setTimeout(() => {
+          if (returnTo) {
+            navigate(returnTo);
+          } else {
+            // Default redirect based on user role
+            navigate("/shop/home");
+          }
+        }, 1000);
       } else {
         showToast({
           message: response.message,

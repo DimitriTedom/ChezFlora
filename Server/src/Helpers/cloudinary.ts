@@ -26,5 +26,19 @@ export const upload = multer({
 // Upload de l'image sans transformation
 export const uploadToCloudinary = async (file: Express.Multer.File) => {
   const dataUri = `data:${file.mimetype};base64,${file.buffer.toString('base64')}`;
-  return await cloudinary.uploader.upload(dataUri, { resource_type: 'image' });
+  return await cloudinary.uploader.upload(dataUri, { 
+    resource_type: 'image',
+    folder: 'chezflora/products' // Organize uploads in folders
+  });
+};
+
+// Delete image from Cloudinary
+export const deleteFromCloudinary = async (publicId: string) => {
+  try {
+    const result = await cloudinary.uploader.destroy(publicId);
+    return result;
+  } catch (error) {
+    console.error('Error deleting image from Cloudinary:', error);
+    throw error;
+  }
 };

@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { uploadToCloudinary } from '../../Helpers/cloudinary';
+import { uploadToCloudinary, deleteFromCloudinary } from '../../Helpers/cloudinary';
 import { HttpCode } from '../../core/constants';
 import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
@@ -173,6 +173,42 @@ export const deleteProducts = async (req: Request, res: Response) => {
 		res.status(500).json({
 			success: false,
 			message: 'An error occurred'
+		});
+	}
+};
+
+// DELETE IMAGE FROM CLOUDINARY
+export const deleteImageFromCloudinary = async (req: Request, res: Response) => {
+	try {
+		const { publicId } = req.body;
+
+		if (!publicId) {
+			return res.status(400).json({
+				success: false,
+				message: 'Public ID is required'
+			});
+		}
+
+		const result = await deleteFromCloudinary(publicId);
+
+		if (result.result === 'ok') {
+			res.status(200).json({
+				success: true,
+				message: 'Image deleted successfully',
+				data: result
+			});
+		} else {
+			res.status(400).json({
+				success: false,
+				message: 'Failed to delete image',
+				data: result
+			});
+		}
+	} catch (error) {
+		console.error('Error deleting image:', error);
+		res.status(500).json({
+			success: false,
+			message: 'An error occurred while deleting image'
 		});
 	}
 };

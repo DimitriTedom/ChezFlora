@@ -72,8 +72,10 @@ const HeaderSm: React.FC = () => {
   const dispactch = useDispatch<AppDispatch>();
   const { showToast } = useCustomToast();
   useEffect(() => {
-    dispactch(fetchCartItems(user?.id));
-  }, [dispactch, user]);
+    if (user?.id && isAuthenticated) {
+      dispactch(fetchCartItems(user.id));
+    }
+  }, [dispactch, user?.id, isAuthenticated]);
 
   const navItems: NavProps[] = [
     { title: "Home", icon: AiFillHome, url: "/shop/home" },
@@ -248,25 +250,37 @@ const HeaderSm: React.FC = () => {
             <NavigationMenu key={index}>
               <NavigationMenuList className="flex justify-around w-full">
                 <NavigationMenuItem>
-                  <Sheet
-                    open={openCartSheet}
-                    onOpenChange={() => setOpenCartSheet(!openCartSheet)}
-                  >
-                    <SheetTrigger asChild>
-                      <button className="flex flex-col items-center text-gray-600 space-y-1 transition-colors p-2 rounded-md">
-                        <item.icon className="text-2xl" />
-                        <span className="text-xs font-semibold">
-                          {item.title}
-                        </span>
-                      </button>
-                    </SheetTrigger>
-                    <SheetContent className="py-8 px-2 flex flex-col items-center gap-5 overflow-y-auto">
-                      <UserCartWrapper
-                        cart={cart}
-                        setOpenCartSheet={setOpenCartSheet}
-                      />
-                    </SheetContent>
-                  </Sheet>
+                  {isAuthenticated ? (
+                    <Sheet
+                      open={openCartSheet}
+                      onOpenChange={() => setOpenCartSheet(!openCartSheet)}
+                    >
+                      <SheetTrigger asChild>
+                        <button className="flex flex-col items-center text-gray-600 space-y-1 transition-colors p-2 rounded-md">
+                          <item.icon className="text-2xl" />
+                          <span className="text-xs font-semibold">
+                            {item.title}
+                          </span>
+                        </button>
+                      </SheetTrigger>
+                      <SheetContent className="py-8 px-2 flex flex-col items-center gap-5 overflow-y-auto">
+                        <UserCartWrapper
+                          cart={cart}
+                          setOpenCartSheet={setOpenCartSheet}
+                        />
+                      </SheetContent>
+                    </Sheet>
+                  ) : (
+                    <Link 
+                      to="/auth/login?returnTo=/shop/checkout"
+                      className="flex flex-col items-center text-gray-600 space-y-1 transition-colors p-2 rounded-md"
+                    >
+                      <item.icon className="text-2xl" />
+                      <span className="text-xs font-semibold">
+                        {item.title}
+                      </span>
+                    </Link>
+                  )}
                 </NavigationMenuItem>
               </NavigationMenuList>
             </NavigationMenu>

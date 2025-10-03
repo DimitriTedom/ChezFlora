@@ -346,7 +346,7 @@ const ShoppingHome = () => {
           alt="motifFlower"
           className="absolute z-20 scale-50 top-[-9%] right-[-50%] md:scale-75 opacity-70 rotate-180 xl:right-[-10%]"
         />
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 mt-8 max-w-full">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 md:gap-6 lg:gap-8 mt-8 max-w-full">
           {productList && productList.length > 0 ? (
             productList.map((product: Product) => (
               <UserProductCard
@@ -356,7 +356,14 @@ const ShoppingHome = () => {
               />
             ))
           ) : (
-            <h1>No items found</h1>
+            <div className="col-span-full flex flex-col items-center justify-center py-12">
+              <img 
+                src="/NoProducts.svg" 
+                alt="No products found" 
+                className="w-32 h-32 md:w-48 md:h-48 opacity-50 mb-4"
+              />
+              <h1 className="text-lg md:text-xl text-gray-500 font-medium">No items found</h1>
+            </div>
           )}
         </div>
         <Link to="/shop/store">
