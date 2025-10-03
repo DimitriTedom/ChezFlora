@@ -21,7 +21,7 @@ export enum Role {
   USER = "USER",
 }
 export enum UsersRole {
-  ALL = " ",
+  ALL = "",
   ADMIN = "ADMIN",
   USER = "USER",
 }
