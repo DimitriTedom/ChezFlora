@@ -124,24 +124,12 @@ const AdminCustomers = () => {
   };
   // Fetch users when component mounts or when filters change
   useEffect(() => {
+    // Only proceed if we have a valid admin user
+    if (!currentUser?.id || currentUser.role !== "ADMIN") {
+      return;
+    }
+
     const fetchUsers = async () => {
-      // Check if user is authenticated and is an admin
-      if (!currentUser || !currentUser.id) {
-        showToast({
-          message: "Please login as an admin to access customer data",
-          type: "error",
-        });
-        return;
-      }
-
-      if (currentUser.role !== "ADMIN") {
-        showToast({
-          message: "Access denied: Admin privileges required",
-          type: "error",
-        });
-        return;
-      }
-
       try {
         const result = await dispatch(
           getAllUsers({
@@ -154,10 +142,13 @@ const AdminCustomers = () => {
         
         if (getAllUsers.rejected.match(result)) {
           console.error("Failed to fetch users:", result.payload);
-          showToast({
-            message: `Failed to fetch users: ${result.payload || 'Unknown error'}`,
-            type: "error",
-          });
+          // Only show toast for non-auth errors to avoid spam
+          if (!result.payload?.includes?.('Authentication') && !result.payload?.includes?.('Access denied')) {
+            showToast({
+              message: `Failed to fetch users: ${result.payload || 'Unknown error'}`,
+              type: "error",
+            });
+          }
         }
       } catch (error) {
         console.error("Failed to fetch users:", error);
@@ -167,8 +158,9 @@ const AdminCustomers = () => {
         });
       }
     };
+
     fetchUsers();
-  }, [dispatch, pagination.page, pagination.limit, selectedRole, searchTerm, showToast, currentUser]);
+  }, [currentUser?.id, currentUser?.role, dispatch, pagination.page, pagination.limit, selectedRole, searchTerm]);
 
   // Handle role change for a single user
   const handleRoleChange = async (userId: string, newRole: Role) => {
