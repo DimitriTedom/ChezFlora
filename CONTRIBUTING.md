@@ -12,39 +12,58 @@ Please note that this project is released with a [Contributor Code of Conduct](C
 2.  **Clone the forked repository** to your local machine.
 
     ```bash
-    git clone https://github.com/DimitriTedom/ChezFlora.git
+    git clone https://github.com/YOUR_USERNAME/ChezFlora.git
     cd ChezFlora
     ```
 
 ## Development Setup
 
-1.  **Install dependencies:**
+### Quick Setup (Recommended)
+```bash
+./setup.sh
+```
 
+### Manual Setup
+1.  **Install dependencies:**
     ```bash
-    # Client
-    cd client
+    # Install Yarn globally if not present
+    npm install -g yarn
+
+    # Server dependencies
+    cd Server
+    yarn install
+
+    # Client dependencies
+    cd ../client
     npm install
 
-    # Server
-    cd ../Server
-    yarn install
+    # Root dependencies (for convenience scripts)
+    cd ..
+    npm install
     ```
 
 2.  **Configure environment variables:**
-
-    *   Create a `.env` file in the root directory and in the `Server` directory.
-    *   Copy the environment variables from `.env.example` (if available) and update the values accordingly.  Refer to the `README.md` for the list of required environment variables.
-
-3.  **Start the development server:**
-
     ```bash
-    # Client
-    cd client
-    npm run dev
+    # Copy environment templates
+    cp Server/.env.example Server/.env
+    cp client/.env.example client/.env
+    ```
+    Edit the `.env` files with your specific configuration values.
 
-    # Server
-    cd ../Server
-    yarn dev
+3.  **Start the development servers:**
+    
+    **Option 1: Both servers simultaneously**
+    ```bash
+    npm run dev
+    ```
+    
+    **Option 2: Separate terminals**
+    ```bash
+    # Terminal 1 - Server
+    npm run dev:server
+    
+    # Terminal 2 - Client  
+    npm run dev:client
     ```
 
 ## Contributing Guidelines

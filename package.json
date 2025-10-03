@@ -1,0 +1,33 @@
+{
+  "name": "chezflora-monorepo",
+  "version": "1.0.0",
+  "description": "Modern e-commerce platform for floral decoration and event services",
+  "private": true,
+  "scripts": {
+    "setup": "./setup.sh",
+    "health-check": "./health-check.sh",
+    "dev": "concurrently \"npm run dev:server\" \"npm run dev:client\"",
+    "dev:server": "cd Server && yarn dev",
+    "dev:client": "cd client && npm run dev",
+    "build": "npm run build:client && npm run build:server",
+    "build:client": "cd client && npm run build",
+    "build:server": "cd Server && yarn build",
+    "install:all": "cd Server && yarn install && cd ../client && npm install",
+    "lint": "npm run lint:client && npm run lint:server",
+    "lint:client": "cd client && npm run lint",
+    "lint:server": "cd Server && yarn lint || echo 'Server lint script not found'"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  },
+  "engines": {
+    "node": ">=20.12.0",
+    "yarn": ">=1.22.19"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/DimitriTedom/ChezFlora.git"
+  },
+  "author": "DimitriTedom",
+  "license": "MIT"
+}
