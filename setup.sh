@@ -61,6 +61,9 @@ echo "✅ Client dependencies installed"
 echo "📝 Setting up environment files..."
 cd ..
 
+    at genericNodeError (node:internal/errors:983:15)
+    at wrappedFn (node:internal/errors:537:14)
+    at checkExecSyncError (node:child_process:915:11)
 if [ ! -f "Server/.env" ]; then
     cp Server/.env.example Server/.env
     echo "✅ Created Server/.env from template"

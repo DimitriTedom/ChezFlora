@@ -153,11 +153,17 @@ const ShoppingStore = () => {
           {isLoading ? (
             <ChezFloraLoader />
           ) : productList.length === 0 ? (
-            <div className="flex justify-center items-center h-[300px]">
-              <span className="text-3xl font-bold">No Products Found</span>
+            <div className="flex flex-col justify-center items-center h-[400px] px-4">
+              <img 
+                src="/NoProducts.svg" 
+                alt="No products found" 
+                className="w-32 h-32 md:w-48 md:h-48 opacity-50 mb-6"
+              />
+              <span className="text-xl md:text-3xl font-bold text-gray-500 text-center">No Products Found</span>
+              <p className="text-gray-400 mt-2 text-center">Try adjusting your filters or search criteria</p>
             </div>
           ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4 py-8 px-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4 md:gap-6 py-6 md:py-8 px-4 md:px-6">
               {productList.map((product: Product) => (
                 <UserProductCard
                   key={product.id}

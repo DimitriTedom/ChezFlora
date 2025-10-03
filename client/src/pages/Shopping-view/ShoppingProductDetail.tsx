@@ -18,7 +18,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Textarea } from "@/components/ui/textarea";
 import { AiOutlineMinus, AiOutlinePlus } from "react-icons/ai";
 import { Share2Icon, HeartIcon, ArrowRightIcon, Star } from "lucide-react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate, useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/store/store";
 import {
@@ -74,7 +74,9 @@ const ShoppingProductDetail: React.FC = () => {
   const [reviewContent, setReviewContent] = useState<string>("");
   const { id: prodId } = useParams<{ id: string }>();
   const dispatch = useDispatch<AppDispatch>();
-  const { user } = useSelector((state: RootState) => state.auth);
+  const navigate = useNavigate();
+  const location = useLocation();
+  const { user, isAuthenticated } = useSelector((state: RootState) => state.auth);
   const cart = useSelector((state: RootState) => state.shoppingCart.cart);
   const { isLoading } = useSelector((state: RootState) => state.shopProducts);
   const { isLoading: isProductReviewLoading, productReviews } = useSelector(
@@ -156,6 +158,17 @@ const ShoppingProductDetail: React.FC = () => {
   const showAddToCartButton: boolean = currentCartQty === 0;
 
   const handleAddToCart = async (id: string) => {
+    // Check if user is authenticated
+    if (!isAuthenticated || !user?.id) {
+      showToast({
+        message: "Please login to add items to cart",
+        type: "info",
+        duration: 3000,
+      });
+      navigate(`/auth/login?returnTo=${encodeURIComponent(location.pathname)}`);
+      return;
+    }
+
     if (!canAddToCart) {
       showToast({
         message: "Cannot add more than available stock",

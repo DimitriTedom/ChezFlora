@@ -13,6 +13,7 @@ import ShoppingCheckout from "./pages/Shopping-view/Checkout";
 import ShoppingAccount from "./pages/Shopping-view/Account";
 import ShoppingBlog from "./pages/Shopping-view/Quotes.tsx";
 import CheckAuth from "./components/Common/Check-auth";
+import ProtectedRoute from "./components/Common/ProtectedRoute";
 import UnAuthPage from "./pages/UnAuthPAge";
 import AuthEnterOtp from "./pages/Auth/EnterOTP";
 import ShoppingStore from "./pages/Shopping-view/ShoppingStore";
@@ -120,16 +121,35 @@ export default function Home() {
             </CheckAuth>
           }
         >
+          {/* Public routes - no authentication required */}
           <Route path="home" element={<ShoppingHome />} />
           <Route path="store" element={<ShoppingStore />} />
           <Route path="detail/:id" element={<ShoppingProductDetail />} />
           <Route path="about" element={<ShoppingAbout />} />
           <Route path="search" element={<SearchPage />} />
-          <Route path="checkout" element={<ShoppingCheckout />} />
-          <Route path="account" element={<ShoppingAccount />} />
-          <Route path="quotes" element={<ShoppingBlog />} />
           <Route path="contact" element={<ShoppingContact />} />
-          <Route path="my-bookings" element={<MyBookings />} />
+          
+          {/* Protected routes - authentication required */}
+          <Route path="checkout" element={
+            <ProtectedRoute isAuthenticated={isAuthenticated} user={user}>
+              <ShoppingCheckout />
+            </ProtectedRoute>
+          } />
+          <Route path="account" element={
+            <ProtectedRoute isAuthenticated={isAuthenticated} user={user}>
+              <ShoppingAccount />
+            </ProtectedRoute>
+          } />
+          <Route path="quotes" element={
+            <ProtectedRoute isAuthenticated={isAuthenticated} user={user}>
+              <ShoppingBlog />
+            </ProtectedRoute>
+          } />
+          <Route path="my-bookings" element={
+            <ProtectedRoute isAuthenticated={isAuthenticated} user={user}>
+              <MyBookings />
+            </ProtectedRoute>
+          } />
           <Route path="paypal-return" element={<PaypalReturnPage />} />
           <Route path="payment-success" element={<PaymentSuccessPage />} />
         </Route>

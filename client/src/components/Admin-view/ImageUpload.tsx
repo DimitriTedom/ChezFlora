@@ -6,6 +6,7 @@ import { Button } from "../ui/button";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "@/store/store";
 import { uploadImage } from "@/store/imageUploadSlice";
+import { deleteImage } from "@/store/imageUploadSlice";
 import { useCustomToast } from "@/hooks/useCustomToast";
 import { Skeleton } from "../ui/skeleton";
 import axios from "axios";
@@ -18,6 +19,8 @@ interface ImageUploadProps {
   imageLoadingState: boolean;
   setImageLoadingState: React.Dispatch<React.SetStateAction<boolean>>;
   isEditMode:boolean;
+  uploadedImagePublicId: string;
+  setUploadedImagePublicId: React.Dispatch<React.SetStateAction<string>>;
 }
 const ProductImageUpload = ({
   imageFile,
@@ -27,6 +30,8 @@ const ProductImageUpload = ({
   isEditMode,
   imageLoadingState,
   setImageLoadingState,
+  uploadedImagePublicId,
+  setUploadedImagePublicId,
 }: ImageUploadProps) => {
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -54,7 +59,27 @@ const ProductImageUpload = ({
     }
   };
 
-  const handleRemoveImage = () => {
+  const handleRemoveImage = async () => {
+    // If there's an uploaded image, delete it from Cloudinary
+    if (uploadedImagePublicId) {
+      try {
+        await dispatch(deleteImage(uploadedImagePublicId)).unwrap();
+        setUploadedImagePublicId("");
+        showToast({
+          message: "Image removed successfully",
+          type: "success",
+          duration: 3000,
+        });
+      } catch (error) {
+        console.error('Failed to delete image from Cloudinary:', error);
+        showToast({
+          message: "Failed to remove image from cloud storage",
+          type: "error",
+          duration: 3000,
+        });
+      }
+    }
+    
     setImageFile(null);
     setImageUploadedUrl("");
     if (inputRef.current) {
@@ -70,6 +95,7 @@ const ProductImageUpload = ({
       const result = await dispatch(uploadImage(file)).unwrap();
       console.log(result);
       setImageUploadedUrl(()=>result.data.url); // Accéder à data.url
+      setUploadedImagePublicId(result.data.public_id); // Store the public_id
       setImageLoadingState(false);
       showToast({
         message: result.message,

@@ -19,6 +19,7 @@ import {
   editProduct,
   fetchAllProducts,
 } from "@/store/ProductSlice";
+import { deleteImage, clearImageData } from "@/store/imageUploadSlice";
 import { useCustomToast } from "@/hooks/useCustomToast";
 import { Product } from "../Shopping-view/Carts/ProductCart";
 import FormTitle from "@/components/Common/FormTitle";
@@ -57,17 +58,56 @@ const AdminProducts = () => {
   const { productList, isLoading } = useSelector(
     (state: RootState) => state.adminProducts
   );
+  const { imageUrl, publicId } = useSelector(
+    (state: RootState) => state.imageUpload
+  );
   const [currentEditedId, setCurrentEditedId] = useState("");
+  const [uploadedImagePublicId, setUploadedImagePublicId] = useState<string>("");
 
   useEffect(() => {
     dispatch(fetchAllProducts()).unwrap();
   }, [dispatch]);
-  // Mettre à jour formData.image lorsque imageUploadedUrl change
+  // Track uploaded images that haven't been saved yet
+  useEffect(() => {
+    if (imageUrl && publicId) {
+      setImageUploadedUrl(imageUrl);
+      setUploadedImagePublicId(publicId);
+    }
+  }, [imageUrl, publicId]);
+
+  // Cleanup function to delete unused uploaded images
+  const cleanupUnusedImage = async (publicIdToDelete: string) => {
+    if (publicIdToDelete) {
+      try {
+        await dispatch(deleteImage(publicIdToDelete)).unwrap();
+        console.log('Unused image cleaned up from Cloudinary');
+      } catch (error) {
+        console.error('Failed to cleanup unused image:', error);
+      }
+    }
+  };
+
+  // Handle dialog close with cleanup
+  const handleDialogClose = () => {
+    // If there's an uploaded image that hasn't been saved as a product, clean it up
+    if (uploadedImagePublicId && currentEditedId === "") {
+      cleanupUnusedImage(uploadedImagePublicId);
+    }
+    
+    setOpenCreateProductDialog(false);
+    setFormData(initialFormData);
+    setImageFile(null);
+    setImageUploadedUrl("");
+    setUploadedImagePublicId("");
+    dispatch(clearImageData());
+  };
+  // Update formData.image when imageUploadedUrl changes
   useEffect(() => {
     if (imageUploadedUrl) {
       setFormData((prev) => ({ ...prev, image: imageUploadedUrl }));
     }
   }, [imageUploadedUrl]);
+
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -109,7 +149,9 @@ const AdminProducts = () => {
         setFormData(initialFormData);
         setImageFile(null);
         setImageUploadedUrl("");
+        setUploadedImagePublicId("");
         setOpenCreateProductDialog(false);
+        dispatch(clearImageData());
         dispatch(fetchAllProducts()).unwrap();
       })
       .catch((error) => {
@@ -176,6 +218,8 @@ const AdminProducts = () => {
           onClick={() => {
             setOpenCreateProductDialog(true);
             setCurrentEditedId("");
+            setUploadedImagePublicId("");
+            dispatch(clearImageData());
           }}
         >
           <AiOutlinePlus /> Add New Product
@@ -207,12 +251,7 @@ const AdminProducts = () => {
       )}
       <Sheet
         open={openCreateProductDialog}
-        onOpenChange={() => {
-          setOpenCreateProductDialog(false);
-          setFormData(initialFormData);
-          setImageFile(null);
-          setImageUploadedUrl("");
-        }}
+        onOpenChange={handleDialogClose}
       >
         <SheetContent className="overflow-y-auto">
           <SheetHeader>
@@ -228,6 +267,8 @@ const AdminProducts = () => {
             imageLoadingState={imageLoadingState}
             setImageLoadingState={setImageLoadingState}
             isEditMode={currentEditedId ? true : false}
+            uploadedImagePublicId={uploadedImagePublicId}
+            setUploadedImagePublicId={setUploadedImagePublicId}
           />
           <div className="py-2">
             <CommonForm

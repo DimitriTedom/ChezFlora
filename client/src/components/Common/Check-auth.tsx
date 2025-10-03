@@ -5,9 +5,15 @@ interface CheckAuthProps {
   isAuthenticated: boolean;
   user: { role?: string } | null;
   children?: React.ReactNode;
+  requireAuth?: boolean; // New prop to determine if auth is required
 }
  
-const  CheckAuth = ({ isAuthenticated, user, children }: CheckAuthProps) => {
+const CheckAuth = ({ 
+  isAuthenticated, 
+  user, 
+  children, 
+  requireAuth = false 
+}: CheckAuthProps) => {
   const location = useLocation();
   const [authState, setAuthState] = useState({
     isAuthenticated: JSON.parse(localStorage.getItem("isAuthenticated") || "false"),
@@ -25,19 +31,23 @@ const  CheckAuth = ({ isAuthenticated, user, children }: CheckAuthProps) => {
       setAuthState({ isAuthenticated: false, user: null });
     }
   }, [isAuthenticated, user]);
+
+  // Handle root path redirection
   if (location.pathname === '/') {
-    if (isAuthenticated) {
-    return <Navigate to="/auth/login" />;
-      
-    }else{
-      if (authState.user?.role === "ADMIN" && !location.pathname.includes("/admin")) {
-        return <Navigate to="/admin/dashboard" />;
-      } else if (authState.user?.role !== "ADMIN" && !location.pathname.includes("/shop")) {
-        return <Navigate to="/shop/home" />;
+    if (authState.isAuthenticated) {
+      if (authState.user?.role === "ADMIN") {
+        return <Navigate to="/admin/dashboard" replace />;
+      } else {
+        return <Navigate to="/shop/home" replace />;
       }
+    } else {
+      return <Navigate to="/shop/home" replace />;
     }
   }
+
+  // If authentication is required but user is not authenticated
   if (
+    requireAuth &&
     !authState.isAuthenticated &&
     !(
       location.pathname.includes("/login") ||
@@ -48,35 +58,37 @@ const  CheckAuth = ({ isAuthenticated, user, children }: CheckAuthProps) => {
       location.pathname.includes("/enter-new-password")
     )
   ) {
-    return <Navigate to="/auth/login" />;
+    return <Navigate to={`/auth/login?returnTo=${encodeURIComponent(location.pathname)}`} replace />;
   }
 
-
+  // Redirect authenticated users away from auth pages
   if (
     authState.isAuthenticated &&
     (location.pathname.includes("/login") || location.pathname.includes("/register"))
   ) {
-    if (authState.user?.role === "ADMIN" && !location.pathname.includes("/admin")) {
-      return <Navigate to="/admin/dashboard" />;
-    } else if (authState.user?.role !== "ADMIN" && !location.pathname.includes("/shop")) {
-      return <Navigate to="/shop/home" />;
+    if (authState.user?.role === "ADMIN") {
+      return <Navigate to="/admin/dashboard" replace />;
+    } else {
+      return <Navigate to="/shop/home" replace />;
     }
   }
 
+  // Admin access control
   if (
     authState.isAuthenticated &&
     authState.user?.role !== "ADMIN" &&
     location.pathname.includes("/admin")
   ) { 
-    return <Navigate to="/unauth-page" />;
+    return <Navigate to="/unauth-page" replace />;
   }
 
+  // Prevent admin from accessing shop routes (they have their own dashboard)
   if (
     authState.isAuthenticated &&
     authState.user?.role === "ADMIN" &&
     location.pathname.includes("/shop")
   ) {
-    return <Navigate to="/admin/dashboard" />;
+    return <Navigate to="/admin/dashboard" replace />;
   }
 
   return <>{children}</>;

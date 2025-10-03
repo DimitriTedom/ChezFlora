@@ -72,10 +72,10 @@ const ShoppingHeader: React.FC = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (user.id) {
+    if (user?.id && isAuthenticated) {
       dispatch(fetchCartItems(user.id));
     }
-  }, [dispatch, user.id,cart]);
+  }, [dispatch, user?.id, isAuthenticated, cart]);
   useEffect(() => {
     if (
       productKeyword &&
@@ -233,35 +233,47 @@ const ShoppingHeader: React.FC = () => {
           </NavigationMenu>
         </nav>
         <div className="hidden lg:flex lg:items-center lg:space-x-4">
-          <Sheet
-            open={openCartSheet}
-            onOpenChange={() => setOpenCartSheet(!openCartSheet)}
-          >
-            <SheetTrigger>
-              <Button
-                onClick={() => setOpenCartSheet(true)}
-                variant="outline"
-                size="icon"
-                className="relative"
-              >
-                <AiOutlineShoppingCart className="headerIcons" />
-                <span
-                  className={`absolute -top-2 -right-2 hidden items-center justify-center px-2 py-1 text-xs font-bold leading-none text-white bg-pink-400 rounded-full ${
-                    cart && cart?.items.length > 0 ? "inline-flex lg:block" : " "
-                  }`}
+          {isAuthenticated ? (
+            <Sheet
+              open={openCartSheet}
+              onOpenChange={() => setOpenCartSheet(!openCartSheet)}
+            >
+              <SheetTrigger>
+                <Button
+                  onClick={() => setOpenCartSheet(true)}
+                  variant="outline"
+                  size="icon"
+                  className="relative"
                 >
-                  {cart?.items.length}
-                </span>
-                <span className="sr-only">User Cart</span>
-              </Button>
-            </SheetTrigger>
-            <SheetContent className="w-[60%] overflow-y-auto">
-              <UserCartWrapper
-                setOpenCartSheet={setOpenCartSheet}
-                cart={cart}
-              />
-            </SheetContent>
-          </Sheet>
+                  <AiOutlineShoppingCart className="headerIcons" />
+                  <span
+                    className={`absolute -top-2 -right-2 hidden items-center justify-center px-2 py-1 text-xs font-bold leading-none text-white bg-pink-400 rounded-full ${
+                      cart && cart?.items.length > 0 ? "inline-flex lg:block" : " "
+                    }`}
+                  >
+                    {cart?.items.length}
+                  </span>
+                  <span className="sr-only">User Cart</span>
+                </Button>
+              </SheetTrigger>
+              <SheetContent className="w-[60%] overflow-y-auto">
+                <UserCartWrapper
+                  setOpenCartSheet={setOpenCartSheet}
+                  cart={cart}
+                />
+              </SheetContent>
+            </Sheet>
+          ) : (
+            <Button
+              onClick={() => navigate('/auth/login?returnTo=' + encodeURIComponent('/shop/checkout'))}
+              variant="outline"
+              size="icon"
+              className="relative"
+            >
+              <AiOutlineShoppingCart className="headerIcons" />
+              <span className="sr-only">Login to view cart</span>
+            </Button>
+          )}
           <span className="w-[2px] h-8 bg-pink-400"></span>
           <Link to="/shop/search">
             <Button variant="outline" size="icon">
