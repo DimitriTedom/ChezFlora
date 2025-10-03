@@ -37,14 +37,18 @@
    npm install
    ```
 
-5. **Environment Configuration**
+5. **🔒 Environment Configuration (IMPORTANT)**
    ```bash
    # Copy environment files
    cp Server/.env.example Server/.env
    cp client/.env.example client/.env
    ```
    
-   Edit the `.env` files with your specific configuration values.
+   **⚠️ SECURITY WARNING:** 
+   - Fill in the `.env` files with your actual credentials
+   - NEVER commit `.env` files to version control
+   - Use strong, random secrets for JWT_SECRET (at least 32 characters)
+   - See [SECURITY.md](SECURITY.md) for detailed security guidelines
 
 6. **Start Development Servers**
    
