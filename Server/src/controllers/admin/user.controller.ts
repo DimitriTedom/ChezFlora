@@ -17,7 +17,7 @@ export const getAllUsers = async (req: Request, res: Response) => {
 		// Filters definition
 		// Use the imported Role enum and check if the value is valid
 		const roleQuery = req.query.role as string | undefined;
-		const role = roleQuery && roleQuery.trim() !== "" && Object.values(Role).includes(roleQuery as Role) ? (roleQuery as Role) : undefined;
+		const role = roleQuery && Object.values(Role).includes(roleQuery as Role) ? (roleQuery as Role) : undefined;
 		const search = req.query.search as string | undefined;
 
 		// lets Build the where clause conditionally with a proper type

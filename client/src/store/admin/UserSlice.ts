@@ -116,15 +116,8 @@ export const getAllUsers = createAsyncThunk<
       return response.data;
     } catch (error) {
       if (axios.isAxiosError(error)) {
-        if (error.response?.status === 401) {
-          return rejectWithValue("Authentication required. Please login as an admin.");
-        }
-        if (error.response?.status === 403) {
-          return rejectWithValue("Access denied. Admin privileges required.");
-        }
-        return rejectWithValue(error.response?.data?.message || error.message || "Failed to fetch users");
+        return rejectWithValue(error.response?.data.message);
       }
-      return rejectWithValue("An unexpected error occurred");
     }
   }
 );

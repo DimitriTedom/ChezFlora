@@ -31,6 +31,14 @@ yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 
+# Cookie files
+cookies.txt
+admin-cookies.txt
+Server/cookies.txt
+Server/admin-cookies.txt
+client/cookies.txt
+client/admin-cookies.txt
+
 client/dist/
 Server/dist/
 

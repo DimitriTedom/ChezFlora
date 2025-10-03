@@ -72,7 +72,6 @@ const AdminCustomers = () => {
   const { users, isLoading, isUpdating, pagination } = useSelector(
     (state: RootState) => state.adminUsers
   );
-  const { user: currentUser } = useSelector((state: RootState) => state.auth);
   const { addressList } = useSelector((state: RootState) => state.address);
 
   const [searchTerm, setSearchTerm] = useState("");
@@ -124,43 +123,24 @@ const AdminCustomers = () => {
   };
   // Fetch users when component mounts or when filters change
   useEffect(() => {
-    // Only proceed if we have a valid admin user
-    if (!currentUser?.id || currentUser.role !== "ADMIN") {
-      return;
-    }
-
     const fetchUsers = async () => {
-      try {
-        const result = await dispatch(
-          getAllUsers({
-            page: pagination.page,
-            limit: pagination.limit,
-            search: searchTerm,
-            role: selectedRole,
-          })
-        );
-        
-        if (getAllUsers.rejected.match(result)) {
-          console.error("Failed to fetch users:", result.payload);
-          // Only show toast for non-auth errors to avoid spam
-          if (!result.payload?.includes?.('Authentication') && !result.payload?.includes?.('Access denied')) {
-            showToast({
-              message: `Failed to fetch users: ${result.payload || 'Unknown error'}`,
-              type: "error",
-            });
-          }
-        }
-      } catch (error) {
+      await dispatch(
+        getAllUsers({
+          page: pagination.page,
+          limit: pagination.limit,
+          search: searchTerm,
+          role: selectedRole,
+        })
+      ).catch((error) => {
         console.error("Failed to fetch users:", error);
         showToast({
-          message: `Failed to fetch users: ${error instanceof Error ? error.message : 'Unknown error'}`,
+          message: `Failed to fetch users: ${error.message || error}`,
           type: "error",
         });
-      }
+      });
     };
-
     fetchUsers();
-  }, [currentUser?.id, currentUser?.role, dispatch, pagination.page, pagination.limit, selectedRole, searchTerm]);
+  }, [selectedRole,searchTerm]);
 
   // Handle role change for a single user
   const handleRoleChange = async (userId: string, newRole: Role) => {
@@ -355,33 +335,7 @@ const AdminCustomers = () => {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {isLoading ? (
-                <TableRow>
-                  <TableCell colSpan={6} className="text-center py-8">
-                    <ChezFloraLoader />
-                    <p className="mt-2 text-gray-500">Loading customers...</p>
-                  </TableCell>
-                </TableRow>
-              ) : users.length === 0 ? (
-                <TableRow>
-                  <TableCell colSpan={6} className="text-center py-8">
-                    <div className="flex flex-col items-center space-y-3">
-                      <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center">
-                        <Eye className="w-8 h-8 text-gray-400" />
-                      </div>
-                      <div>
-                        <h3 className="text-lg font-medium text-gray-900">No customers found</h3>
-                        <p className="text-gray-500">
-                          {!currentUser ? 'Please login as an admin to view customers' : 
-                           currentUser.role !== 'ADMIN' ? 'Admin access required' :
-                           searchTerm || selectedRole !== UsersRole.ALL ? 'Try adjusting your search or filters' : 'No customers have registered yet'}
-                        </p>
-                      </div>
-                    </div>
-                  </TableCell>
-                </TableRow>
-              ) : (
-                users.map((user) => (
+              {users.map((user) => (
                 <TableRow key={user.id}>
                   <TableCell>
                     <Checkbox
@@ -622,8 +576,7 @@ const AdminCustomers = () => {
                     </Button>
                   </TableCell>
                 </TableRow>
-                ))
-              )}
+              ))}
             </TableBody>
             {/* Table Footer */}
             <tfoot>
