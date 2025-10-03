@@ -254,7 +254,69 @@ a {
   @apply transition-colors duration-300;
 }
 
-/* Mobile responsiveness */
+/* Floating animations for testimonials */
+@keyframes float {
+  0%, 100% { 
+    transform: translateY(0px) rotate(0deg); 
+  }
+  50% { 
+    transform: translateY(-20px) rotate(2deg); 
+  }
+}
+
+@keyframes float-reverse {
+  0%, 100% { 
+    transform: translateY(0px) rotate(0deg); 
+  }
+  50% { 
+    transform: translateY(20px) rotate(-2deg); 
+  }
+}
+
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+
+.animate-float-reverse {
+  animation: float-reverse 8s ease-in-out infinite;
+}
+
+/* Enhanced testimonial card utilities */
+.testimonial-card {
+  @apply transition-all duration-500 hover:shadow-2xl;
+  backdrop-filter: blur(10px);
+}
+
+.testimonial-grid {
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+}
+
+/* Mobile responsiveness with enhanced breakpoints */
+@media (max-width: 640px) {
+  .testimonial-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (min-width: 641px) and (max-width: 1024px) {
+  .testimonial-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1025px) and (max-width: 1536px) {
+  .testimonial-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (min-width: 1537px) {
+  .testimonial-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+/* Base mobile styles */
 @media (max-width: 768px) {
   body {
     font-size: 14px;
@@ -262,5 +324,14 @@ a {
   
   .card-hover {
     @apply hover:scale-105;
+  }
+  
+  /* Testimonial mobile optimizations */
+  .testimonial-section {
+    @apply px-4 py-8;
+  }
+  
+  .testimonial-card {
+    @apply text-sm;
   }
 }

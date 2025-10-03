@@ -13,6 +13,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import UserProductCard from "./Carts/ProductCart";
 import { Plus } from "lucide-react";
+import { motion } from "framer-motion";
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
 import {
   Carousel,
@@ -411,50 +412,66 @@ const ShoppingHome = () => {
         </Link>
       </section>
 
-      {/* Testimonials */}
-      <section className="flex flex-col items-center gap-12 mt-20 flower-gradient p-12 lg:p-20 relative overflow-hidden">
-        {/* Background decorative elements */}
-        <div className="absolute top-10 left-10 w-72 h-72 bg-gradient-to-br from-rose-200 to-pink-200 rounded-full opacity-30 blur-3xl"></div>
-        <div className="absolute bottom-10 right-10 w-64 h-64 bg-gradient-to-tl from-purple-200 to-pink-200 rounded-full opacity-30 blur-3xl"></div>
+      {/* Enhanced Testimonials Section */}
+      <section className="flex flex-col items-center gap-8 sm:gap-12 lg:gap-16 mt-16 sm:mt-20 flower-gradient p-6 sm:p-12 lg:p-20 xl:p-24 relative overflow-hidden">
+        {/* Enhanced background decorative elements */}
+        <div className="absolute top-10 left-10 w-48 h-48 sm:w-72 sm:h-72 lg:w-96 lg:h-96 bg-gradient-to-br from-rose-200 to-pink-200 rounded-full opacity-20 sm:opacity-30 blur-3xl animate-float"></div>
+        <div className="absolute bottom-10 right-10 w-40 h-40 sm:w-64 sm:h-64 lg:w-80 lg:h-80 bg-gradient-to-tl from-purple-200 to-pink-200 rounded-full opacity-20 sm:opacity-30 blur-3xl animate-float-reverse"></div>
         
-        <div className="text-center max-w-4xl z-10">
+        {/* Header section with improved spacing */}
+        <div className="text-center max-w-2xl sm:max-w-4xl z-10 px-4">
           <FormTitle
             title="What Our Customers Say"
-            comment="Discover why thousands of customers trust ChezFlora for their floral needs. Read their beautiful stories and experiences."
+            comment="Discover why thousands of customers trust ChezFlora for their floral needs. Read their beautiful stories and experiences that make every occasion special."
           />
         </div>
         
-        {/* Decorative flower motifs */}
+        {/* Enhanced decorative flower motifs with better responsive positioning */}
         <img
           src="/motifFloral-removebg-preview.png"
           alt="Decorative floral motif"
-          className="absolute scale-50 top-[-5%] right-[-30%] md:scale-75 opacity-40 rotate-180 xl:right-[-5%] pointer-events-none"
+          className="absolute scale-25 sm:scale-50 lg:scale-75 top-[-5%] right-[-40%] sm:right-[-30%] lg:right-[-15%] xl:right-[-5%] opacity-30 sm:opacity-40 rotate-180 pointer-events-none"
         />
         <img
           src="/ProduitEnVedeteFlower-removebg-preview.png"
           alt="Decorative flower motif"
-          className="absolute scale-50 bottom-[-10%] left-[-30%] md:scale-75 opacity-40 xl:left-[-10%] pointer-events-none"
+          className="absolute scale-25 sm:scale-50 lg:scale-75 bottom-[-10%] left-[-40%] sm:left-[-30%] lg:left-[-15%] xl:left-[-10%] opacity-30 sm:opacity-40 pointer-events-none"
         />
         
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 mt-12 max-w-full w-full z-10">
-          {testimonials.map((testimonial, index) => (
-            <div key={index} className="group">
-              <TestimonialCard {...testimonial} />
-            </div>
-          ))}
+        {/* Enhanced responsive grid with improved spacing */}
+        <div className="w-full max-w-7xl mx-auto z-10">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-4 gap-4 sm:gap-6 lg:gap-8 auto-rows-fr">
+            {testimonials.map((testimonial, index) => (
+              <motion.div 
+                key={index} 
+                className="group h-full"
+                initial={{ opacity: 0, y: 50 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: index * 0.1, duration: 0.5 }}
+              >
+                <TestimonialCard {...testimonial} />
+              </motion.div>
+            ))}
+          </div>
         </div>
         
-        <div className="mt-12 text-center z-10">
-          <p className="text-lg text-gray-600 mb-6">Join thousands of happy customers</p>
-          <div className="flex items-center justify-center space-x-2">
-            <div className="flex">
+        {/* Enhanced footer section with better responsive design */}
+        <div className="mt-8 sm:mt-12 lg:mt-16 text-center z-10 px-4">
+          <p className="text-base sm:text-lg lg:text-xl text-gray-600 mb-4 sm:mb-6 font-medium">Join thousands of happy customers</p>
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6">
+            <div className="flex items-center">
               {[...Array(5)].map((_, i) => (
-                <svg key={i} className="w-6 h-6 text-yellow-400 fill-current" viewBox="0 0 20 20">
+                <svg key={i} className="w-5 h-5 sm:w-6 sm:h-6 lg:w-7 lg:h-7 text-yellow-400 fill-current" viewBox="0 0 20 20">
                   <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
                 </svg>
               ))}
             </div>
-            <span className="text-lg font-semibold text-gray-700">4.8/5 from 1000+ reviews</span>
+            <div className="flex flex-col sm:flex-row items-center gap-2 sm:gap-4">
+              <span className="text-lg sm:text-xl lg:text-2xl font-bold text-gray-800">4.8/5</span>
+              <span className="text-sm sm:text-base lg:text-lg text-gray-600 bg-white/80 backdrop-blur-sm px-3 py-1 rounded-full border border-pink-200">
+                from 1000+ reviews
+              </span>
+            </div>
           </div>
         </div>
       </section>
