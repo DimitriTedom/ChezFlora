@@ -12,7 +12,10 @@
     "postbuild": "cp -r src/controllers/shop/templates dist/controllers/shop/templates && cp -r src/controllers/templates dist/controllers/templates",
     "build": "rimraf ./dist && tsc",
     "start": "node dist/app.js",
-    "postinstall": "prisma generate"
+    "postinstall": "prisma generate",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage"
   },
   "keywords": [],
   "author": "",
@@ -61,6 +64,7 @@
     "express-handlebars": "^8.0.1",
     "express-rate-limit": "^7.3.1",
     "helmet": "^8.0.0",
+    "ioredis": "^5.3.2",
     "joi": "^17.13.3",
     "json2csv": "^6.0.0-alpha.2",
     "jsonwebtoken": "^9.0.2",
@@ -73,6 +77,18 @@
     "prisma": "^6.4.1",
     "swagger-jsdoc": "^6.2.8",
     "swagger-ui-express": "^5.0.1",
+    "winston": "^3.11.0",
     "zod": "^3.24.2"
+  },
+  "jest": {
+    "preset": "ts-jest",
+    "testEnvironment": "node",
+    "roots": ["<rootDir>/tests"],
+    "testMatch": ["**/*.test.ts"],
+    "collectCoverageFrom": [
+      "src/**/*.ts",
+      "!src/**/*.d.ts",
+      "!src/**/index.ts"
+    ]
   }
 }

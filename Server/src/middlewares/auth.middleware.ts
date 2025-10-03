@@ -10,8 +10,6 @@ declare module "express-serve-static-core" {
       email: string;
       role: string;
       name: string;
-      createdAt: Date | string;
-      updatedAt: Date |string;
     };
   }
 }
@@ -34,9 +32,7 @@ export const authenticateUser = async (req: Request, res: Response, next: NextFu
       id: decoded.id,
       email: decoded.email,
       role: decoded.role,
-      name: decoded.name,
-      createdAt: decoded.createdAt,
-      updatedAt: decoded.updatedAt
+      name: decoded.name
     };
     
     next();

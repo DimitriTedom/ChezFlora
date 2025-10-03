@@ -1,7 +1,7 @@
 import { FormControlItem } from "@/components/Common/Form";
 import { Product } from "@/pages/Shopping-view/Carts/ProductCart";
 
-// Define form data interfaces
+// Define form data interfaces with enhanced validation
 export interface RegisterFormData {
   name: string;
   email: string;
@@ -55,6 +55,50 @@ export interface ContactFormData {
   subject: string;
   message: string;
 }
+
+// Enhanced validation functions
+export const validateEmail = (email: string): boolean => {
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return emailRegex.test(email) && email.length <= 255;
+};
+
+export const validatePassword = (password: string): { isValid: boolean; message: string } => {
+  if (password.length < 8) {
+    return { isValid: false, message: "Password must be at least 8 characters long" };
+  }
+  
+  if (password.length > 128) {
+    return { isValid: false, message: "Password must be less than 128 characters" };
+  }
+  
+  const hasUpperCase = /[A-Z]/.test(password);
+  const hasLowerCase = /[a-z]/.test(password);
+  const hasNumbers = /\d/.test(password);
+  const hasSpecialChar = /[@$!%*?&]/.test(password);
+  
+  if (!hasUpperCase || !hasLowerCase || !hasNumbers || !hasSpecialChar) {
+    return {
+      isValid: false,
+      message: "Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character"
+    };
+  }
+  
+  return { isValid: true, message: "" };
+};
+
+export const validateName = (name: string): boolean => {
+  const nameRegex = /^[a-zA-Z\s'-]+$/;
+  return nameRegex.test(name) && name.length >= 2 && name.length <= 50;
+};
+
+export const validatePhone = (phone: string): boolean => {
+  const phoneRegex = /^[\+]?[1-9][\d]{0,15}$/;
+  return phoneRegex.test(phone) && phone.length >= 8 && phone.length <= 20;
+};
+
+export const sanitizeInput = (input: string): string => {
+  return input.trim().replace(/[<>]/g, '');
+};
 
 
 export const registerFormControls: FormControlItem[] = [

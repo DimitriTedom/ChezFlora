@@ -120,6 +120,8 @@ model PendingUser {
   otp          String
   otpExpiresAt DateTime
   createdAt    DateTime @default(now())
+  
+  @@index([otpExpiresAt])
 }
 
 model User {
@@ -130,6 +132,10 @@ model User {
   role         Role      @default(USER)
   otp          String?
   otpExpiresAt DateTime?
+  isActive     Boolean   @default(true)
+  lastLoginAt  DateTime?
+  loginAttempts Int      @default(0)
+  lockedUntil  DateTime?
   createdAt    DateTime  @default(now())
   updatedAt    DateTime  @updatedAt
 
@@ -140,6 +146,10 @@ model User {
   carts          Cart[]
   productReviews ProductReview[]
   blogReviews    BlogReview[]
+  
+  @@index([role])
+  @@index([isActive])
+  @@index([lockedUntil])
 }
 
 model ProductReview {
