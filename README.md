@@ -5,6 +5,68 @@
 
 ---
 
+## 🚀 Quick Setup Guide
+
+### Prerequisites
+- **Node.js**: Version 20.12.0 or higher
+- **Yarn**: For server dependency management
+- **npm**: For client dependency management
+
+### Installation Steps
+
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/DimitriTedom/ChezFlora.git
+   cd ChezFlora
+   ```
+
+2. **Install Yarn globally (if not already installed)**
+   ```bash
+   npm install -g yarn
+   ```
+
+3. **Setup Server Dependencies**
+   ```bash
+   cd Server
+   yarn install
+   ```
+
+4. **Setup Client Dependencies**
+   ```bash
+   cd ../client
+   npm install
+   ```
+
+5. **Environment Configuration**
+   ```bash
+   # Copy environment files
+   cp Server/.env.example Server/.env
+   cp client/.env.example client/.env
+   ```
+   
+   Edit the `.env` files with your specific configuration values.
+
+6. **Start Development Servers**
+   
+   **Terminal 1 - Server:**
+   ```bash
+   cd Server
+   yarn dev
+   ```
+   
+   **Terminal 2 - Client:**
+   ```bash
+   cd client
+   npm run dev
+   ```
+
+7. **Access the Application**
+   - Frontend: http://localhost:5173/
+   - Backend API: http://localhost:5000/
+   - API Documentation: http://localhost:5000/api-docs
+
+---
+
 ## Project Overview  
 ChezFlora is a web application designed to modernize floral decoration and event services. It enables clients to shop, request quotes for custom services, and engage with the brand through a blog, while administrators manage inventory, orders, and promotions seamlessly. Built with modern technologies like React, Express.js, and PostgreSQL, the platform prioritizes security, user experience, and scalability.
 
